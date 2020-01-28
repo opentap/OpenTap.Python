@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PythonSettings type="Keysight.OpenTap.Plugins.Python.PythonSettings">
+  <EnableCodeReloading>true</EnableCodeReloading>
+  <DebugThreadingMode>true</DebugThreadingMode>
+  <PythonPath>C:\Users\jinghlim\AppData\Local\Programs\Python\Python36</PythonPath>
+  <DeployPythonNet>true</DeployPythonNet>
+  <Package.Dependencies>
+    <Package Name="Python" Version="2.0.0-beta.9+05b19e11" />
+  </Package.Dependencies>
+</PythonSettings>

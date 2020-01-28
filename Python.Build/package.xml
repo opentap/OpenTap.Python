@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="Python" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux">
+  <Description>
+    OpenTAP Python SDK plugin. This plugin includes all tools, examples, and documentation to develop plugins using Python.
+    <Owner>Keysight Technologies, Inc.</Owner>
+    <Contacts>
+      tap.support@keysight.com
+    </Contacts>
+    <Prerequisites>Python.NET and Python</Prerequisites>
+  </Description>  
+  <Repository Url="http://gitlab.it.keysight.com/tap-plugins/cpython.git" />
+  <Files>
+      <File Path="Packages/Python/Keysight.OpenTap.Plugins.Python.dll" >
+        <IgnoreDependency>Python.Runtime</IgnoreDependency>
+        <!--<SetAssemblyInfo Attributes="Version"/>
+        <Sign Certificate="Keysight Technologies, Inc."/>-->
+      </File>
+    <File Path="Packages/Python/PluginExample/*.py" />
+    <File Path="Packages/Python/Linux Sample Files/Test Plans/*.TapPlan" />
+    <File Path="Packages/Python/Linux Sample Files/Settings/Bench/Default/*.xml" />
+    <File Path="Packages/Python/PythonTap.py" />
+    <!--<File Path="Packages/Python/PythonHelp.chm" />-->
+  </Files>
+</Package>

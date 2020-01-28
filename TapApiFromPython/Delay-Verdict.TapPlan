@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestPlan type="Keysight.Tap.TestPlan" Name="Delay-Verdict.TapPlan" Version="7.0.721.0" Locked="False">
+  <Steps>
+    <TestStep type="Keysight.Tap.Plugins.BasicSteps.DelayStep" Version="7.0.0.0" Id="7ca120c4-fa6c-4e7f-9f67-45c0d03d96aa">
+      <ChildTestSteps />
+      <DelaySecs>1</DelaySecs>
+      <Enabled>True</Enabled>
+      <Name>Delay</Name>
+    </TestStep>
+    <TestStep type="Keysight.Tap.Plugins.BasicSteps.DelayStep" Version="7.0.0.0" Id="46f508f4-d9a1-4b63-9b34-85e08fdbdb07">
+      <ChildTestSteps />
+      <DelaySecs>1</DelaySecs>
+      <Enabled>True</Enabled>
+      <Name>Delay (1)</Name>
+    </TestStep>
+    <TestStep type="Keysight.Tap.Plugins.BasicSteps.VerdictStep" Version="7.0.0.0" Id="3f1ca848-e107-427f-892b-491915948ee8">
+      <ChildTestSteps />
+      <Enabled>True</Enabled>
+      <Name>Set Verdict</Name>
+      <RequestAbort>False</RequestAbort>
+      <VerdictOutput>Pass</VerdictOutput>
+    </TestStep>
+  </Steps>
+</TestPlan>

@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keysight.OpenTap.Plugins.Python", "Keysight.OpenTap.Plugins.Python\Keysight.OpenTap.Plugins.Python.csproj", "{BDF831E0-85BF-4825-AD9E-1018A2DD3D58}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonExampleProject", "PythonExampleProject\PythonExampleProject\PythonExampleProject.pyproj", "{BC19A2E4-0E7B-41F3-8BD3-C7A2CEA5CFF7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keysight.OpenTap.Plugins.Python.UnitTests", "Keysight.OpenTap.Plugins.Python.UnitTests\Keysight.OpenTap.Plugins.Python.UnitTests.csproj", "{EB5378E0-076C-4AD6-AA12-FE1BF5B5B3BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python.Dependencies", "Python.Dependencies\Python.Dependencies.csproj", "{98659EDB-85E5-4779-91F2-58ABB7ABE1F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Python.Build", "Python.Build\Python.Build.csproj", "{82C5871F-C7B5-4678-A0BB-F740362344DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDF831E0-85BF-4825-AD9E-1018A2DD3D58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDF831E0-85BF-4825-AD9E-1018A2DD3D58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDF831E0-85BF-4825-AD9E-1018A2DD3D58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDF831E0-85BF-4825-AD9E-1018A2DD3D58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC19A2E4-0E7B-41F3-8BD3-C7A2CEA5CFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC19A2E4-0E7B-41F3-8BD3-C7A2CEA5CFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB5378E0-076C-4AD6-AA12-FE1BF5B5B3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB5378E0-076C-4AD6-AA12-FE1BF5B5B3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98659EDB-85E5-4779-91F2-58ABB7ABE1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98659EDB-85E5-4779-91F2-58ABB7ABE1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98659EDB-85E5-4779-91F2-58ABB7ABE1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98659EDB-85E5-4779-91F2-58ABB7ABE1F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C5871F-C7B5-4678-A0BB-F740362344DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C5871F-C7B5-4678-A0BB-F740362344DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C5871F-C7B5-4678-A0BB-F740362344DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C5871F-C7B5-4678-A0BB-F740362344DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F25A72F5-A736-4A6E-ACE0-555C09AD4DFA}
+	EndGlobalSection
+EndGlobal

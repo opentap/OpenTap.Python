@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+InfoLink: Is the link that will be used by the Plugin Package Manager for the "More Information" button.
+Version: Is displayed in the dropdown in the Plugin Package Manager.
+Configuration: Can be any kind of information, such as bit version or git branch name. 
+
+For Version and Configuration the following macros are available (Only works if the project directory is under Git source control):
+$(GitVersion) - Gets the version from Git.
+$(GitBranch) - Gets the branch name from Git.
+-->
+<Package Name="PythonExample" xmlns="http://tap.aalborg.keysight.com/PackageSchema" InfoLink="" Configuration="" Version="">
+  <Description>This is my plugin package.</Description>
+  <Files>
+    <File Path="Keysight.OpenTap.Plugins.PythonExample.dll" Obfuscate="true" UseVersion="true"></File>
+  </Files>
+</Package>

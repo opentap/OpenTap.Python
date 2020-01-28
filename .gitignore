@@ -1,0 +1,14 @@
+[Oo]bj
+[Bb]in
+*.suo
+*.tss
+packages/
+*.user
+TestResults/
+*.dat
+.vs/
+.idea/
+.py_installed
+.pynet_installed
+
+/Help/Project/Users/

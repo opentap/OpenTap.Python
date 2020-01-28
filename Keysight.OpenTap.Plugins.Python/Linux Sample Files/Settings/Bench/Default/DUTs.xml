@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DutSettings type="OpenTap.DutSettings">
+  <BasicDut type="Python.PluginExample.BasicDut" Source="">
+    <Firmware>1.0.2</Firmware>
+    <Name>PyDUT</Name>
+  </BasicDut>
+  <Package.Dependencies>
+    <Package Name="OpenTAP" Version="9.1.3+c6190994" />
+  </Package.Dependencies>
+</DutSettings>

@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(TAP_PATH)\Editor.exe</StartProgram>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D83C19DC-1F9B-479B-9EE9-32F5D8CB7828}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Keysight.OpenTap.Plugins.PythonExample</RootNamespace>
+    <AssemblyName>Keysight.OpenTap.Plugins.PythonExample</AssemblyName>
+    <!-- 'v4.5.2' removed because we only support 4.5.2-->
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(TAP_PATH)</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(TAP_PATH)</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Python.Runtime">
+      <HintPath>C:\Python27\Lib\site-packages\Python.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Keysight.Tap.Engine">
+      <HintPath>$(TAP_PATH)\OpenTap.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Keysight.OpenTap.Plugins.Python\AssemblyLoader.cs">
+      <Link>AssemblyLoader.cs</Link>
+    </Compile>
+    <Compile Include="..\Keysight.OpenTap.Plugins.Python\NativeMethods.cs">
+      <Link>NativeMethods.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SamplePythonInst.cs" />
+    <Compile Include="SignalGeneratorStep.cs" />
+    <Compile Include="Step.cs" />
+    <None Include="package.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestSteps\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tap_example.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <UsingTask TaskName="Keysight.OpenTap.Package.PackageTask" AssemblyFile="$(TAP_PATH)\tap.exe" />
+  <UsingTask TaskName="Keysight.OpenTap.Package.SetAssemblyInfoTask" AssemblyFile="$(TAP_PATH)\tap.exe" />
+  <Target Name="BeforeBuild">
+    <SetAssemblyInfoTask FilePath="Properties\AssemblyInfo.cs" AssemblyInformationalVersionFromGit="True" />
+  </Target>
+  <Target Name="AfterBuild" Condition="'$(Configuration)' == 'Release' ">
+    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
+      <Output TaskParameter="Assemblies" ItemName="TargetInfo" />
+    </GetAssemblyIdentity>
+    <PackageTask Dir="$(TargetDir)" ConfFile="$(ProjectDir)\package.xml" />
+  </Target>
+</Project>

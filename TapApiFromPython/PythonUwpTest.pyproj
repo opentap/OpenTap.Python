@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0e148833-3519-41b6-85ff-328a4dfb529c}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>TapPythonGui.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{2b557614-1a2b-4903-b9df-ed20d7b63f3a};{888888A0-9F3D-457C-B088-3A5042F75D52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+    <InterpreterVersion />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="console_log.txt" />
+    <Content Include="PyHelper\PyHelper\obj\Debug\PyHelper.csproj.FileListAbsolute.txt" />
+    <Content Include="Results\2016-10-07 13-49-55-NotSet.txt" />
+    <Content Include="Results\2016-10-07 13-57-53-NotSet.txt" />
+    <Content Include="Results\2016-10-10 10-40-36-NotSet.txt" />
+    <Content Include="Results\2016-10-10 13-30-26-NotSet.txt" />
+    <Content Include="Results\2016-10-10 13-59-59-NotSet.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DynamicallyGenerateTestPlan.py" />
+    <Compile Include="LoadTestPlanFromFile.py" />
+    <Compile Include="TapApiAbstract.py" />
+    <Compile Include="TapPythonGui.py" />
+    <Compile Include="wxGuiClass.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PyHelper\" />
+    <Folder Include="PyHelper\PyHelper\" />
+    <Folder Include="PyHelper\PyHelper\obj\" />
+    <Folder Include="PyHelper\PyHelper\obj\Debug" />
+    <Folder Include="Results" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="OpenTap" Version="9.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Keysight.OpenTap.Plugins.Python\Keysight.OpenTap.Plugins.Python.csproj" />
+      <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj" />
+    </ItemGroup>
+
+</Project>

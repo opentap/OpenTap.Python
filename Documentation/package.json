@@ -1,0 +1,16 @@
+{
+  "name": "opentap-python-docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "vuepress build",
+    "dev": "vuepress dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vuepress": "^1.2.0",
+    "vuepress-plugin-export": "^0.2.0"
+  }
+}
