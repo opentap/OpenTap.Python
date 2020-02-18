@@ -18,6 +18,16 @@
   <Files>
       <File Path="Packages/Python/Keysight.OpenTap.Plugins.Python.dll" >
         <IgnoreDependency>Python.Runtime</IgnoreDependency>
+        <IgnoreDependency>Microsoft.CodeAnalysis</IgnoreDependency>
+        <IgnoreDependency>Microsoft.CSharp</IgnoreDependency>
+        <IgnoreDependency>System.Collections.Concurrent</IgnoreDependency>
+        <IgnoreDependency>System.IO.FileSystem.Primitives</IgnoreDependency>
+        <IgnoreDependency>System.Linq</IgnoreDependency>
+        <IgnoreDependency>System.Linq.Expressions</IgnoreDependency>
+        <IgnoreDependency>System.ObjectModel</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit.ILGeneration</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit.LightWeight</IgnoreDependency>
       </File>
     <File Path="Packages/Python/PluginExample/*.py" />
     <File Path="Packages/Python/Linux Sample Files/Test Plans/*.TapPlan" />
@@ -25,3 +35,4 @@
     <File Path="Packages/Python/PythonTap.py" />
   </Files>
 </Package>
+
