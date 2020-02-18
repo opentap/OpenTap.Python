@@ -5,7 +5,7 @@ Python is a very popular programming language in test and automation. The Python
 The plugin is called Python because it interacts with the most common Python implementation also known as "Python", more specifically version 2.7 (3.6 support coming later). Read more about Python at www.python.org. Other Python implementations also exist, but these are not supported by this plugin.
 
 __More Information__
-- [The Wiki] (http://gitlab.it.keysight.com/tap-plugins/CPython/wikis/home)
+- Documentation can be found at https://opentap.gitlab.io/Plugins/python/
 - Example code is located in ```%TAP_PATH%\Packages\Python\MyExamplePlugin\```
 
 __Developers__
