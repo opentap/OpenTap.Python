@@ -7,18 +7,40 @@
       tap.support@keysight.com
     </Contacts>
     <Prerequisites>Python.NET and Python</Prerequisites>
-  </Description>  
+    <Links>
+      <Link Description="Go to the GitLab repository" Name="GitLab Repository" Url="https://gitlab.com/OpenTAP/Plugins/python"/>
+      <Link Description="Go to the documentation" Name="Documentation" Url="https://opentap.gitlab.io/Plugins/python/"/>
+    </Links>
+  </Description>
+  <Dependencies>
+  </Dependencies>
   <Repository Url="http://gitlab.it.keysight.com/tap-plugins/cpython.git" />
   <Files>
       <File Path="Packages/Python/Keysight.OpenTap.Plugins.Python.dll" >
         <IgnoreDependency>Python.Runtime</IgnoreDependency>
-        <!--<SetAssemblyInfo Attributes="Version"/>
-        <Sign Certificate="Keysight Technologies, Inc."/>-->
+        <IgnoreDependency>Microsoft.CodeAnalysis</IgnoreDependency>
+        <IgnoreDependency>Microsoft.CodeAnalysis.CSharp</IgnoreDependency>
+        <IgnoreDependency>Microsoft.CSharp</IgnoreDependency>
+        <IgnoreDependency>System.Collections.Concurrent</IgnoreDependency>
+        <IgnoreDependency>System.IO.FileSystem.Primitives</IgnoreDependency>
+        <IgnoreDependency>System.Linq</IgnoreDependency>
+        <IgnoreDependency>System.Linq.Expressions</IgnoreDependency>
+        <IgnoreDependency>System.ObjectModel</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit.ILGeneration</IgnoreDependency>
+        <IgnoreDependency>System.Reflection.Emit.LightWeight</IgnoreDependency>
+        <IgnoreDependency>System.Security.Cryptography.Primitives</IgnoreDependency>
+        <IgnoreDependency>System.Text.RegularExpressions</IgnoreDependency>
+        <IgnoreDependency>System.Threading</IgnoreDependency>
+        <IgnoreDependency>System.Threading.Task.Extensions</IgnoreDependency>
+        <IgnoreDependency>System.Threading.Task.Parallel</IgnoreDependency>
+        <IgnoreDependency>System.Xml.ReaderWriter</IgnoreDependency>
+        <IgnoreDependency>System.Xml.XDocument</IgnoreDependency>
       </File>
     <File Path="Packages/Python/PluginExample/*.py" />
     <File Path="Packages/Python/Linux Sample Files/Test Plans/*.TapPlan" />
     <File Path="Packages/Python/Linux Sample Files/Settings/Bench/Default/*.xml" />
     <File Path="Packages/Python/PythonTap.py" />
-    <!--<File Path="Packages/Python/PythonHelp.chm" />-->
   </Files>
 </Package>
+
