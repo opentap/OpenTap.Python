@@ -47,6 +47,6 @@ module.exports = {
         ]
     },
     dest: '../public',
-    base: '/python/'
+    base: '/Plugins/python/'
 }
 
