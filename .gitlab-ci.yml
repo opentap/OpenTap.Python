@@ -78,7 +78,7 @@ TestPackageUbuntuPy37:
 # This job publishes the *.TapPlugin to the package repository
 # This job does not run automatically but requires manual action from the developer
 ManualPublishOpenTapIo:
-  tags: [docker,ubuntu18.4]
+  tags: [ docker, gce ]
   stage: publish
   when: manual
   image: opentapio/opentap:9.5-ubuntu18.04
@@ -89,7 +89,7 @@ ManualPublishOpenTapIo:
      - 'tap package publish -v -p python -k $OPENTAP_REPO_SECRET_KEY -r packages.opentap.io *.TapPackage'
 
 ManualPublishInternal:
-  tags: [docker,ubuntu18.4]
+  tags: [ docker, gce ]
   stage: publish
   when: manual
   image: opentapio/opentap:9.5-ubuntu18.04
