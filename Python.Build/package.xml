@@ -7,18 +7,21 @@
       tap.support@keysight.com
     </Contacts>
     <Prerequisites>Python.NET and Python</Prerequisites>
-  </Description>  
+    <Links>
+      <Link Description="Go to the GitLab repository" Name="GitLab Repository" Url="https://gitlab.com/OpenTAP/Plugins/python"/>
+      <Link Description="Go to the documentation" Name="Documentation" Url="https://opentap.gitlab.io/Plugins/python/"/>
+    </Links>
+  </Description>
+  <Dependencies>
+  </Dependencies>
   <Repository Url="http://gitlab.it.keysight.com/tap-plugins/cpython.git" />
   <Files>
       <File Path="Packages/Python/Keysight.OpenTap.Plugins.Python.dll" >
         <IgnoreDependency>Python.Runtime</IgnoreDependency>
-        <!--<SetAssemblyInfo Attributes="Version"/>
-        <Sign Certificate="Keysight Technologies, Inc."/>-->
       </File>
     <File Path="Packages/Python/PluginExample/*.py" />
     <File Path="Packages/Python/Linux Sample Files/Test Plans/*.TapPlan" />
     <File Path="Packages/Python/Linux Sample Files/Settings/Bench/Default/*.xml" />
     <File Path="Packages/Python/PythonTap.py" />
-    <!--<File Path="Packages/Python/PythonHelp.chm" />-->
   </Files>
 </Package>
