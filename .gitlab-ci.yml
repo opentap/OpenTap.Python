@@ -103,6 +103,8 @@ ManualPublishInternal:
 pages:
   stage: build
   image: node:9.11.1
+  only:
+    - master
   cache:
     paths:
       - node_modules/
