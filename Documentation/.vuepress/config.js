@@ -3,7 +3,7 @@ module.exports = {
     description: 'Python Integration for OpenTAP',
     
     themeConfig: {
-        repo: 'https://gitlab.com/romadsen-ks/Python',
+        repo: 'https://gitlab.com/opentap/plugins/Python',
         editLinks: true,
         editLinkText: 'Help improve this page!',
         docsDir: 'Documentation',
@@ -42,8 +42,7 @@ module.exports = {
                     ['Release Notes/ReleaseNotes_1_1.md', "Version 1.1"],
                     ['Release Notes/ReleaseNotes_2_0.md', "Version 2.0"]
                 ]
-            },
-            ['TAP Python Help/Notices.md', 'Notices']
+            }
         ]
     },
     dest: '../public',

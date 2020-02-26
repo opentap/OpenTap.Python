@@ -1,5 +1,5 @@
 # Welcome
-Python is a popular programming language for test and automation. The OpenTAP Python plugin makes it possible to use Python and Keysight Test Automation together.
+Python is a popular programming language for test and automation. The OpenTAP Python plugin makes it possible to use Python to program plugins for OpenTAP.
 
 With the Python plugin you can:
 
