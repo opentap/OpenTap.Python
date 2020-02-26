@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package Name="Python" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux">
     <Description>
-        OpenTAP Python SDK plugin. This plugin includes all tools, examples, and documentation to develop plugins using Python.
+        OpenTAP Python SDK plugin. This plugin includes all tools, examples, and documentation to develop OpenTAP plugins using Python.
         <Owner>Keysight Technologies, Inc.</Owner>
-        <Contacts>
-            tap.support@keysight.com
-        </Contacts>
-        <Prerequisites>Python.NET and Python</Prerequisites>
+        <Links>
+            <Link Name="Source Code" Description="Go to the source code repository." URL="https://gitlab.com/OpenTAP/Plugins/python"/>
+            <Link Name="Documentation" Description="Go to the documentation." URL="https://opentap.gitlab.io/Plugins/python/"/>
+        </Links>
+        <Contacts> tap.support@keysight.com </Contacts>
+        <Prerequisites> OpenTAP (9.6+) and Python (2.7, 3.6, 3.7) </Prerequisites>
+        <SourceUrl>https://opentap.gitlab.io/Plugins/python/</SourceUrl>
     </Description>
     <Repository Url="https://opentap.gitlab.io/Plugins/python/" />
     <Files>
