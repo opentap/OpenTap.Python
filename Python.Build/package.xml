@@ -38,6 +38,10 @@
         <File Path="Packages/Python/Linux Sample Files/Test Plans/*.TapPlan" />
         <File Path="Packages/Python/Linux Sample Files/Settings/Bench/Default/*.xml" />
         <File Path="Packages/Python/PythonTap.py" />
+        <File Path="Packages/Python/icon.png">
+            <PackageIcon/>
+        </File>
+
     </Files>
 </Package>
 
