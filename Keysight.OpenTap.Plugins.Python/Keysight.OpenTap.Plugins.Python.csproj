@@ -43,6 +43,10 @@
     <Content Include="..\Directory.Build.props">
       <Link>Directory.Build.props</Link>
     </Content>
+    <Content Include="..\Documentation\icon.png">
+      <Link>icon.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="PluginExample\BasicSettings.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
