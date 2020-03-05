@@ -15,31 +15,6 @@
     <OutputPath>..\bin\Debug\Packages\Python</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="PluginExample\BasicDut.py" />
-    <None Remove="PluginExample\BasicFunctionality.py" />
-    <None Remove="PluginExample\BasicInstrument.py" />
-    <None Remove="PluginExample\BasicSettings.py" />
-    <None Remove="PluginExample\ChargeStep.py" />
-    <None Remove="PluginExample\CsvResultListener.py" />
-    <None Remove="PluginExample\DischargeStep.py" />
-    <None Remove="PluginExample\EnumUsage.py" />
-    <None Remove="PluginExample\ErrorExample.py" />
-    <None Remove="PluginExample\HiddenDut.py" />
-    <None Remove="PluginExample\LockManager.py" />
-    <None Remove="PluginExample\MenuItem.py" />
-    <None Remove="PluginExample\OutputInput.py" />
-    <None Remove="PluginExample\PowerAnalyzer.py" />
-    <None Remove="PluginExample\SamplingStepBase.py" />
-    <None Remove="PluginExample\__init__.py" />
-    <None Remove="PythonTap.py" />
-    <None Remove="Linux Sample Files\Test Plans\Python27Example.TapPlan" />
-    <None Remove="Linux Sample Files\Test Plans\Python36Example.TapPlan" />
-    <None Remove="Linux Sample Files\Settings\Python.xml" />
-    <None Remove="Linux Sample Files\Settings\Results.xml" />
-    <None Remove="Linux Sample Files\Settings\Bench\Default\DUTs.xml" />
-    <None Remove="Linux Sample Files\Settings\Bench\Default\Instruments.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\Directory.Build.props">
       <Link>Directory.Build.props</Link>
     </Content>
@@ -124,9 +99,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10" PrivateAssets="all">
+        <Private>False</Private>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" >
+      <Private>False</Private>
+    </PackageReference>
+    
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0">
+      <Private>False</Private>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Update="Linux Sample Files\Test Plans\Python3xExample.TapPlan">
@@ -137,6 +119,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj" />
+    <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
 </Project>
