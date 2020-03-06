@@ -6,7 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenTap" Version="9.5" />
+        <PackageReference Include="OpenTap" Version="$(OpenTapVersion)" >
+            <Private>False</Private>
+        </PackageReference  >
     </ItemGroup>
 
 </Project>

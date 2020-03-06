@@ -35,6 +35,7 @@ module.exports = {
             },
             [ 'TAP Python Help/Code Examples.md', 'Example Code'],
             [ 'TAP Python Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],
+            ['TAP Python Help/Limitations.md', 'Limitations'],
             {
                 title: "Release Notes",
                 children:
