@@ -12,7 +12,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Keysight.OpenTap.Plugins.Python")]
 [assembly: AssemblyCopyright("Copyright © Keysight Technologies 2019")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Keysight.OpenTap.Plugins.Python.UnitTests")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -36,3 +35,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyInformationalVersion("1.0.99.68cd4314")]
+
+[assembly: AssemblyCulture("en")] [assembly: System.Resources.NeutralResourcesLanguageAttribute("en")]
