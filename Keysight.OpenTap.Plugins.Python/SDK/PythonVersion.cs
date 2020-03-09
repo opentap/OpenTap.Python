@@ -18,7 +18,7 @@ namespace Keysight.OpenTap.Plugins.Python
         }
         public static PythonVersion Parse(string version)
         {
-            string[] versionParts = version.Split('.');
+            string[] versionParts = version.Trim().Split('.', ' ');
             int major = int.Parse(versionParts[0]);
             int minor = int.Parse(versionParts[1]);
 
