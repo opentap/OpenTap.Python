@@ -15,8 +15,6 @@
     <Files>
         <File Path="Packages/Python/Keysight.OpenTap.Plugins.Python.dll" >
             <IgnoreDependency>Python.Runtime</IgnoreDependency>
-            <IgnoreDependency>Microsoft.CodeAnalysis</IgnoreDependency>
-            <IgnoreDependency>Microsoft.CodeAnalysis.CSharp</IgnoreDependency>
             <IgnoreDependency>Microsoft.CSharp</IgnoreDependency>
             <IgnoreDependency>System.Collections.Concurrent</IgnoreDependency>
             <IgnoreDependency>System.IO.FileSystem.Primitives</IgnoreDependency>
