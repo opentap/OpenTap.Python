@@ -95,6 +95,7 @@
       <Private>true</Private>
     </Reference>
     <EmbeddedResource Include="py_deploy.bin" />
+    <EmbeddedResource Include="Resources\*.txt" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -102,7 +103,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10" PrivateAssets="all">
         <Private>False</Private>
     </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" >
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0">
       <Private>False</Private>
     </PackageReference>
     

@@ -1,0 +1,71 @@
+"""
+ For more examples, please refer to the plugin example of OpenTAP Python plugin.
+"""
+import sys
+import clr
+import PythonTap
+import OpenTap
+import System
+from PythonTap import *
+from OpenTap import DisplayAttribute, UnitAttribute, Verdict
+from System import String, Int32 # Import types to reference for generic methods.
+
+@Attribute(DisplayAttribute, "ACTUAL_PLUGIN_NAME", "Add a description here", "Add a group name here")
+class ACTUAL_PLUGIN_NAME(ResultListener):
+    def __init__(self):
+        super(ACTUAL_PLUGIN_NAME, self).__init__()
+        
+        # ToDo: Add property here for each parameter the end user should be able to change.
+        # AddProperty("property_name", default property value, property data type)
+
+        # String property example.
+        prop = self.AddProperty("string_property_example", "string example", String)
+        prop.AddAttribute(DisplayAttribute, "Add a display name here", "Add a description here", "Add a group name here")
+
+        # Integer property example.
+        prop = self.AddProperty("integer_property_example", 0, Int32)
+        prop.AddAttribute(DisplayAttribute, "Add a display name here", "Add a description here", "Add a group name here")
+        prop.AddAttribute(UnitAttribute, "Add a display unit here")
+
+    def OnTestPlanRunStart(self, planRun):
+        """Called by OpenTAP when the test plan starts."""
+        # Add handling code for test plan run start
+        
+        pass
+
+    def OnTestStepRunStart(self, stepRun):
+        """Called by OpenTAP when a test step starts."""
+        # Add handling code for test step run start
+        
+        pass
+
+    def OnResultPublished(self, stepRun, result):
+        """Called by OpenTAP when a chunk of results are published."""
+        self.OnActivity()
+        # Add handling code for result data
+        
+        pass
+
+    def OnTestStepRunCompleted(self, stepRun):
+        """Called by OpenTAP when a test step completes."""
+        # Add handling code for test step run completed
+        
+        pass 
+
+    def OnTestPlanRunCompleted(self, planRun, logStream):
+        """Called by OpenTAP when the test plan completes."""
+        # Add handling for test plan run completed
+        
+        pass
+
+    def Open(self):
+        """Called by OpenTAP when the test plan starts."""
+        # Add resource open code
+        
+        pass
+
+    def Close(self):
+        """Called by OpenTAP when the test plan ends."""
+        # Add resource close code
+        
+        pass
