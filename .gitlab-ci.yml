@@ -10,7 +10,7 @@ stages:
 # This job builds the solution and captures the resulting *.TapPlugin as a build artifact
 Build:
   stage: build
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   tags: [ docker, gce ]
   script: 
           - dotnet build -c Release
@@ -24,7 +24,7 @@ Build:
 TestPackageUbuntuPy27:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - 'cp *.TapPackage Python.TapPackage'
@@ -41,7 +41,7 @@ TestPackageUbuntuPy27:
 TestPackageUbuntuPy36:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - cp *.TapPackage Python.TapPackage
@@ -60,7 +60,7 @@ TestPackageUbuntuPy36:
 TestPackageUbuntuPy37:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - cp *.TapPackage Python.TapPackage
@@ -81,7 +81,7 @@ ManualPublishOpenTapIo:
   tags: [ docker, gce ]
   stage: publish
   when: manual
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies:
      - Build
   script: 
@@ -92,7 +92,7 @@ ManualPublishInternal:
   tags: [ docker, gce ]
   stage: publish
   when: manual
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies:
      - Build
 
