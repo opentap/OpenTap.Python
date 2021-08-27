@@ -284,7 +284,12 @@ class ComponentSettings(TapPlugin(PythonComponentSettings)):
     @classmethod
     def GetCurrent(cls):
         """Gets the current settings instance. This value changes when new settings profiles are loaded."""
-        return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        try: 
+            return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        except AttributeError: # The component settings has not yet been loaded so __WrapperType__ is not set.
+            PythonComponentSettings.EnsureLoaded(cls);
+            return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        
 
     def reload(self):
         cls = self.__class__
