@@ -1,6 +1,6 @@
 # Building the Python Examples for Ubuntu
 
-Prior to successfully building the Python Examples, please make sure the steps in [Python Development Setup for Ubuntu](..\Python Development Setup for Ubuntu.md) is executed.
+Prior to successfully building the Python Examples, please make sure the steps in [Python Development Setup for Ubuntu](../Python Development Setup for Ubuntu.md) is executed.
 
 Follow these steps to build the examples:
 
@@ -8,11 +8,11 @@ Follow these steps to build the examples:
 
 2. Setup Python path
 
-    For **Python 2.7**: `~/.tap/tap python set-path <Python installation path> 2.7` (refering to [Python Development Setup for Ubuntu](..\Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+    For **Python 2.7**: `~/.tap/tap python set-path <Python installation path> 2.7` (refering to [Python Development Setup for Ubuntu](../Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
 
-	For **Python 3.6**: `~/.tap/tap python set-path <Python installation path> 3.6` (refering to [Python Development Setup for Ubuntu](..\Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+	For **Python 3.6**: `~/.tap/tap python set-path <Python installation path> 3.6` (refering to [Python Development Setup for Ubuntu](../Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
     
-    For **Python 3.7**: `~/.tap/tap python set-path <Python installation path> 3.7` (refering to [Python Development Setup for Ubuntu](..\Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+    For **Python 3.7**: `~/.tap/tap python set-path <Python installation path> 3.7` (refering to [Python Development Setup for Ubuntu](../Python Development Setup for Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
     
 3. Build the wrapper for the example modules. Execute:
 
@@ -20,4 +20,4 @@ Follow these steps to build the examples:
 
     ![](../Images/Python_exe_Ubuntu.png) 
 
-You can [Create and Run a Simple Test Plan](Create and Run a Simple Test Plan for Ubuntu.md) using these steps and resources to become more familiar with OpenTAP.
+You can [Create and Run a Simple Test Plan](./Create and Run a Simple Test Plan for Ubuntu.md) using these steps and resources to become more familiar with OpenTAP.

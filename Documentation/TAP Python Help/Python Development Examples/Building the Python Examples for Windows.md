@@ -57,4 +57,4 @@ PluginExample Completed.
     - Basic Settings
  
 
-You can [Create and Run a Simple Test Plan](Create and Run a Simple Test Plan for Windows.md) using these steps and resources to become more familiar with OpenTAP.
+You can [Create and Run a Simple Test Plan](./Create and Run a Simple Test Plan for Windows.md) using these steps and resources to become more familiar with OpenTAP.
