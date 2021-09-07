@@ -9,6 +9,7 @@
 	 - [Building the Python Examples for Ubuntu](Python Development Examples/Building the Python Examples for Ubuntu.md)
      - [Create and Run a Simple Test Plan for Windows](Python Development Examples/Create and Run a Simple Test Plan for Windows.md)
 	 - [Create and Run a Simple Test Plan for Ubuntu](Python Development Examples/Create and Run a Simple Test Plan for Ubuntu.md)
+- [Project Creation Wizard](Project Creation Wizard.md)
 - [Creating an OpenTAP Plugin with Python for Windows](Creating a Plugin with Python for Windows.md)
 - [Creating an OpenTAP Plugin with Python for Ubuntu](Creating a Plugin with Python for Ubuntu.md)
 - [Python Code Examples](Code Examples.md)

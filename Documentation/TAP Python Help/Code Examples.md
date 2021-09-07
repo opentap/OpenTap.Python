@@ -55,7 +55,7 @@ The following example of a test step shows:
 - How **@Attribute** and **AddAttribute** integrate with Windows Presentation Foundation (WPF) to create the GUI 
 - Inheritance from base classes
 
-![](Images/python_code_example.png) 
+![](./Images/python_code_example.png) 
 
 ## Test Plan Run Method
 The code below shows how the run a method:
@@ -65,4 +65,4 @@ The code below shows how the run a method:
 - Enables simple results publishing using self.PublishResult 
 - Integrates with all OpenTAP Result Listeners 
 
-![](Images/python_test_execute75.png)
+![](./Images/python_test_execute75.png)

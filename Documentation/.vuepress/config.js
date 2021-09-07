@@ -29,7 +29,8 @@ module.exports = {
                 title: "Creating a Plugin",
                 children:
                     [
-                        [ 'TAP Python Help/Creating a Plugin with Python for Windows.md', 'Windows'],
+                        [ 'TAP Python Help/Project Creation Wizard.md', 'Project Creation Wizard' ],
+                        [ 'TAP Python Help/Creating a plugin with Python for Windows.md', 'Windows'],
                         [ 'TAP Python Help/Creating a plugin with Python for Ubuntu.md', 'Ubuntu']
                     ]
             },
