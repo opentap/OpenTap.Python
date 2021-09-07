@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using OpenTap;
@@ -149,7 +150,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                     log.Flush();
                     return ExitCodes.UnableToLoadPython;
                 }
-                buildTapPackage(modulename, pyconly, replace_package_xml, dump_package_xml);
+                buildTapPackage(actualModulePath, pyconly, replace_package_xml, dump_package_xml);
             }
             log.Info("{0} Completed.", modulename);
             return exitcode;    
@@ -158,26 +159,40 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         // buildTapPlugin needs to be encapsulated, because it depends on Keysight.Tap.Package
         // if the exe is missing, any method using it will throw an exception.
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void buildTapPackage(string modulename, bool pyconly, bool replace_package_xml, string dump_package_xml)
+        static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string dump_package_xml)
         {
-            var modpath = Path.Combine(Path.GetDirectoryName(typeof(Builder).Assembly.Location), modulename);
-            List<string> files = new List<string>();
-            var allfiles = Directory.EnumerateFiles(modpath, "*", SearchOption.AllDirectories);
-            foreach (var file in allfiles)
+            string pluginName = Path.GetFileName(sourcePath);
+            string opentapPath = Path.GetDirectoryName(PluginManager.GetOpenTapAssembly().Location);
+            string destinationPath = Path.Combine(opentapPath, "Packages", pluginName);
+
+            var contentFileSourcePaths = Directory.EnumerateFiles(sourcePath, pyconly ? "*.pyc" : "*.py", SearchOption.AllDirectories)
+                .Concat(Directory.EnumerateFiles(sourcePath, "*.cs", SearchOption.AllDirectories))
+                .Concat(Directory.EnumerateFiles(sourcePath, "*.dll", SearchOption.AllDirectories));
+
+            // Create the temporary directories for the plugin tap package to be built in the %OPEN_TAP%\Packages dir
+            Directory.CreateDirectory(destinationPath);
+            var directories = Directory.EnumerateDirectories(sourcePath, "*.*", SearchOption.AllDirectories);
+            Parallel.ForEach(directories, dirPath =>
             {
-                var ext = Path.GetExtension(file);
-                if (ext == ".py" && pyconly)
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
+            });
+
+            // Copy the plugin content files to the %OPEN_TAP%\Packages dir
+            Parallel.ForEach(contentFileSourcePaths, path =>
+            {
+                try
                 {
-                    continue;
+                    File.Copy(path, path.Replace(sourcePath, destinationPath), true);
                 }
-                else if (ext == ".pyc" && !pyconly)
+                catch (IOException ex)
                 {
-                    continue;
+                    // Suppress temp files in use
+                    log.Error($"File copy failed for {path} ({ex.Message})");
                 }
-                files.Add(file);
-            }
+            });
+
             string defaultPackageName = "package.xml";
-            if (replace_package_xml || !File.Exists(Path.Combine(modpath, "package.xml")) || dump_package_xml != null)
+            if (replace_package_xml || !File.Exists(Path.Combine(sourcePath, "package.xml")) || dump_package_xml != null)
             {
                 var xdoc = new XDocument();
                 XNamespace aw = @"http://opentap.io/schemas/package";
@@ -192,16 +207,16 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 package_elem.SetAttributeValue("InfoLink", "");
                 package_elem.SetAttributeValue("Version", "1.0.0");
                 
-                package_elem.SetAttributeValue("Name", modulename);
-                foreach (var file in files)
+                package_elem.SetAttributeValue("Name", pluginName);
+
+                Parallel.ForEach(contentFileSourcePaths, path =>
                 {
-                    if (file.EndsWith(defaultPackageName))
-                        continue;
                     var fileelem = new XElement(aw + "File");
-                    fileelem.SetAttributeValue("Path", file);
+                    fileelem.SetAttributeValue("Path", path.Replace(sourcePath, $"Packages/{pluginName}"));
                     files_elem.Add(fileelem);
-                }
-                var targetxml = Path.Combine(modpath, defaultPackageName);
+                });
+
+                var targetxml = Path.Combine(sourcePath, defaultPackageName);
                 if (string.IsNullOrWhiteSpace(dump_package_xml) == false)
                 {
                     targetxml = Path.Combine(Path.GetDirectoryName(typeof(Builder).Assembly.Location), dump_package_xml);
@@ -219,8 +234,12 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                     return;
             }
 
-            createPackage(Path.Combine(modpath, defaultPackageName), modulename + ".TapPackage");
-            log.Info("Saved to '{0}'.", Path.Combine(Directory.GetCurrentDirectory(), modpath, modulename + ".TapPackage"));
+            createPackage(Path.Combine(sourcePath, defaultPackageName), pluginName + ".TapPackage");
+
+            // delete the temporary plugin folder created to build the tap package
+            Directory.Delete(destinationPath, true);
+
+            log.Info("Saved to '{0}'.", Path.Combine(Directory.GetCurrentDirectory(), sourcePath, pluginName + ".TapPackage"));
             log.Flush();
         }
 
