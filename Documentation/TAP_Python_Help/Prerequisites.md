@@ -1,5 +1,5 @@
 # Prerequisites
-The Python Plugin is available at [the OpenTAP website](http://packages.opentap.keysight.com). This plugin requires the following:
+The Python Plugin is available at [the OpenTAP website](https://packages.opentap.io). This plugin requires the following:
 
 - **OpenTAP** version 9.0 or later
 
@@ -9,4 +9,4 @@ The Python Plugin is available at [the OpenTAP website](http://packages.opentap.
 Officially supported version are for Python 2, 2.7 series. For Python 3, 3.6 series and 3.7 series.
    Download from [here](http://www.python.org).
 
-For Linux user, you can refer to [Python Development Setup for Ubuntu](./Python Development Setup for Ubuntu.md) for Python setup. 
+For Linux user, you can refer to [Python Development Setup for Ubuntu](./Python_Development_Setup_for_Ubuntu.md) for Python setup. 

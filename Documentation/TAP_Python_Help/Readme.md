@@ -32,4 +32,4 @@ All other normal OpenTAP SDK constructs can be used in a similar fashion:
 
 Refer to the OpenTAP SDK for OpenTAP constructs that can be created.
 
-To get started, see [Getting Started](./Python Development Examples/Readme.md)
+To get started, see [Getting Started](./Python_Development_Examples/Readme.md)

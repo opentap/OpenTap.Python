@@ -13,36 +13,36 @@ module.exports = {
         ],
         sidebar: [
             ['/', "Welcome"],
-            ['TAP Python Help/', 'OpenTAP Python'],
-            ['TAP Python Help/Prerequisites.md', 'Prerequisites'],
+            ['TAP_Python_Help/', 'OpenTAP Python'],
+            ['TAP_Python_Help/Prerequisites.md', 'Prerequisites'],
             {
                 title: "Getting Started",
                 children:[
-                    'TAP Python Help/Python Development Examples/',
-                    ['TAP Python Help/Python Development Examples/Building the Python Examples for Windows.md', 'Building the Examples on Windows'],
-                    ['TAP Python Help/Python Development Examples/Building the Python Examples for Ubuntu.md', 'Building the Examples on Ubuntu'],
-                    ['TAP Python Help/Python Development Examples/Create and Run a Simple Test Plan for Windows.md', 'Create and Run a Simple Test Plan on Windows'],
-                    ['TAP Python Help/Python Development Examples/Create and Run a Simple Test Plan for Ubuntu.md', 'Create and Run a Simple Test Plan on Ubuntu']
+                    'TAP_Python_Help/Python_Development_Examples/',
+                    ['TAP_Python_Help/Python_Development_Examples/Building_the_Python_Examples_for_Windows.md', 'Building the Examples on Windows'],
+                    ['TAP_Python_Help/Python_Development_Examples/Building_the_Python_Examples_for_Ubuntu.md', 'Building the Examples on Ubuntu'],
+                    ['TAP_Python_Help/Python_Development_Examples/Create_and_Run_a_Simple_Test_Plan_for_Windows.md', 'Create and Run a Simple Test Plan on Windows'],
+                    ['TAP_Python_Help/Python_Development_Examples/Create_and_Run_a_Simple_Test_Plan_for_Ubuntu.md', 'Create and Run a Simple Test Plan on Ubuntu']
                 ]
             },
             {
                 title: "Creating a Plugin",
                 children:
                     [
-                        [ 'TAP Python Help/Project Creation Wizard.md', 'Project Creation Wizard' ],
-                        [ 'TAP Python Help/Creating a plugin with Python for Windows.md', 'Windows'],
-                        [ 'TAP Python Help/Creating a plugin with Python for Ubuntu.md', 'Ubuntu']
+                        [ 'TAP_Python_Help/Project_Creation_Wizard.md', 'Project Creation Wizard' ],
+                        [ 'TAP_Python_Help/Creating_a_plugin_with_Python_for_Windows.md', 'Windows'],
+                        [ 'TAP_Python_Help/Creating_a_plugin_with_Python_for_Ubuntu.md', 'Ubuntu']
                     ]
             },
-            [ 'TAP Python Help/Code Examples.md', 'Example Code'],
-            [ 'TAP Python Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],
-            ['TAP Python Help/Limitations.md', 'Limitations'],
+            [ 'TAP_Python_Help/Code_Examples.md', 'Example Code'],
+            [ 'TAP_Python_Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],
+            ['TAP_Python_Help/Limitations.md', 'Limitations'],
             {
                 title: "Release Notes",
                 children:
                 [
-                    ['Release Notes/ReleaseNotes_1_1.md', "Version 1.1"],
-                    ['Release Notes/ReleaseNotes_2_0.md', "Version 2.0"]
+                    ['Release_Notes/ReleaseNotes_1_1.md', "Version 1.1"],
+                    ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0"]
                 ]
             }
         ]
