@@ -99,12 +99,9 @@ ManualPublishInternal:
   script: 
      - 'tap package install -f -v -r $REPO_URL "PackagePublish" --version 2'
      - 'tap package publish -v -p python -k $INTERNAL_REPO_SECRET_KEY -r packages.opentap.keysight.com *.TapPackage'
-  
-pages:
+.BuildDoc:
   stage: build
   image: node:9.11.1
-  only:
-    - master
   cache:
     paths:
       - node_modules/
@@ -115,3 +112,11 @@ pages:
   artifacts:
     paths:
       - public
+pages:
+  extends: .BuildDoc
+  only: 
+    - tags
+buildDocTest:
+  extends: .BuildDoc
+  except: 
+    - tags
