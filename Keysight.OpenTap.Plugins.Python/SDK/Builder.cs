@@ -35,15 +35,15 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
 
         public static OpenTapTraceSource.TraceSource log = Log.CreateSource("Python");
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ExitCodes doBuild(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string dump_package_xml)
+        public static ExitCodes doBuild(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string xml_file_name)
         {
             if (WrapperBuilder.LoadPython() == false)
                 return ExitCodes.UnableToLoadPython;
-            return doBuildint(modulename, include_pyc, build_tap_plugin, replace_package_xml, dump_package_xml);
+            return doBuildint(modulename, include_pyc, build_tap_plugin, replace_package_xml, xml_file_name);
         }
 
 
-        public static ExitCodes doBuildint(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string dump_package_xml)
+        public static ExitCodes doBuildint(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string xml_file_name)
         {
             log.Info("Start building {0}.", modulename);
             new PythonSettings();
@@ -109,12 +109,12 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 if (File.Exists(dllLegacyFileName)) // delete legacy dlls named without the 'Python.' prefix.
                     File.Delete(dllLegacyFileName);
             }
-            catch(global::Python.Runtime.PythonException)
+            catch (global::Python.Runtime.PythonException)
             {
                 Log.Flush();
                 return ExitCodes.UnableToBuildWrapper;
             }
-            catch(BuildException b)
+            catch (BuildException b)
             {
                 if (b.PrintErrors)
                 {
@@ -150,39 +150,40 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                     log.Flush();
                     return ExitCodes.UnableToLoadPython;
                 }
-                buildTapPackage(actualModulePath, pyconly, replace_package_xml, dump_package_xml);
+                buildTapPackage(actualModulePath, pyconly, replace_package_xml, xml_file_name);
             }
             log.Info("{0} Completed.", modulename);
-            return exitcode;    
+            return exitcode;
         }
 
         // buildTapPlugin needs to be encapsulated, because it depends on Keysight.Tap.Package
         // if the exe is missing, any method using it will throw an exception.
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string dump_package_xml)
+        static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string xml_file_name)
         {
-            string pluginName = Path.GetFileName(sourcePath);
-            string opentapPath = Path.GetDirectoryName(PluginManager.GetOpenTapAssembly().Location);
-            string destinationPath = Path.Combine(opentapPath, "Packages", pluginName);
 
-            var contentFileSourcePaths = Directory.EnumerateFiles(sourcePath, pyconly ? "*.pyc" : "*.py", SearchOption.AllDirectories)
+            string pluginName = new DirectoryInfo(sourcePath).Name;
+            string opentapPath = Path.GetDirectoryName(PluginManager.GetOpenTapAssembly().Location);
+            string pluginDestPath = Path.Combine(opentapPath, "Packages", pluginName);
+
+            var pluginContentSourcePaths = Directory.EnumerateFiles(sourcePath, pyconly ? "*.pyc" : "*.py", SearchOption.AllDirectories)
                 .Concat(Directory.EnumerateFiles(sourcePath, "*.cs", SearchOption.AllDirectories))
                 .Concat(Directory.EnumerateFiles(sourcePath, "*.dll", SearchOption.AllDirectories));
 
             // Create the temporary directories for the plugin tap package to be built in the %OPEN_TAP%\Packages dir
-            Directory.CreateDirectory(destinationPath);
+            Directory.CreateDirectory(pluginDestPath);
             var directories = Directory.EnumerateDirectories(sourcePath, "*.*", SearchOption.AllDirectories);
             Parallel.ForEach(directories, dirPath =>
             {
-                Directory.CreateDirectory(dirPath.Replace(sourcePath, destinationPath));
+                Directory.CreateDirectory(dirPath.Replace(sourcePath, pluginDestPath));
             });
 
             // Copy the plugin content files to the %OPEN_TAP%\Packages dir
-            Parallel.ForEach(contentFileSourcePaths, path =>
+            Parallel.ForEach(pluginContentSourcePaths, path =>
             {
                 try
                 {
-                    File.Copy(path, path.Replace(sourcePath, destinationPath), true);
+                    File.Copy(path, path.Replace(sourcePath, pluginDestPath), true);
                 }
                 catch (IOException ex)
                 {
@@ -191,67 +192,84 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 }
             });
 
-            string defaultPackageName = "package.xml";
-            if (replace_package_xml || !File.Exists(Path.Combine(sourcePath, "package.xml")) || dump_package_xml != null)
+            // Create/update the xml file
+            string targetXmlFileName = string.IsNullOrWhiteSpace(xml_file_name) ? "package.xml" : (xml_file_name + (Path.GetExtension(xml_file_name) == ".xml" ? "" : ".xml"));
+            string targetXmlFilePath = Path.Combine(sourcePath, targetXmlFileName);
+
+            try
             {
-                var xdoc = new XDocument();
+                // Collection of .py/.pyc, .dll, .cs files must always be updated to ensure the latest changes are being included in the tap package
                 XNamespace aw = @"http://opentap.io/schemas/package";
-                XElement package_elem = null;
                 XElement files_elem = new XElement(aw + "Files");
-                XElement description = new XElement(aw + "Description");
-                description.Value = "Add a description here";
-                xdoc.Add(package_elem = new XElement(aw + "Package"));
-                package_elem.Add(files_elem);
-                package_elem.Add(description);
-
-                package_elem.SetAttributeValue("InfoLink", "");
-                package_elem.SetAttributeValue("Version", "1.0.0");
-                
-                package_elem.SetAttributeValue("Name", pluginName);
-
-                Parallel.ForEach(contentFileSourcePaths, path =>
+                Parallel.ForEach(pluginContentSourcePaths, path =>
                 {
                     var fileelem = new XElement(aw + "File");
                     fileelem.SetAttributeValue("Path", path.Replace(sourcePath, $"Packages/{pluginName}"));
                     files_elem.Add(fileelem);
                 });
 
-                var targetxml = Path.Combine(sourcePath, defaultPackageName);
-                if (string.IsNullOrWhiteSpace(dump_package_xml) == false)
+                // Provide default values if the xml file does not exist or the replace flag is true or the existing package element is missing
+                if (!File.Exists(targetXmlFilePath)
+                    || replace_package_xml
+                    || XElement.Load(targetXmlFilePath)?.Name != aw + "Package")
                 {
-                    targetxml = Path.Combine(Path.GetDirectoryName(typeof(Builder).Assembly.Location), dump_package_xml);
-                }
-                File.Delete(targetxml);
-                using (var f = File.Open(targetxml, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    using (var writer = XmlWriter.Create(f, new XmlWriterSettings() { Indent = true }))
+                    // create new xml file
+                    var xdoc = new XDocument();
+                    XElement package_elem = new XElement(aw + "Package");
+                    XElement description = new XElement(aw + "Description");
+                    description.Value = "Add a description here";
+                    xdoc.Add(package_elem);
+                    package_elem.Add(description);
+                    package_elem.Add(files_elem);
+                    package_elem.SetAttributeValue("InfoLink", "");
+                    package_elem.SetAttributeValue("Version", "1.0.0");
+                    package_elem.SetAttributeValue("Name", pluginName);
+                    package_elem.SetAttributeValue("OS", "Windows,Linux");
+
+                    using (var f = File.Open(targetXmlFilePath, FileMode.Create, FileAccess.ReadWrite))
                     {
-                        xdoc.WriteTo(writer);
+                        using (var writer = XmlWriter.Create(f, new XmlWriterSettings() { Indent = true }))
+                        {
+                            xdoc.WriteTo(writer);
+                        }
                     }
+
+                    log.Info("Created file: '{0}'.", targetXmlFilePath);
                 }
-                Console.WriteLine("Created file: '{0}'.", targetxml);
-                if (string.IsNullOrWhiteSpace(dump_package_xml) == false)
-                    return;
+                else
+                {
+                    // Just update the files collection if the xml file exists and the replace flag is false and the existing package element exists
+                    XElement existing_xml_content = XElement.Load(targetXmlFilePath);
+                    XElement existing_files = existing_xml_content.Element(aw + "Files");
+
+                    if (existing_files == null)
+                        existing_xml_content.Add(files_elem);
+                    else
+                        existing_files.ReplaceWith(files_elem);
+
+                    existing_xml_content.Save(targetXmlFilePath);
+                    log.Info("Updated file: '{0}'.", targetXmlFilePath);
+                }
+
+                createPackage(targetXmlFilePath, pluginName + ".TapPackage");
             }
-
-            createPackage(Path.Combine(sourcePath, defaultPackageName), pluginName + ".TapPackage");
-
-            // delete the temporary plugin folder created to build the tap package
-            Directory.Delete(destinationPath, true);
-
-            log.Info("Saved to '{0}'.", Path.Combine(Directory.GetCurrentDirectory(), sourcePath, pluginName + ".TapPackage"));
-            log.Flush();
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+            }
+            finally
+            {
+                // delete the temporary plugin folder created to build the tap package
+                Directory.Delete(pluginDestPath, true);
+            }
         }
 
         private static void createPackage(string inputXmlPath, string outputPath)
         {
             //generating package by using command line
-            string destPluginPackageFile = Path.Combine(Directory.GetCurrentDirectory(), Path.GetDirectoryName(inputXmlPath), outputPath);
-
-            string packageManagerFile = PyThread.IsWin32 ? Path.Combine(Directory.GetCurrentDirectory(), "tap.exe")
-                : Path.Combine(Directory.GetCurrentDirectory(), "tap");
-            string sourceXMLPath = Path.Combine(Directory.GetCurrentDirectory(), inputXmlPath);
-            string argument = "package create " + "\"" + sourceXMLPath + "\""
+            string destPluginPackageFile = Path.Combine(Path.GetDirectoryName(inputXmlPath), outputPath);
+            string packageManagerFile = Path.Combine(Path.GetDirectoryName(PluginManager.GetOpenTapAssembly().Location), PyThread.IsWin32 ? "tap.exe" : "tap");
+            string argument = "package create " + "\"" + inputXmlPath + "\""
                 + " -o \"" + destPluginPackageFile + "\"";
             string error = "", output = "";
             int exitcode = 0;
@@ -275,6 +293,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             if (exitcode == 0)
             {
                 log.Info("Successfully generated package.");
+                log.Info("Saved to '{0}'.", destPluginPackageFile);
             }
             else
             {
