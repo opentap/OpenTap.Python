@@ -35,15 +35,15 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
 
         public static OpenTapTraceSource.TraceSource log = Log.CreateSource("Python");
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ExitCodes doBuild(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string xml_file_name)
+        public static ExitCodes doBuild(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string dump_package_xml)
         {
             if (WrapperBuilder.LoadPython() == false)
                 return ExitCodes.UnableToLoadPython;
-            return doBuildint(modulename, include_pyc, build_tap_plugin, replace_package_xml, xml_file_name);
+            return doBuildint(modulename, include_pyc, build_tap_plugin, replace_package_xml, dump_package_xml);
         }
 
 
-        public static ExitCodes doBuildint(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string xml_file_name)
+        public static ExitCodes doBuildint(string modulename, bool include_pyc, bool build_tap_plugin, bool replace_package_xml, string dump_package_xml)
         {
             log.Info("Start building {0}.", modulename);
             new PythonSettings();
@@ -150,7 +150,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                     log.Flush();
                     return ExitCodes.UnableToLoadPython;
                 }
-                buildTapPackage(actualModulePath, pyconly, replace_package_xml, xml_file_name);
+                buildTapPackage(actualModulePath, pyconly, replace_package_xml, dump_package_xml);
             }
             log.Info("{0} Completed.", modulename);
             return exitcode;
@@ -159,7 +159,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         // buildTapPlugin needs to be encapsulated, because it depends on Keysight.Tap.Package
         // if the exe is missing, any method using it will throw an exception.
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string xml_file_name)
+        static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string dump_package_xml)
         {
 
             string pluginName = new DirectoryInfo(sourcePath).Name;
@@ -193,7 +193,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             });
 
             // Create/update the xml file
-            string targetXmlFileName = string.IsNullOrWhiteSpace(xml_file_name) ? "package.xml" : (xml_file_name + (Path.GetExtension(xml_file_name) == ".xml" ? "" : ".xml"));
+            string targetXmlFileName = string.IsNullOrWhiteSpace(dump_package_xml) ? "package.xml" : (dump_package_xml + (Path.GetExtension(dump_package_xml) == ".xml" ? "" : ".xml"));
             string targetXmlFilePath = Path.Combine(sourcePath, targetXmlFileName);
 
             try

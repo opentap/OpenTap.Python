@@ -22,7 +22,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         public bool IncludePyc { get; set; } = false;
         [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create a package.xml file in the module folder.")]
         public string DumpPackageXml { get; set; } = "";
-        [CommandLineArgument("replace-package-xml", Description = "Replaces the package XML in the module folder.", ShortName = "x")]
+        [CommandLineArgument("replace-package-xml", ShortName = "r", Description = "Replaces the package XML in the module folder.")]
         public bool ReplacePackageXml { get; set; } = false;
 
         public int Execute(CancellationToken cancellationToken)
