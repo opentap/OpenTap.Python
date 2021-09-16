@@ -20,8 +20,8 @@ After creating the Python plugin project, you may start the plugin development f
 The project creation wizard is supported on both Windows and Ubuntu.
 
 Otherwise, if you would like to create a project manually, please refer to:
-1. [Creating an OpenTAP Plugin with Python for Windows](./Creating a plugin with Python for Windows.md)
-2. [Creating an OpenTAP Plugin with Python for Ubuntu](./Creating a plugin with Python for Ubuntu.md)
+1. [Creating an OpenTAP Plugin with Python for Windows](./Creating_a_plugin_with_Python_for_Windows.md)
+2. [Creating an OpenTAP Plugin with Python for Ubuntu](./Creating_a_plugin_with_Python_for_Ubuntu.md)
 
 ## Generate Plugin Template in Existing Python Plugin Project
 
