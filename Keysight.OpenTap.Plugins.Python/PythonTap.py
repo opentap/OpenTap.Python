@@ -185,7 +185,7 @@ def TapPlugin(base):
         def getSingleError(self, propertyName):
             result = ''
             filteredRules = dict(filter(lambda item: str(propertyName) in item[0], self.__ruleCollection.items()))
-            if len(filteredRules) is 0:
+            if len(filteredRules) == 0:
                 return result
             for rule in filteredRules.values():
                 try:

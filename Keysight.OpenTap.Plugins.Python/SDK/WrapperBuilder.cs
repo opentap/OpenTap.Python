@@ -51,7 +51,7 @@ def get_dirs():
         static bool initialized = false;
         static bool init_success = false;
 
-        static readonly IEnumerable<string> pyLibNames = new[] { "python27.dll", "python36.dll", "python35.dll", "python34.dll", "python33.dll", "python37.dll", "libpython2.7.so", "libpython3.6.so", "libpython3.7.so" };
+        static readonly IEnumerable<string> pyLibNames = new[] { "python27.dll", "python36.dll", "python35.dll", "python34.dll", "python33.dll", "python37.dll", "python38.dll", "libpython2.7.so", "libpython3.6.so", "libpython3.7.so", "libpython3.8.so" };
 
         static SharedLib tryLoadPython(string path, bool quiet = false)
         {
@@ -265,7 +265,7 @@ def get_dirs():
 
                 if (pylib == null)
                 {
-                    string message = "Please ensure that the Python path is set to a location of an installed Python 2.7, 3.6 or 3.7.\nTo set the Python path use the 'tap python set-path <version>' command argument.\nPython 2.7, 3.6 or 3.7 can be downloaded from https://www.python.org/\nPlease, see the Python plugin documentation for details.";
+                    string message = "Please ensure that the Python path is set to a location of an installed Python 2.7, 3.6, 3.7 or 3.8.\nTo set the Python path use the 'tap python set-path <version>' command argument.\nPython 2.7, 3.6, 3.7 or 3.8 can be downloaded from https://www.python.org/\nPlease, see the Python plugin documentation for details.";
                     if (robustDirectoryExists(pypath))
                         message += string.Format("\nIt's possible that the architecture of the installed TAP version ({0})\n does not match the installed Python version.", IntPtr.Size == 4 ? "32-bit" : "64-bit");
 
@@ -276,7 +276,7 @@ def get_dirs():
                 var f = pylib.GetDelegate<getStringFcn>("Py_GetVersion");
                 var pythonVersion = f();
                 var pyVersionString = Marshal.PtrToStringAnsi(pythonVersion);
-                Log.Debug("Python version: {0}", pyVersionString);
+                Log.Info("Python version: {0}", pyVersionString);
                 var pyversion = PythonVersion.Parse(pyVersionString);
 
                 if (pyversion == PythonVersion.Unsupported)
@@ -429,6 +429,7 @@ def get_dirs():
                         PythonEngine.Initialize(false);
                         PythonEngine.BeginAllowThreads();
                         PyThread.PyInitialized = true;
+                        log.Debug($"Loaded Pythonnet for Python Version {PythonEngine.Version}");
                     }
                     finally
                     {

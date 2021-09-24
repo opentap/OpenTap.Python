@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using OpenTap;
 using OpenTap.Cli;
@@ -63,17 +64,23 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         TraceSource log = global::OpenTap.Log.CreateSource("CLI");
         public int Execute(CancellationToken cancellationToken)
         {
+            string trimmedVersion = "";
             if (PyThread.IsWin32)
             {
                 log.Error("This option is only supported on linux.");
                 return 1;
             }
-            if((Version == "2.7" || Version == "3.6" || Version == "3.7" || string.IsNullOrWhiteSpace(Version)) == false)
+            else if (!string.IsNullOrWhiteSpace(Version))
             {
-                log.Error("Only Python version 2.7, 3.6 and 3.7 are supported.");
-                return 1;
+                trimmedVersion = Version.Trim();
+                Regex rx = new Regex(@"(^2\.7$)|(^3\.[6-8]{1}$)");
+                if (!rx.IsMatch(trimmedVersion))
+                {
+                    log.Error("Only Python version 2.7, 3.6, 3.7 and 3.8 are supported.");
+                    return 1;
+                }
             }
-            PythonSettings.Current.PythonVersion = Version;
+            PythonSettings.Current.PythonVersion = trimmedVersion;
             PythonSettings.Current.Save();
             log.Info("Set Python version to '{0}'", PythonSettings.Current.PythonVersion);
             return 0;
