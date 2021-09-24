@@ -8,7 +8,7 @@
             <Link Name="Documentation" Description="Go to the documentation." URL="https://opentap.gitlab.io/Plugins/python/"/>
         </Links>
         <Contacts> tap.support@keysight.com </Contacts>
-        <Prerequisites> OpenTAP (9.6+) and Python (2.7, 3.6, 3.7) </Prerequisites>
+        <Prerequisites> OpenTAP (9.6+) and Python (2.7, 3.6, 3.7, 3.8) </Prerequisites>
         <SourceUrl>https://opentap.gitlab.io/Plugins/python/</SourceUrl>
     </Description>
     <Repository Url="https://opentap.gitlab.io/Plugins/python/" />

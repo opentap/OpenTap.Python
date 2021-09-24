@@ -8,6 +8,7 @@ namespace Keysight.OpenTap.Plugins.Python
     class PythonVersion
     {
         public static PythonVersion Unsupported = new PythonVersion("unsupported");
+        public static PythonVersion Py38 = new PythonVersion("py38");
         public static PythonVersion Py37 = new PythonVersion("py37");
         public static PythonVersion Py36 = new PythonVersion("py36");
         public static PythonVersion Py27 = new PythonVersion("py27");
@@ -30,13 +31,19 @@ namespace Keysight.OpenTap.Plugins.Python
             }
             else if (major == 3)
             {
-                if (minor == 7)
+                switch (minor)
                 {
-                    pyversion = Py37;
-                }
-                else
-                {
-                    pyversion = Py36;
+                    case 6:
+                        pyversion = Py36;
+                        break;
+                    case 7:
+                        pyversion = Py37;
+                        break;
+                    case 8:
+                        pyversion = Py38;
+                        break;
+                    default:
+                        break;
                 }
             }
             return pyversion;

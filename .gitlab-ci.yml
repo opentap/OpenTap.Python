@@ -67,8 +67,26 @@ TestPackageUbuntuPy37:
          - tap package install ./Python.TapPackage
          - apt update
          - apt install python3.7-dev -y
-         - tap python set-path /usr/lib/python3.7/config-3.7m-x86_64-linux-gnu
+         - export LD_LIBRARY_PATH=/usr/lib/python3.7/config-3.7m-x86_64-linux-gnu
          - tap python set-version 3.7
+         - pushd /opt/tap
+         - tap python build PluginExample --build-package -v
+         - mkdir -p /opt/tap/Settings/Bench/Default
+         - 'cp -r /opt/tap/Packages/Python/Linux\ Sample\ Files/Settings /opt/tap'
+         - 'tap run /opt/tap/Packages/Python/Linux\ Sample\ Files/Test\ Plans/Python3xExample.TapPlan'
+
+TestPackageUbuntuPy38:
+  tags: [ docker, gce ]
+  stage: test
+  image: opentapio/opentap:9.15-ubuntu18.04
+  dependencies: [Build]
+  script: 
+         - cp *.TapPackage Python.TapPackage
+         - tap package install ./Python.TapPackage
+         - apt update
+         - apt install python3.8-dev -y
+         - export LD_LIBRARY_PATH=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu
+         - tap python set-version 3.8
          - pushd /opt/tap
          - tap python build PluginExample --build-package -v
          - mkdir -p /opt/tap/Settings/Bench/Default
