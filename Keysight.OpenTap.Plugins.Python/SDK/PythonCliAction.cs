@@ -20,7 +20,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         public bool BuildTapPlugin { get; set; } = false;   
         [CommandLineArgument("include-pyc", ShortName = "p", Description = "Include .pyc files in the Python module instead of .py files. This option can only be used with build-package")]
         public bool IncludePyc { get; set; } = false;
-        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create a package.xml file in the module folder.")]
+        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create/update a package.xml file in the module folder.")]
         public string DumpPackageXml { get; set; } = "";
         [CommandLineArgument("replace-package-xml", ShortName = "r", Description = "Replaces the package XML in the module folder.")]
         public bool ReplacePackageXml { get; set; } = false;

@@ -161,7 +161,6 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         [MethodImpl(MethodImplOptions.NoInlining)]
         static void buildTapPackage(string sourcePath, bool pyconly, bool replace_package_xml, string dump_package_xml)
         {
-
             string pluginName = new DirectoryInfo(sourcePath).Name;
             string opentapPath = Path.GetDirectoryName(PluginManager.GetOpenTapAssembly().Location);
             string pluginDestPath = Path.Combine(opentapPath, "Packages", pluginName);
@@ -170,7 +169,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 .Concat(Directory.EnumerateFiles(sourcePath, "*.cs", SearchOption.AllDirectories))
                 .Concat(Directory.EnumerateFiles(sourcePath, "*.dll", SearchOption.AllDirectories));
 
-            // Create the temporary directories for the plugin tap package to be built in the %OPEN_TAP%\Packages dir
+            // Create the temporary directories for the plugin tap package to be built in the current OpenTAP Packages dir
             Directory.CreateDirectory(pluginDestPath);
             var directories = Directory.EnumerateDirectories(sourcePath, "*.*", SearchOption.AllDirectories);
             foreach(string dir in directories)
@@ -178,8 +177,8 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 Directory.CreateDirectory(dir.Replace(sourcePath, pluginDestPath));
             }
 
-            // Copy the plugin content files to the %OPEN_TAP%\Packages dir
-            foreach(string contentPath in pluginContentSourcePaths)
+            // Copy the plugin content files to the current OpenTAP Packages dir
+            foreach (string contentPath in pluginContentSourcePaths)
             {
                 try
                 {
