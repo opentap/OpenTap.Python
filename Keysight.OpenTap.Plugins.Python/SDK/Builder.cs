@@ -173,24 +173,24 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             // Create the temporary directories for the plugin tap package to be built in the %OPEN_TAP%\Packages dir
             Directory.CreateDirectory(pluginDestPath);
             var directories = Directory.EnumerateDirectories(sourcePath, "*.*", SearchOption.AllDirectories);
-            Parallel.ForEach(directories, dirPath =>
+            foreach(string dir in directories)
             {
-                Directory.CreateDirectory(dirPath.Replace(sourcePath, pluginDestPath));
-            });
+                Directory.CreateDirectory(dir.Replace(sourcePath, pluginDestPath));
+            }
 
             // Copy the plugin content files to the %OPEN_TAP%\Packages dir
-            Parallel.ForEach(pluginContentSourcePaths, path =>
+            foreach(string contentPath in pluginContentSourcePaths)
             {
                 try
                 {
-                    File.Copy(path, path.Replace(sourcePath, pluginDestPath), true);
+                    File.Copy(contentPath, contentPath.Replace(sourcePath, pluginDestPath), true);
                 }
                 catch (IOException ex)
                 {
                     // Suppress temp files in use
-                    log.Error($"File copy failed for {path} ({ex.Message})");
+                    log.Error($"File copy failed for {contentPath} ({ex.Message})");
                 }
-            });
+            }
 
             // Create/update the xml file
             string targetXmlFileName = string.IsNullOrWhiteSpace(dump_package_xml) ? "package.xml" : (dump_package_xml + (Path.GetExtension(dump_package_xml) == ".xml" ? "" : ".xml"));
@@ -201,12 +201,12 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 // Collection of .py/.pyc, .dll, .cs files must always be updated to ensure the latest changes are being included in the tap package
                 XNamespace aw = @"http://opentap.io/schemas/package";
                 XElement files_elem = new XElement(aw + "Files");
-                Parallel.ForEach(pluginContentSourcePaths, path =>
+                foreach(string contentPath in pluginContentSourcePaths)
                 {
                     var fileelem = new XElement(aw + "File");
-                    fileelem.SetAttributeValue("Path", path.Replace(sourcePath, $"Packages/{pluginName}"));
+                    fileelem.SetAttributeValue("Path", contentPath.Replace(sourcePath, $"Packages/{pluginName}"));
                     files_elem.Add(fileelem);
-                });
+                }
 
                 // Provide default values if the xml file does not exist or the replace flag is true or the existing package element is missing
                 if (!File.Exists(targetXmlFilePath)
