@@ -6,13 +6,15 @@ Follow these steps to build the examples:
 
 1. Open the Terminal and navigate to your Python plugin folder (%TAP_PATH%).
 
-2. Setup Python path
+2. Set Python version
 
-    For **Python 2.7**: `~/.tap/tap python set-path <Python installation path> 2.7` (refering to [Python Development Setup for Ubuntu](../Python_Development_Setup_for_Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+    For **Python 2.7**: `~/.tap/tap python set-version 2.7`
 
-	For **Python 3.6**: `~/.tap/tap python set-path <Python installation path> 3.6` (refering to [Python Development Setup for Ubuntu](../Python_Development_Setup_for_Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+    For **Python 3.6**: `~/.tap/tap python set-version 3.6`
+
+    For **Python 3.7**: `~/.tap/tap python set-version 3.7`
     
-    For **Python 3.7**: `~/.tap/tap python set-path <Python installation path> 3.7` (refering to [Python Development Setup for Ubuntu](../Python_Development_Setup_for_Ubuntu.md), the installation path is **/usr/local/lib/pythonplugin**)
+    For **Python 3.8**: `~/.tap/tap python set-version 3.8`
     
 3. Build the wrapper for the example modules. Execute:
 

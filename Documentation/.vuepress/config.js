@@ -42,7 +42,8 @@ module.exports = {
                 children:
                 [
                     ['Release_Notes/ReleaseNotes_1_1.md', "Version 1.1"],
-                    ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0"]
+                    ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0"],
+                    ['Release_Notes/ReleaseNotes_2_3.md', "Version 2.3"]
                 ]
             }
         ]

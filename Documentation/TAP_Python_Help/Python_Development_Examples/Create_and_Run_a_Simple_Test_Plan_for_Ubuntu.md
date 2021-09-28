@@ -13,7 +13,7 @@ To view a basic demonstration of the example, you can user the sample test plan 
     
     `~/.tap/tap run ~/.tap/Packages/Python/Linux\ Sample\ Files/Test\ Plans/Python27Example.TapPlan` (for Python2.7)
 
-    `~/.tap/tap run ~/.tap/Packages/Python/Linux\ Sample\ Files/Test\ Plans/Python3xExample.TapPlan` (for Python3.6 and Python3.7)
+    `~/.tap/tap run ~/.tap/Packages/Python/Linux\ Sample\ Files/Test\ Plans/Python3xExample.TapPlan` (for Python3.6, Python3.7 and Python3.8)
 
 The Summary of the result shows that the test plan completed successfully.
 
