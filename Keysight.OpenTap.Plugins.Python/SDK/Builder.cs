@@ -175,7 +175,6 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             string target_plugin_path = Path.Combine(open_tap_path, "Packages", "Python", plugin_name);
             bool is_ext_module = string.Compare(source_path, target_plugin_path) != 0;
             IEnumerable<string> file_source_paths = Directory.EnumerateFiles(source_path, pyconly ? "*.pyc" : "*.py", SearchOption.AllDirectories)
-                .Concat(Directory.EnumerateFiles(source_path, "*.cs", SearchOption.AllDirectories))
                 .Concat(Directory.EnumerateFiles(source_path, "*.dll", SearchOption.AllDirectories));
 
             // Create/update the xml file
