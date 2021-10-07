@@ -3,7 +3,6 @@
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //  http://www.apache.org/licenses/LICENSE-2.0
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -21,9 +20,9 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         public bool BuildTapPlugin { get; set; } = false;   
         [CommandLineArgument("include-pyc", ShortName = "p", Description = "Include .pyc files in the Python module instead of .py files. This option can only be used with build-package")]
         public bool IncludePyc { get; set; } = false;
-        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create a package.xml file in the module folder.")]
+        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create/update a package.xml file in the module folder.")]
         public string DumpPackageXml { get; set; } = "";
-        [CommandLineArgument("replace-package-xml", Description = "Replaces the package XML in the module folder.", ShortName = "x")]
+        [CommandLineArgument("replace-package-xml", ShortName = "r", Description = "Replaces the package XML in the module folder.")]
         public bool ReplacePackageXml { get; set; } = false;
 
         public int Execute(CancellationToken cancellationToken)
