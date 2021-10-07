@@ -150,14 +150,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                     log.Flush();
                     return ExitCodes.UnableToLoadPython;
                 }
-                try
-                {
-                    buildTapPackage(actualModulePath, pyconly, replace_package_xml, dump_package_xml);
-                }
-                catch (Exception ex)
-                {
-                    log.Error("Cannot build the TapPackage file - {0}", ex.Message);
-                }
+                buildTapPackage(actualModulePath, pyconly, replace_package_xml, dump_package_xml);
             }
             log.Info("{0} Completed.", modulename);
             return exitcode;
