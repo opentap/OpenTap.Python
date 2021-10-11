@@ -106,17 +106,6 @@ ManualPublishOpenTapIo:
      - 'tap package install -f -v -r $REPO_URL "PackagePublish" --version 2'
      - 'tap package publish -v -p python -k $OPENTAP_REPO_SECRET_KEY -r packages.opentap.io *.TapPackage'
 
-ManualPublishInternal:
-  tags: [ docker, gce ]
-  stage: publish
-  when: manual
-  image: opentapio/opentap:9.15-ubuntu18.04
-  dependencies:
-     - Build
-
-  script: 
-     - 'tap package install -f -v -r $REPO_URL "PackagePublish" --version 2'
-     - 'tap package publish -v -p python -k $INTERNAL_REPO_SECRET_KEY -r packages.opentap.keysight.com *.TapPackage'
 .BuildDoc:
   stage: build
   image: node:9.11.1
