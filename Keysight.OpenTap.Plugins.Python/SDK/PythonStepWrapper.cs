@@ -36,12 +36,26 @@ namespace Keysight.OpenTap.Plugins.Python
                 OnPropertyChanged("ChildTestSteps");
             }
         }
-        [Browsable(false)]
+
+        /// <summary>
+        /// Gets or sets boolean indicating whether this step is enabled in the TestPlan
+        /// </summary>
         [ColumnDisplayName("", Order: -101)]
+        [Display("Enabled", "Enabling/Disabling the test step decides if" +
+                            " it should be used when the test plan is executed. " +
+                            "This value should not be changed during test plan run.", Group: "Common", Order: 20000, Collapsed: true)]
+        [Unsweepable]
+        [NonMetaData]
         public bool Enabled
         {
             get => step.Enabled;
-            set => step.Enabled = value;
+            set
+            {
+                if (step.Enabled == value)
+                    return;
+                step.Enabled = value;
+                OnPropertyChanged(nameof(Enabled));
+            }
         }
 
         [XmlAttribute("Id")]
@@ -175,5 +189,9 @@ namespace Keysight.OpenTap.Plugins.Python
         {
             ChildTestSteps = new TestStepList { Parent = this };
         }
+    }
+    class NonMetaDataAttribute : Attribute
+    {
+
     }
 }
