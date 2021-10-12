@@ -73,12 +73,30 @@ namespace Keysight.OpenTap.Plugins.Python
             set => step.IsReadOnly = value;
         }
 
-        [ColumnDisplayName("Step Name", Order: -100)]
-        [Browsable(false)]
+        /// <summary>
+        /// Gets or sets the name of the TestStep instance. Not allowed to be null.
+        /// In many cases the name is unique within a test plan, but this should not be assumed, use <see cref="Id"/>for an unique identifier.
+        /// May not be null.
+        /// </summary>
+        [ColumnDisplayName(nameof(Name), Order: -100)]
+        [Display("Step Name", "The name of the test step, this value can be used to identifiy a test step. " +
+                              "Test step names are not guaranteed to be unique. " +
+                              "Name can include names of a setting of the step, this property will dynamically be " +
+                              "replaced with it's current value in some views.", Group: "Common", Order: 20001, Collapsed: true)]
+        [Unsweepable]
+        [MetaData(Frozen = true)]
         public string Name
         {
-            get => step.Name; 
-            set => step.Name = value; 
+            get => step.Name;
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value), "TestStep.Name cannot be null.");
+                if (value == step.Name)
+                    return;
+                step.Name = value;
+                OnPropertyChanged(nameof(Name));
+            }
         }
 
         [XmlIgnore]
