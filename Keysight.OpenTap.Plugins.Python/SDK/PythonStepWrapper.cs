@@ -45,7 +45,6 @@ namespace Keysight.OpenTap.Plugins.Python
                             " it should be used when the test plan is executed. " +
                             "This value should not be changed during test plan run.", Group: "Common", Order: 20000, Collapsed: true)]
         [Unsweepable]
-        [NonMetaData]
         public bool Enabled
         {
             get => step.Enabled;
@@ -189,9 +188,5 @@ namespace Keysight.OpenTap.Plugins.Python
         {
             ChildTestSteps = new TestStepList { Parent = this };
         }
-    }
-    class NonMetaDataAttribute : Attribute
-    {
-
     }
 }
