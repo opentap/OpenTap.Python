@@ -54,7 +54,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         }
     }
 
-    [Display("get-path", Group: "python", Description: "Get the path to the Python library.")]
+    [Display("get-path", Group: "python", Description: "Get the path to the Python library. (Windows only)")]
     public class PythonGetPath : ICliAction
     {
         readonly TraceSource log = Log.CreateSource("CLI");
@@ -73,12 +73,8 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             }
             else
             {
-                path = System.Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
-                if (string.IsNullOrWhiteSpace(path))
-                {
-                    log.Error("Python library path is empty. Please refer to the user guide - `Python Development Setup for Ubuntu` for details.");
-                    return 1;
-                }
+                log.Error("This option is only supported on Windows.");
+                return 1;
             }
 
             log.Info("Python library path - {0}", path);
@@ -115,36 +111,6 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             PythonSettings.Current.Save();
             log.Info("Set Python version to '{0}'", PythonSettings.Current.PythonVersion);
             return 0;
-        }
-    }
-
-    [Display("get-version", Group: "python", Description: "Get the Python version to use. (Linux only)")]
-    public class PythonGetVersion : ICliAction
-    {
-        readonly TraceSource log = Log.CreateSource("CLI");
-
-        public int Execute(CancellationToken cancellationToken)
-        {
-            if (PyThread.IsWin32)
-            {
-                log.Error("This option is only supported on linux.");
-                return 1;
-            }
-            else
-            {
-                // PythonVersion only available on Linux.
-                string version = PythonSettings.Current.PythonVersion;
-                if (string.IsNullOrWhiteSpace(version))
-                {
-                    log.Error("Python version is empty. Please refer to `tap python set-version` for details.");
-                    return 1;
-                }
-                else
-                {
-                    log.Info("Python version - {0}", version);
-                    return 0;
-                }
-            }
         }
     }
 
