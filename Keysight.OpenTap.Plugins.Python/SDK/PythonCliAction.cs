@@ -54,6 +54,38 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         }
     }
 
+    [Display("get-path", Group: "python", Description: "Get the path to the Python library.")]
+    public class PythonGetPath : ICliAction
+    {
+        readonly TraceSource log = Log.CreateSource("CLI");
+
+        public int Execute(CancellationToken cancellationToken)
+        {
+            string path;
+            if (PyThread.IsWin32)
+            {
+                path = PythonSettings.Current.PythonPath;
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    log.Error("Python library path is empty. Please refer to `tap python set-path` for details.");
+                    return 1;
+                }
+            }
+            else
+            {
+                path = System.Environment.GetEnvironmentVariable("LD_LIBRARY_PATH");
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    log.Error("Python library path is empty. Please refer to the user guide - `Python Development Setup for Ubuntu` for details.");
+                    return 1;
+                }
+            }
+
+            log.Info("Python library path - {0}", path);
+            return 0;
+        }
+    }
+
     [Display("set-version", Group: "python", Description: "Set the Python version to use. E.g 'tap python set-version 2.7' (Linux only)")]
     public class PythonSetVersion : ICliAction
     {
@@ -83,6 +115,36 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             PythonSettings.Current.Save();
             log.Info("Set Python version to '{0}'", PythonSettings.Current.PythonVersion);
             return 0;
+        }
+    }
+
+    [Display("get-version", Group: "python", Description: "Get the Python version to use. (Linux only)")]
+    public class PythonGetVersion : ICliAction
+    {
+        readonly TraceSource log = Log.CreateSource("CLI");
+
+        public int Execute(CancellationToken cancellationToken)
+        {
+            if (PyThread.IsWin32)
+            {
+                log.Error("This option is only supported on linux.");
+                return 1;
+            }
+            else
+            {
+                // PythonVersion only available on Linux.
+                string version = PythonSettings.Current.PythonVersion;
+                if (string.IsNullOrWhiteSpace(version))
+                {
+                    log.Error("Python version is empty. Please refer to `tap python set-version` for details.");
+                    return 1;
+                }
+                else
+                {
+                    log.Info("Python version - {0}", version);
+                    return 0;
+                }
+            }
         }
     }
 
