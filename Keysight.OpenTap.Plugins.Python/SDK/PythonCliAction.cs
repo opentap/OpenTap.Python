@@ -54,6 +54,34 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         }
     }
 
+    [Display("get-path", Group: "python", Description: "Get the path to the Python library. (Windows only)")]
+    public class PythonGetPath : ICliAction
+    {
+        readonly TraceSource log = Log.CreateSource("CLI");
+
+        public int Execute(CancellationToken cancellationToken)
+        {
+            string path;
+            if (PyThread.IsWin32)
+            {
+                path = PythonSettings.Current.PythonPath;
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    log.Error("Python library path is empty. Please refer to `tap python set-path` for details.");
+                    return 1;
+                }
+            }
+            else
+            {
+                log.Error("This option is only supported on Windows.");
+                return 1;
+            }
+
+            log.Info("Python library path - {0}", path);
+            return 0;
+        }
+    }
+
     [Display("set-version", Group: "python", Description: "Set the Python version to use. E.g 'tap python set-version 2.7' (Linux only)")]
     public class PythonSetVersion : ICliAction
     {
