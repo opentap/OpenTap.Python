@@ -185,7 +185,7 @@ def TapPlugin(base):
         def getSingleError(self, propertyName):
             result = ''
             filteredRules = dict(filter(lambda item: str(propertyName) in item[0], self.__ruleCollection.items()))
-            if len(filteredRules) is 0:
+            if len(filteredRules) == 0:
                 return result
             for rule in filteredRules.values():
                 try:
@@ -284,7 +284,12 @@ class ComponentSettings(TapPlugin(PythonComponentSettings)):
     @classmethod
     def GetCurrent(cls):
         """Gets the current settings instance. This value changes when new settings profiles are loaded."""
-        return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        try: 
+            return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        except AttributeError: # The component settings has not yet been loaded so __WrapperType__ is not set.
+            PythonComponentSettings.EnsureLoaded(cls);
+            return OpenTap.ComponentSettings.GetCurrent(cls.__WrapperType__)
+        
 
     def reload(self):
         cls = self.__class__

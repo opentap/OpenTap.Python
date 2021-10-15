@@ -1,4 +1,4 @@
-﻿//  Copyright 2012-2019 Keysight Technologies
+//  Copyright 2012-2019 Keysight Technologies
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
@@ -138,7 +138,7 @@ namespace Keysight.OpenTap.Plugins.Python
 
         public string TypeName => GetType().FullName;
 
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public ITestStepParent Parent
         {
             get => step?.Parent;

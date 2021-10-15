@@ -10,7 +10,7 @@ stages:
 # This job builds the solution and captures the resulting *.TapPlugin as a build artifact
 Build:
   stage: build
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   tags: [ docker, gce ]
   script: 
           - dotnet build -c Release
@@ -24,7 +24,7 @@ Build:
 TestPackageUbuntuPy27:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - 'cp *.TapPackage Python.TapPackage'
@@ -41,7 +41,7 @@ TestPackageUbuntuPy27:
 TestPackageUbuntuPy36:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - cp *.TapPackage Python.TapPackage
@@ -60,15 +60,33 @@ TestPackageUbuntuPy36:
 TestPackageUbuntuPy37:
   tags: [ docker, gce ]
   stage: test
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies: [Build]
   script: 
          - cp *.TapPackage Python.TapPackage
          - tap package install ./Python.TapPackage
          - apt update
          - apt install python3.7-dev -y
-         - tap python set-path /usr/lib/python3.7/config-3.7m-x86_64-linux-gnu
+         - export LD_LIBRARY_PATH=/usr/lib/python3.7/config-3.7m-x86_64-linux-gnu
          - tap python set-version 3.7
+         - pushd /opt/tap
+         - tap python build PluginExample --build-package -v
+         - mkdir -p /opt/tap/Settings/Bench/Default
+         - 'cp -r /opt/tap/Packages/Python/Linux\ Sample\ Files/Settings /opt/tap'
+         - 'tap run /opt/tap/Packages/Python/Linux\ Sample\ Files/Test\ Plans/Python3xExample.TapPlan'
+
+TestPackageUbuntuPy38:
+  tags: [ docker, gce ]
+  stage: test
+  image: opentapio/opentap:9.15-ubuntu18.04
+  dependencies: [Build]
+  script: 
+         - cp *.TapPackage Python.TapPackage
+         - tap package install ./Python.TapPackage
+         - apt update
+         - apt install python3.8-dev -y
+         - export LD_LIBRARY_PATH=/usr/lib/python3.8/config-3.8-x86_64-linux-gnu
+         - tap python set-version 3.8
          - pushd /opt/tap
          - tap python build PluginExample --build-package -v
          - mkdir -p /opt/tap/Settings/Bench/Default
@@ -81,30 +99,16 @@ ManualPublishOpenTapIo:
   tags: [ docker, gce ]
   stage: publish
   when: manual
-  image: opentapio/opentap:9.5-ubuntu18.04
+  image: opentapio/opentap:9.15-ubuntu18.04
   dependencies:
      - Build
   script: 
      - 'tap package install -f -v -r $REPO_URL "PackagePublish" --version 2'
      - 'tap package publish -v -p python -k $OPENTAP_REPO_SECRET_KEY -r packages.opentap.io *.TapPackage'
 
-ManualPublishInternal:
-  tags: [ docker, gce ]
-  stage: publish
-  when: manual
-  image: opentapio/opentap:9.5-ubuntu18.04
-  dependencies:
-     - Build
-
-  script: 
-     - 'tap package install -f -v -r $REPO_URL "PackagePublish" --version 2'
-     - 'tap package publish -v -p python -k $INTERNAL_REPO_SECRET_KEY -r packages.opentap.keysight.com *.TapPackage'
-  
-pages:
+.BuildDoc:
   stage: build
   image: node:9.11.1
-  only:
-    - master
   cache:
     paths:
       - node_modules/
@@ -115,3 +119,11 @@ pages:
   artifacts:
     paths:
       - public
+pages:
+  extends: .BuildDoc
+  only: 
+    - tags
+buildDocTest:
+  extends: .BuildDoc
+  except: 
+    - tags

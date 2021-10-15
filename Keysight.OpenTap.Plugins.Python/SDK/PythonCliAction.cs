@@ -3,9 +3,9 @@
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //  http://www.apache.org/licenses/LICENSE-2.0
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using OpenTap;
 using OpenTap.Cli;
@@ -20,9 +20,9 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         public bool BuildTapPlugin { get; set; } = false;   
         [CommandLineArgument("include-pyc", ShortName = "p", Description = "Include .pyc files in the Python module instead of .py files. This option can only be used with build-package")]
         public bool IncludePyc { get; set; } = false;
-        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create a package.xml file in the module folder.")]
+        [CommandLineArgument("dump-package-xml", ShortName = "x", Description = "Create/update a package.xml file in the module folder.")]
         public string DumpPackageXml { get; set; } = "";
-        [CommandLineArgument("replace-package-xml", Description = "Replaces the package XML in the module folder.", ShortName = "x")]
+        [CommandLineArgument("replace-package-xml", ShortName = "r", Description = "Replaces the package XML in the module folder.")]
         public bool ReplacePackageXml { get; set; } = false;
 
         public int Execute(CancellationToken cancellationToken)
@@ -54,6 +54,34 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         }
     }
 
+    [Display("get-path", Group: "python", Description: "Get the path to the Python library. (Windows only)")]
+    public class PythonGetPath : ICliAction
+    {
+        readonly TraceSource log = Log.CreateSource("CLI");
+
+        public int Execute(CancellationToken cancellationToken)
+        {
+            string path;
+            if (PyThread.IsWin32)
+            {
+                path = PythonSettings.Current.PythonPath;
+                if (string.IsNullOrWhiteSpace(path))
+                {
+                    log.Error("Python library path is empty. Please refer to `tap python set-path` for details.");
+                    return 1;
+                }
+            }
+            else
+            {
+                log.Error("This option is only supported on Windows.");
+                return 1;
+            }
+
+            log.Info("Python library path - {0}", path);
+            return 0;
+        }
+    }
+
     [Display("set-version", Group: "python", Description: "Set the Python version to use. E.g 'tap python set-version 2.7' (Linux only)")]
     public class PythonSetVersion : ICliAction
     {
@@ -63,17 +91,23 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         TraceSource log = global::OpenTap.Log.CreateSource("CLI");
         public int Execute(CancellationToken cancellationToken)
         {
+            string trimmedVersion = "";
             if (PyThread.IsWin32)
             {
                 log.Error("This option is only supported on linux.");
                 return 1;
             }
-            if((Version == "2.7" || Version == "3.6" || Version == "3.7" || string.IsNullOrWhiteSpace(Version)) == false)
+            else if (!string.IsNullOrWhiteSpace(Version))
             {
-                log.Error("Only Python version 2.7, 3.6 and 3.7 are supported.");
-                return 1;
+                trimmedVersion = Version.Trim();
+                Regex rx = new Regex(@"(^2\.7$)|(^3\.[6-8]{1}$)");
+                if (!rx.IsMatch(trimmedVersion))
+                {
+                    log.Error("Only Python version 2.7, 3.6, 3.7 and 3.8 are supported.");
+                    return 1;
+                }
             }
-            PythonSettings.Current.PythonVersion = Version;
+            PythonSettings.Current.PythonVersion = trimmedVersion;
             PythonSettings.Current.Save();
             log.Info("Set Python version to '{0}'", PythonSettings.Current.PythonVersion);
             return 0;

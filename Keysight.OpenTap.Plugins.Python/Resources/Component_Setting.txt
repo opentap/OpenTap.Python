@@ -1,0 +1,28 @@
+"""
+ For more examples, please refer to the plugin example of OpenTAP Python plugin.
+"""
+import sys
+import clr
+import PythonTap
+import OpenTap
+import System
+from PythonTap import *
+from OpenTap import DisplayAttribute, UnitAttribute, Verdict
+from System import String, Int32 # Import types to reference for generic methods.
+
+@Attribute(DisplayAttribute, "ACTUAL_PLUGIN_NAME", "Add a description here")
+class ACTUAL_PLUGIN_NAME(ComponentSettings):
+    def __init__(self):
+        super(ACTUAL_PLUGIN_NAME, self).__init__()
+        
+        # ToDo: Add property here for each parameter the end user should be able to change.
+        # AddProperty("property_name", default property value, property data type)
+
+        # String property example.
+        prop = self.AddProperty("string_property_example", "string example", String)
+        prop.AddAttribute(DisplayAttribute, "Add a display name here", "Add a description here", "Add a group name here")
+
+        # Integer property example.
+        prop = self.AddProperty("integer_property_example", 0, Int32)
+        prop.AddAttribute(DisplayAttribute, "Add a display name here", "Add a description here", "Add a group name here")
+        prop.AddAttribute(UnitAttribute, "Add a display unit here")

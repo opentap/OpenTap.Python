@@ -1,7 +1,7 @@
 # Debugging with Microsoft Visual Studio
 Python development supports debugging through attaching the debugger to the OpenTAP executable process. In the following steps, remote debugging through attaching the debugger in Microsoft Visual Studio environment is shown.
 
-1. Build Python Scripts (refer to Step 2 of [Creating an OpenTAP Plugin with Python for Windows](Creating a Plugin with Python for Windows.md)).
+1. Build Python Scripts (refer to Step 2 of [Creating an OpenTAP Plugin with Python for Windows](./Creating_a_plugin_with_Python_for_Windows.md)).
 
 2. Launch OpenTAP.
 

@@ -10,5 +10,8 @@ TestResults/
 .idea/
 .py_installed
 .pynet_installed
+**/node_modules
+**/public
+**/.vscode 
 
 /Help/Project/Users/

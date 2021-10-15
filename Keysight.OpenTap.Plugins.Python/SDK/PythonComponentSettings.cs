@@ -6,7 +6,9 @@
 using OpenTap;
 using Keysight.Plugins.Python;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using Python.Runtime;
 
 namespace Keysight.OpenTap.Plugins.Python
 {
@@ -16,5 +18,20 @@ namespace Keysight.OpenTap.Plugins.Python
     {        
         [Browsable(false)]
         public IPythonWrapper Wrapper { get; set; }
+
+        static public void EnsureLoaded(PyObject value)
+        {
+            PyThread.Invoke(() =>
+            {
+                var name = value.GetAttr("__name__").ToString();
+                var x = TypeData.GetDerivedTypes<ComponentSettings>()
+                    .Where(xy => xy.DescendsTo(typeof(IPythonWrapper))
+                                  && xy.CanCreateInstance
+                    ).ToArray();
+                foreach (var tp in x)
+                    if(tp.Name.Contains("." + name))
+                        ComponentSettings.GetCurrent(tp);
+            });
+        }
     }
 }

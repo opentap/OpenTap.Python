@@ -14,11 +14,11 @@ Creating a plugin with Python involves five basic steps:
 
 5. Build the .TapPackage package, which allows the plugin to be distributed.
 
-For details on these steps, see [Creating an OpenTAP Plugin with Python for Windows](Creating a Plugin with Python for Windows.md).
+For details on these steps, see [Creating an OpenTAP Plugin with Python for Windows](./Creating_a_plugin_with_Python_for_Windows.md).
 
-If you would like to build the examples first, see [Building the Python Examples for Windows](Python Development Examples/Building the Python Examples for Windows.md).
+If you would like to build the examples first, see [Building the Python Examples for Windows](./Python_Development_Examples/Building_the_Python_Examples_for_Windows.md).
 
-For debugging steps, see [Debugging with Microsoft Visual Studio](Debugging_with_Microsoft_Visual_Studio.md).
+For debugging steps, see [Debugging with Microsoft Visual Studio](./Debugging_with_Microsoft_Visual_Studio.md).
 
 **For Ubuntu**
 
@@ -36,6 +36,6 @@ Creating a plugin with Python involves five basic steps:
 
 6. Build the .TapPackage package, which allows the plugin to be distributed.
 
-For details on these steps, see [Creating an OpenTAP Plugin with Python for Ubuntu](Creating a Plugin with Python for Ubuntu.md).
+For details on these steps, see [Creating an OpenTAP Plugin with Python for Ubuntu](./Creating_a_plugin_with_Python_for_Ubuntu.md).
 
-If you would like to build the examples first, see [Building the Python Examples for Ubuntu](Python Development Examples/Building the Python Examples for Ubuntu.md).
+If you would like to build the examples first, see [Building the Python Examples for Ubuntu](./Python_Development_Examples/Building_the_Python_Examples_for_Ubuntu.md).
