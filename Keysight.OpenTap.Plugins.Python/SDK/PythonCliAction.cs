@@ -27,6 +27,12 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
 
         public int Execute(CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(ModuleName))
+            {
+                Log.CreateSource("CLI").Error("Module name cannot be empty.");
+                return 1;
+            }
+
             // It is important that the module we are building is not loaded if it was already there.
             PluginManager.AddAssemblyLoadFilter((x, v) => (x != "Python." + ModuleName) && (x != ModuleName));
             TapThread.Start(WrapperBuilder.RoslynWarmup); // Saves ~1s compilation time.
