@@ -51,7 +51,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         {
             if(Directory.Exists(Path) == false)
             {
-                log.Warning("Warning: The directory '{0}' does not exist.\n", Path);
+                log.Error("The directory '{0}' does not exist.\n", Path);
                 return 1;
             }
             PythonSettings.Current.PythonPath = System.IO.Path.GetFullPath(Path);
