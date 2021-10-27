@@ -126,6 +126,11 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                 }
                 return ExitCodes.UnableToBuildWrapper;
             }
+            catch (UnauthorizedAccessException uae)
+            {
+                log.Error("Please close any active tap processes. E.g. Editor, Editor X, etc.\n" + uae.Message);
+                return ExitCodes.UnableToBuildWrapper;
+            }
             catch (Exception ex)
             {
                 log.Error("Caught exception while creating plugin.");
