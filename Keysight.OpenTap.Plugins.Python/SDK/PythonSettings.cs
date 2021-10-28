@@ -17,7 +17,7 @@ namespace Keysight.OpenTap.Plugins.Python
     /// Provides capability to load Python code into step, build step as PythonStep, and build C# DLL wrapper code.
     /// </summary>
     [Display("Python", "Settings for the Python plugin.")]
-    [HelpLink("Packages/Python/TapPythonPluginHelp.chm")]
+    //[HelpLink("https://opentap.gitlab.io/Plugins/python/")]
     [Obfuscation(Exclude = true)]
     public class PythonSettings : ComponentSettings<PythonSettings>
     {
