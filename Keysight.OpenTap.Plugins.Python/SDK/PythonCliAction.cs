@@ -27,6 +27,12 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
 
         public int Execute(CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(ModuleName))
+            {
+                Log.CreateSource("CLI").Error("Module name cannot be empty.");
+                return 1;
+            }
+
             // It is important that the module we are building is not loaded if it was already there.
             PluginManager.AddAssemblyLoadFilter((x, v) => (x != "Python." + ModuleName) && (x != ModuleName));
             TapThread.Start(WrapperBuilder.RoslynWarmup); // Saves ~1s compilation time.
@@ -45,7 +51,8 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
         {
             if(Directory.Exists(Path) == false)
             {
-                log.Warning("Warning: The directory '{0}' does not exist.\n", Path);
+                log.Error("The directory '{0}' does not exist.\n", Path);
+                return 1;
             }
             PythonSettings.Current.PythonPath = System.IO.Path.GetFullPath(Path);
             PythonSettings.Current.Save();
