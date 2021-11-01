@@ -128,7 +128,7 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
             }
             catch (UnauthorizedAccessException uae)
             {
-                log.Error("Please close any active tap processes. E.g. Editor, Editor X, etc.\n" + uae.Message);
+                log.Error("Please close any active tap processes such as Editor, Editor X and others, and build the python plugin again.\n" + uae.Message);
                 return ExitCodes.UnableToBuildWrapper;
             }
             catch (Exception ex)
