@@ -214,7 +214,7 @@ namespace Keysight.OpenTap.Plugins.Python
                     return false;
             }, "This search path does not exist.", nameof(SearchPath));
 
-            Rules.Add(() => ValidateDirSize(), "This directory is too large. Maximum size: 100mb", nameof(SearchPath));
+            Rules.Add(() => ValidateDirSize(), "This directory is too large. Maximum size: 100MB", nameof(SearchPath));
         }
 
         private bool dirSize(DirectoryInfo dirInfo, ref long size)
