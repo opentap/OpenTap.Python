@@ -84,14 +84,14 @@ namespace Keysight.OpenTap.Plugins.Python
                 var PluginManagerDirectories = PluginManager.DirectoriesToSearch;
                 var pluginManagerDirToCompare = PluginManagerDirectories.FindAll(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location));
                 pluginManagerDirToCompare.Sort();
-                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath) && x.ValidateDirSize()).Select(y => y.SearchPath).ToList();
+                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath) && x.Validate()).Select(y => y.SearchPath).ToList();
                 pluginSearchPathToCompare.Sort();
                 if (pluginManagerDirToCompare.SequenceEqual(pluginSearchPathToCompare))
                     return;
 
                 var dirToBeRemoved = PluginManagerDirectories.Where(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location) && (!PluginSearchPath.Exists(y => y.SearchPath == x) || !PluginSearchPath.Find(z => z.SearchPath == x).Enabled)).ToList();
                 dirToBeRemoved.ForEach(x => PluginManagerDirectories.Remove(x));
-                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath) && x.ValidateDirSize()).ToList();
+                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath) && x.Validate()).ToList();
                 dirToBeAdded.ForEach(x => PluginManagerDirectories.Add(x.SearchPath));
                 PluginManager.SearchAsync();
             }
@@ -214,41 +214,40 @@ namespace Keysight.OpenTap.Plugins.Python
                     return false;
             }, "This search path does not exist.", nameof(SearchPath));
 
-            Rules.Add(() => ValidateDirSize(), "This directory is too large. Maximum size: 100MB", nameof(SearchPath));
+            Rules.Add(() => Validate(), "The sub-directory(s) could not be accessed or it exceeds the maximum file count (Maximum file count: 100)", nameof(SearchPath));
         }
 
-        private bool dirSize(DirectoryInfo dirInfo, ref long size)
-        {
-            // add file sizes of the current dir
-            FileInfo[] files = dirInfo.GetFiles();
-            foreach (FileInfo fi in files)
-            {
-                size += fi.Length;
-                if (size > 100000000) // if the total size is above 100mb, we stop searching and return false.
-                    return false;
-            }
-            // add subdirectory sizes
-            DirectoryInfo[] subDirs = dirInfo.GetDirectories();
-            foreach (DirectoryInfo di in subDirs)
-            {
-                bool result = dirSize(di, ref size);
-                if (!result)
-                    return false;
-            }
-            return true;
-        }
-
-        public bool ValidateDirSize()
+        public bool Validate()
         {
             // check the existence of the search path first
-            if (!string.IsNullOrWhiteSpace(searchPath) && Directory.Exists(Path.GetFullPath(searchPath)))
+            if (!string.IsNullOrWhiteSpace(SearchPath) && Directory.Exists(Path.GetFullPath(SearchPath)))
             {
-                long totalSize = 0;
-                DirectoryInfo dirInfo = new DirectoryInfo(searchPath);
-                return dirSize(dirInfo, ref totalSize);
+                try
+                {
+                    var dirs = new DirectoryInfo(SearchPath).GetDirectories();
+                    foreach (DirectoryInfo dir in dirs)
+                    {
+                        if (File.Exists(Path.Combine(dir.FullName, "__init__.py")) || dir.Name == "bin" || dir.Name == "obj")
+                            continue;
+
+                        if (dir.GetFiles().Length > 100)
+                            return false;
+
+                        var subDirs = dir.GetDirectories();
+                        foreach (DirectoryInfo subDir in subDirs)
+                        {
+                            if (subDir.GetFiles().Length > 100)
+                                return false;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.Message);
+                    return false;
+                }
             }
-            else
-                return true;
+            return true;
         }
 
         TraceSource log = global::OpenTap.Log.CreateSource("Python");
