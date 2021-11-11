@@ -224,20 +224,22 @@ namespace Keysight.OpenTap.Plugins.Python
             {
                 try
                 {
-                    var dirs = new DirectoryInfo(SearchPath).GetDirectories();
-                    foreach (DirectoryInfo dir in dirs)
+                    var startingDir = new DirectoryInfo(SearchPath);
+                    Queue<DirectoryInfo> dirQueue = new Queue<DirectoryInfo>();
+
+                    dirQueue.Enqueue(startingDir);
+
+                    while (dirQueue.Count != 0)
                     {
-                        if (File.Exists(Path.Combine(dir.FullName, "__init__.py")) || dir.Name == "bin" || dir.Name == "obj")
-                            continue;
-
-                        if (dir.GetFiles().Length > 100)
+                        DirectoryInfo currentDir = dirQueue.Dequeue();
+                        if (!validateDir(currentDir))
                             return false;
-
-                        var subDirs = dir.GetDirectories();
-                        foreach (DirectoryInfo subDir in subDirs)
+                        else
                         {
-                            if (subDir.GetFiles().Length > 100)
-                                return false;
+                            foreach (DirectoryInfo subDir in currentDir.GetDirectories())
+                            {
+                                dirQueue.Enqueue(subDir);
+                            }
                         }
                     }
                 }
@@ -248,6 +250,16 @@ namespace Keysight.OpenTap.Plugins.Python
                 }
             }
             return true;
+        }
+
+        private bool validateDir(DirectoryInfo directoryInfo)
+        {
+            if (File.Exists(Path.Combine(directoryInfo.FullName, "__init__.py")) || directoryInfo.Name == "bin" || directoryInfo.Name == "obj")
+                return true;
+            else if (directoryInfo.GetFiles().Length > 100)
+                return false;
+            else
+                return true;
         }
 
         TraceSource log = global::OpenTap.Log.CreateSource("Python");
