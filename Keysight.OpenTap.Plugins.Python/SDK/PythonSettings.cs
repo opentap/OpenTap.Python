@@ -214,7 +214,7 @@ namespace Keysight.OpenTap.Plugins.Python
                     return false;
             }, "This search path does not exist.", nameof(SearchPath));
 
-            Rules.Add(() => Validate(), "The sub-directory(s) could not be accessed or it exceeds the maximum file count (Maximum file count: 100)", nameof(SearchPath));
+            Rules.Add(() => Validate(), "The directory or its sub-directory(s) could not be accessed or they contain more than 100 files. (Maximum file count: 100)", nameof(SearchPath));
         }
 
         public bool Validate()
@@ -229,10 +229,13 @@ namespace Keysight.OpenTap.Plugins.Python
 
                     dirQueue.Enqueue(startingDir);
 
+                    int totalFileCount = 0;
                     while (dirQueue.Count != 0)
                     {
                         DirectoryInfo currentDir = dirQueue.Dequeue();
-                        if (!validateDir(currentDir))
+                        totalFileCount += getFileCount(currentDir);
+                        
+                        if (totalFileCount > 100)
                             return false;
                         else
                         {
@@ -252,14 +255,12 @@ namespace Keysight.OpenTap.Plugins.Python
             return true;
         }
 
-        private bool validateDir(DirectoryInfo directoryInfo)
+        private int getFileCount(DirectoryInfo directoryInfo)
         {
             if (File.Exists(Path.Combine(directoryInfo.FullName, "__init__.py")) || directoryInfo.Name == "bin" || directoryInfo.Name == "obj")
-                return true;
-            else if (directoryInfo.GetFiles().Length > 100)
-                return false;
+                return 0; // do not count bin/obj folder and folder containing __init__.py
             else
-                return true;
+                return directoryInfo.GetFiles().Length;
         }
 
         TraceSource log = global::OpenTap.Log.CreateSource("Python");
