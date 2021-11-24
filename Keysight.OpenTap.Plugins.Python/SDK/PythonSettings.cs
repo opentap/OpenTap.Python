@@ -190,6 +190,7 @@ namespace Keysight.OpenTap.Plugins.Python
 
     public class PluginSearchPath : ValidatingObject
     {
+        const int MAX_FILE_COUNT = 100;
         string searchPath;
 
         [Display("Search Path", "A search path for finding the Python based plugin modules.", Order:1)]
@@ -233,9 +234,12 @@ namespace Keysight.OpenTap.Plugins.Python
                     while (dirQueue.Count != 0)
                     {
                         DirectoryInfo currentDir = dirQueue.Dequeue();
-                        totalFileCount += getFileCount(currentDir);
+                        if (currentDir.Name == "bin" || currentDir.Name == "obj" || File.Exists(Path.Combine(currentDir.FullName, "__init__.py")))
+                            continue;
+
+                        totalFileCount += currentDir.GetFiles().Length;
                         
-                        if (totalFileCount > 100)
+                        if (totalFileCount > MAX_FILE_COUNT)
                             return false;
                         else
                         {
@@ -253,14 +257,6 @@ namespace Keysight.OpenTap.Plugins.Python
                 }
             }
             return true;
-        }
-
-        private int getFileCount(DirectoryInfo directoryInfo)
-        {
-            if (File.Exists(Path.Combine(directoryInfo.FullName, "__init__.py")) || directoryInfo.Name == "bin" || directoryInfo.Name == "obj")
-                return 0; // do not count bin/obj folder and folder containing __init__.py
-            else
-                return directoryInfo.GetFiles().Length;
         }
 
         TraceSource log = global::OpenTap.Log.CreateSource("Python");
