@@ -190,7 +190,7 @@ namespace Keysight.OpenTap.Plugins.Python
 
     public class PluginSearchPath : ValidatingObject
     {
-        const int MAX_FILE_COUNT = 100;
+        const int MAX_ENTRY_COUNT = 100;
         string searchPath;
 
         [Display("Search Path", "A search path for finding the Python based plugin modules.", Order:1)]
@@ -230,16 +230,20 @@ namespace Keysight.OpenTap.Plugins.Python
 
                     dirQueue.Enqueue(startingDir);
 
-                    int totalFileCount = 0;
+                    int totalFileSystemEntryCount = 0;
                     while (dirQueue.Count != 0)
                     {
                         DirectoryInfo currentDir = dirQueue.Dequeue();
                         if (currentDir.Name == "bin" || currentDir.Name == "obj" || File.Exists(Path.Combine(currentDir.FullName, "__init__.py")))
                             continue;
 
-                        totalFileCount += currentDir.GetFiles().Length;
+                        // count this dir
+                        totalFileSystemEntryCount++;
+
+                        // count the files inside the dir
+                        totalFileSystemEntryCount += currentDir.GetFiles().Length;
                         
-                        if (totalFileCount > MAX_FILE_COUNT)
+                        if (totalFileSystemEntryCount > MAX_ENTRY_COUNT)
                             return false;
                         else
                         {
