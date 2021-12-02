@@ -84,14 +84,14 @@ namespace Keysight.OpenTap.Plugins.Python
                 var PluginManagerDirectories = PluginManager.DirectoriesToSearch;
                 var pluginManagerDirToCompare = PluginManagerDirectories.FindAll(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location));
                 pluginManagerDirToCompare.Sort();
-                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath) && x.Validate()).Select(y => y.SearchPath).ToList();
+                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath) && x.CheckDirectorySizeConstraint()).Select(y => y.SearchPath).ToList();
                 pluginSearchPathToCompare.Sort();
                 if (pluginManagerDirToCompare.SequenceEqual(pluginSearchPathToCompare))
                     return;
 
                 var dirToBeRemoved = PluginManagerDirectories.Where(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location) && (!PluginSearchPath.Exists(y => y.SearchPath == x) || !PluginSearchPath.Find(z => z.SearchPath == x).Enabled)).ToList();
                 dirToBeRemoved.ForEach(x => PluginManagerDirectories.Remove(x));
-                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath) && x.Validate()).ToList();
+                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath) && x.CheckDirectorySizeConstraint()).ToList();
                 dirToBeAdded.ForEach(x => PluginManagerDirectories.Add(x.SearchPath));
                 PluginManager.SearchAsync();
             }
@@ -215,10 +215,10 @@ namespace Keysight.OpenTap.Plugins.Python
                     return false;
             }, "This search path does not exist.", nameof(SearchPath));
 
-            Rules.Add(() => Validate(), "The directory or its sub-directory(s) could not be accessed or they contain more than 100 files. (Maximum file count: 100)", nameof(SearchPath));
+            Rules.Add(() => CheckDirectorySizeConstraint(), "The directory or its sub-directory(s) could not be accessed or they contain more than 100 files. (Maximum file count: 100)", nameof(SearchPath));
         }
 
-        public bool Validate()
+        internal bool CheckDirectorySizeConstraint()
         {
             // check the existence of the search path first
             if (!string.IsNullOrWhiteSpace(SearchPath) && Directory.Exists(Path.GetFullPath(SearchPath)))
