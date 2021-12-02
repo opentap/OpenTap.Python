@@ -69,7 +69,7 @@ namespace Keysight.OpenTap.Plugins.Python
                 LoadedPluginManagerDir = new List<string>(PluginManager.DirectoriesToSearch);
             }
         }
-        
+
         public string DefaultSearchPath => Path.GetDirectoryName(typeof(PythonSettings).Assembly.Location);
 
         public IEnumerable<string> GetSearchPaths() =>
@@ -84,14 +84,14 @@ namespace Keysight.OpenTap.Plugins.Python
                 var PluginManagerDirectories = PluginManager.DirectoriesToSearch;
                 var pluginManagerDirToCompare = PluginManagerDirectories.FindAll(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location));
                 pluginManagerDirToCompare.Sort();
-                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath)).Select(y => y.SearchPath).ToList();
+                var pluginSearchPathToCompare = PluginSearchPath.FindAll(x => x.Enabled == true && Directory.Exists(x.SearchPath) && x.CheckDirectorySizeConstraint()).Select(y => y.SearchPath).ToList();
                 pluginSearchPathToCompare.Sort();
                 if (pluginManagerDirToCompare.SequenceEqual(pluginSearchPathToCompare))
                     return;
 
                 var dirToBeRemoved = PluginManagerDirectories.Where(x => x != Path.GetDirectoryName(typeof(ComponentSettings).Assembly.Location) && (!PluginSearchPath.Exists(y => y.SearchPath == x) || !PluginSearchPath.Find(z => z.SearchPath == x).Enabled)).ToList();
                 dirToBeRemoved.ForEach(x => PluginManagerDirectories.Remove(x));
-                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath)).ToList();
+                var dirToBeAdded = PluginSearchPath.Where(x => x.Enabled && Directory.Exists(x.SearchPath) && !PluginManagerDirectories.Contains(x.SearchPath) && x.CheckDirectorySizeConstraint()).ToList();
                 dirToBeAdded.ForEach(x => PluginManagerDirectories.Add(x.SearchPath));
                 PluginManager.SearchAsync();
             }
@@ -162,7 +162,7 @@ namespace Keysight.OpenTap.Plugins.Python
                 var programFiles4 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
                 var programFiles5 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Programs", "Python");
 
-                return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5 }).SelectMany(getPythonsInFolder).Distinct().ToArray(); ;
+                return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5 }).SelectMany(getPythonsInFolder).Distinct().ToArray();
             }
             else
             {
@@ -184,12 +184,13 @@ namespace Keysight.OpenTap.Plugins.Python
             PythonPath = Environment.GetEnvironmentVariable("PYTHONHOME") ?? LocatePythons().FirstOrDefault();
             Rules.Add(() => string.IsNullOrWhiteSpace(LoadedPath) || LoadedPath == currentPath, "This change won't take effect until OpenTAP is restarted.", nameof(PythonPath));
             Rules.Add(() => IsLoadedDirUnchange(), "This change won't take effect until OpenTAP is restarted.", nameof(SearchPathList));
-            Rules.Add(() => !SearchPathList.Exists(x => !string.IsNullOrEmpty(x.Error)), "Non-existent search path(s) is found.", nameof(SearchPathList));
+            Rules.Add(() => !SearchPathList.Exists(x => !string.IsNullOrEmpty(x.Error)), "Search path error(s) is found.", nameof(SearchPathList));
         }
     }
 
     public class PluginSearchPath : ValidatingObject
     {
+        const int MAX_ENTRY_COUNT = 100;
         string searchPath;
 
         [Display("Search Path", "A search path for finding the Python based plugin modules.", Order:1)]
@@ -206,13 +207,60 @@ namespace Keysight.OpenTap.Plugins.Python
         public PluginSearchPath()
         {
             Rules.Add(() => PythonSettings.Current.SearchPathList.Where(x => string.Compare(x.SearchPath, SearchPath) == 0).ToList().Count <= 1, "This search path duplicates in the list.", nameof(SearchPath));
-            Rules.Add(() => 
+            Rules.Add(() =>
             {
                 if(!string.IsNullOrEmpty(SearchPath))
                     return Directory.Exists(Path.GetFullPath(SearchPath));
                 else
                     return false;
             }, "This search path does not exist.", nameof(SearchPath));
+
+            Rules.Add(() => CheckDirectorySizeConstraint(), "The directory or its sub-directory(s) could not be accessed or they contain more than 100 files. (Maximum file count: 100)", nameof(SearchPath));
+        }
+
+        internal bool CheckDirectorySizeConstraint()
+        {
+            // check the existence of the search path first
+            if (!string.IsNullOrWhiteSpace(SearchPath) && Directory.Exists(Path.GetFullPath(SearchPath)))
+            {
+                try
+                {
+                    var startingDir = new DirectoryInfo(SearchPath);
+                    Queue<DirectoryInfo> dirQueue = new Queue<DirectoryInfo>();
+
+                    dirQueue.Enqueue(startingDir);
+
+                    int totalFileSystemEntryCount = 0;
+                    while (dirQueue.Count != 0)
+                    {
+                        DirectoryInfo currentDir = dirQueue.Dequeue();
+                        if (currentDir.Name == "bin" || currentDir.Name == "obj" || File.Exists(Path.Combine(currentDir.FullName, "__init__.py")))
+                            continue;
+
+                        // count this dir
+                        totalFileSystemEntryCount++;
+
+                        // count the files inside the dir
+                        totalFileSystemEntryCount += currentDir.GetFiles().Length;
+                        
+                        if (totalFileSystemEntryCount > MAX_ENTRY_COUNT)
+                            return false;
+                        else
+                        {
+                            foreach (DirectoryInfo subDir in currentDir.GetDirectories())
+                            {
+                                dirQueue.Enqueue(subDir);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    log.Error(e.Message);
+                    return false;
+                }
+            }
+            return true;
         }
 
         TraceSource log = global::OpenTap.Log.CreateSource("Python");
