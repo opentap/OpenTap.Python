@@ -124,16 +124,27 @@ namespace Keysight.OpenTap.Plugins.Python.SDK
                         log.Info("{0}", error);
                     }
                 }
+
+                return ExitCodes.UnableToBuildWrapper;
+            }
+            catch (UnauthorizedAccessException uae)
+            {
+                // Ensure Python is in state that can be aborted.
+                PyThread.Invoke(() => { });
+                log.Error(
+                    "Please close any active tap processes such as Editor, Editor X and others, and build the python plugin again.\n" +
+                    uae.Message);
                 return ExitCodes.UnableToBuildWrapper;
             }
             catch (Exception ex)
             {
+                // Ensure Python is in state that can be aborted.
+                PyThread.Invoke(() => { });
                 log.Error("Caught exception while creating plugin.");
                 log.Debug(ex);
                 Log.Flush();
                 return ExitCodes.UnableToBuildWrapper;
             }
-
             bool pyconly = includePyc;
 
             if (buildTapPlugin)
