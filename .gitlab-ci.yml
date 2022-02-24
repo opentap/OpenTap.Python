@@ -108,7 +108,7 @@ ManualPublishOpenTapIo:
 
 .BuildDoc:
   stage: build
-  image: node:9.11.1
+  image: node:16.14.0
   cache:
     paths:
       - node_modules/
