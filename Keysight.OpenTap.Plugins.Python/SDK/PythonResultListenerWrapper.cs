@@ -135,6 +135,7 @@ namespace Keysight.OpenTap.Plugins.Python
 
         #endregion
 
+        [Browsable(false)]
         public bool IsEnabled
         {
             get => resultListener.IsEnabled; 
