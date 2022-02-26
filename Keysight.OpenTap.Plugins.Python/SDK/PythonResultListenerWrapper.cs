@@ -16,7 +16,7 @@ namespace Keysight.OpenTap.Plugins.Python
 {
     [PythonWrapper.WrappedType(typeof(PythonResultListener))]
     [Obfuscation(Exclude = true)]
-    public abstract class PythonResultListenerWrapper : PythonWrapper, IResultListener
+    public abstract class PythonResultListenerWrapper : PythonWrapper, IResultListener, IEnabledResource
     {
         protected override void load(string name, string moduleName)
         {
@@ -30,7 +30,6 @@ namespace Keysight.OpenTap.Plugins.Python
         }
 
         #region Members
-        public new TraceSource log = OpenTapTraceSource.Log.CreateSource("ResultListener");
         protected PythonResultListener resultListener { get { return PythonObject.As<PythonResultListener>(); } }
         #endregion
 
@@ -136,5 +135,11 @@ namespace Keysight.OpenTap.Plugins.Python
 
         #endregion
 
+        [Browsable(false)]
+        public bool IsEnabled
+        {
+            get => resultListener.IsEnabled; 
+            set => resultListener.IsEnabled = value;
+        }
     }
 }
