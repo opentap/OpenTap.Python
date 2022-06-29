@@ -39,7 +39,7 @@ def get_dirs():
         static void userError(string message, string information)
         {
             log.Error(message);
-            foreach(var inf in information.Split('\n'))
+            foreach (var inf in information.Split('\n'))
                 log.Info(inf);
             Task.Factory.StartNew(() =>
             {
@@ -100,8 +100,9 @@ def get_dirs():
                     var sharedlib = SharedLib.Load(pyLibDllPath);
                     if (sharedlib != null)
                         return sharedlib;
-                }catch(Exception)
-                {       
+                }
+                catch (Exception)
+                {
                 }
             }
 
@@ -152,8 +153,8 @@ def get_dirs():
                 else
                 {
                     var error = dlerror();
-                    
-                    if(error != IntPtr.Zero)
+
+                    if (error != IntPtr.Zero)
                     {
                         throw new Exception("Unable to load python: " + error.ToString());
                     }
@@ -164,7 +165,7 @@ def get_dirs():
             {
                 if (isWin)
                 {
-                    
+
                 }
                 else
                 {
@@ -223,7 +224,7 @@ def get_dirs():
         {
             try
             {
-                return Directory.Exists(path); 
+                return Directory.Exists(path);
             }
             catch
             {
@@ -238,7 +239,7 @@ def get_dirs():
             return LoadPython(false);
         }
         delegate IntPtr getStringFcn();
-        public static bool LoadPython(bool startSearch = false, bool reinit=false)
+        public static bool LoadPython(bool startSearch = false, bool reinit = false)
         {
             typeof(ModuleBuilder).ToString();
             lock (loadLock)
@@ -246,7 +247,7 @@ def get_dirs():
                 if (initialized && !reinit) return init_success;
                 initialized = true;
                 string pypath = PythonSettings.Current.PythonPath;
-                if(string.IsNullOrWhiteSpace(pypath) == false)
+                if (string.IsNullOrWhiteSpace(pypath) == false)
                 {
                     pypath = Path.GetFullPath(pypath);
                     Environment.SetEnvironmentVariable("PYTHONHOME", pypath);
@@ -258,7 +259,7 @@ def get_dirs():
                     var path = new DirectoryInfo(pypath);
                     pylib = tryLoadPython(path.FullName);
                 }
-                else if(string.IsNullOrWhiteSpace(pypath))
+                else if (string.IsNullOrWhiteSpace(pypath))
                 {
                     pylib = tryLoadPython("");
                 }
@@ -295,7 +296,7 @@ def get_dirs():
                         // this could be OK, if python has been manually installed.
                     }
                 }
-                
+
                 if (startSearch)
                     PluginManager.SearchAsync();
 
@@ -306,7 +307,7 @@ def get_dirs():
                 var installedPyNet = string.IsNullOrEmpty(pypath) ? pypath : Path.Combine(pypath, "Python.Runtime.dll");
                 if (File.Exists(deployedPyNet))
                     asm = Assembly.LoadFrom(deployedPyNet);
-                else if(File.Exists(installedPyNet))
+                else if (File.Exists(installedPyNet))
                     asm = Assembly.LoadFrom(installedPyNet);
 
                 AppDomain.CurrentDomain.AssemblyResolve += (s, e) =>
@@ -316,7 +317,7 @@ def get_dirs():
                     return null;
                 };
                 log.Debug("Loaded {0}", asm);
-                if(asm == null)
+                if (asm == null)
                 {
                     log.Error("Unable to load DLL from {0}", pypath);
                     return false;
@@ -333,11 +334,11 @@ def get_dirs():
                     log.Error("Caught exception while initializing Python {0}", pyVersionString);
                     log.Debug(e);
                 }
-                return init_success;                
+                return init_success;
             }
         }
 
-    
+
         static void CheckDeployPythonNet(PythonVersion pv, bool is32Bit)
         {
             var names = typeof(PythonVersion).Assembly.GetManifestResourceNames();
@@ -346,7 +347,7 @@ def get_dirs():
             string filename = string.Format("{0}_{1}", pv.Name, is32Bit ? "32" : "64");
             using (var str = typeof(PythonVersion).Assembly.GetManifestResourceStream(names.First(x => x.Contains("py_deploy.bin"))))
             {
-                if(str == null)
+                if (str == null)
                 {
                     throw new Exception("Unable to load python deployment library");
                 }
@@ -364,7 +365,7 @@ def get_dirs():
                     }
 
                     var entry = archive.GetEntry(fileName);
-                    if(entry == null)
+                    if (entry == null)
                     {
                         throw new Exception($"Unable to find entry: {fileName}");
                     }
@@ -376,12 +377,12 @@ def get_dirs():
                             int read_a = 0, read_b = 0;
                             byte[] buffer_a = new byte[1024];
                             byte[] buffer_b = new byte[1024];
-                            while(true)
+                            while (true)
                             {
                                 read_a = streama.Read(buffer_a, 0, buffer_a.Length);
                                 read_b = streamb.Read(buffer_b, 0, buffer_b.Length);
                                 if (read_a != read_b || read_a == 0) break;
-                                for(int i = 0; i < read_a; i++)
+                                for (int i = 0; i < read_a; i++)
                                 {
                                     if (buffer_a[i] != buffer_b[i])
                                         return false;
@@ -456,7 +457,7 @@ def get_dirs():
                     {
                         Py.Import("PythonTap");
                     }
-                    catch(PythonException e)
+                    catch (PythonException e)
                     {
                         printPythonException(e);
                     }
@@ -468,7 +469,7 @@ def get_dirs():
         public WrapperBuilder()
         {
             typeof(Microsoft.CodeAnalysis.Diagnostic).ToString();
-                
+
             registerType(typeof(PythonSettings));
             registerType(typeof(TestPlan));
             registerType(typeof(BrowsableAttribute));
@@ -520,7 +521,7 @@ namespace Dynamic
                     object newobj = attr_arg;
                     try
                     {
-                        if(!(newobj == null))
+                        if (!(newobj == null))
                             if (param[idx].ParameterType.IsAssignableFrom(Convert.ChangeType(newobj, param[idx].ParameterType).GetType()) == false)
                                 goto next;
                     }
@@ -535,9 +536,18 @@ namespace Dynamic
                     idx++;
                 }
 
+                int argnr = 0;
                 foreach (var attr_arg in attributeValue.Arguments)
                 {
-                    attr = attr.AddArgumentListArguments(getAttributeArgument(attr_arg?.GetType() ?? typeof(object), attr_arg));
+
+                    var p = param.ElementAt(argnr);
+                    argnr++;
+                    var type = p.ParameterType;
+                    if (p.ParameterType.IsArray)
+                        // Variadic attribute argument.
+                        type = p.ParameterType.GetElementType();
+                    attr = attr.AddArgumentListArguments(getAttributeArgument(type, attr_arg));
+                    
                 }
 
                 foreach (var attr_kwarg in attributeValue.KwArguments)
@@ -566,7 +576,7 @@ namespace Dynamic
                 }
 
                 break;
-                next:;
+            next:;
             }
             return attr;
         }
@@ -576,7 +586,7 @@ namespace Dynamic
         {
             Log.Error(pyx.Message);
             var trace = pyx.StackTrace;
-            if(trace.Contains(']'))
+            if (trace.Contains(']'))
                 trace = trace.Substring(0, trace.IndexOf(']'));
             var stk = trace.Split(new string[] { "\\n" }, StringSplitOptions.RemoveEmptyEntries).Reverse();
             foreach (var line in stk)
@@ -592,7 +602,7 @@ namespace Dynamic
 
         TypeSyntax TypeToSyntax(Type tp)
         {
-            
+
             if (tp.IsGenericType)
             {
                 var subTypes = tp.GetGenericArguments().Select(TypeToSyntax);
@@ -943,15 +953,15 @@ namespace Dynamic
             }
             addAsm(typeof(object).GetTypeInfo().Assembly);
             addAsm(typeof(SyntaxTree).GetTypeInfo().Assembly);
-            
+
             // compilation
-            var comp= CSharpCompilation.Create("TestApplication",sourceTrees, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+            var comp = CSharpCompilation.Create("TestApplication", sourceTrees, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
             using (var m = new MemoryStream())
             {
                 comp.Emit(m);
             }
         }
-        
+
         public struct AttributeData
         {
             public Type Attribute;
@@ -966,7 +976,7 @@ namespace Dynamic
 
                 if (tupleArg.Length() > 1)
                 {
-                    if((new PyList(enumClasses)).Contains(tupleArg[1].GetPythonType()))
+                    if ((new PyList(enumClasses)).Contains(tupleArg[1].GetPythonType()))
                         args = new object[] { tupleArg.GetItem(0).ToString(), tupleArg.GetItem(1) };
                     else
                         args = (object[])tp[1].AsManagedObject(typeof(object[]));
@@ -980,13 +990,13 @@ namespace Dynamic
 
                 foreach (var ka in tap.InvokeMethod("to_list", dict.Keys()))
                 {
-                        string key = ka.ToString();
-                        kwargsout.Add(Tuple.Create(key, dict.GetItem(key)));
+                    string key = ka.ToString();
+                    kwargsout.Add(Tuple.Create(key, dict.GetItem(key)));
                 }
                 return new AttributeData { Attribute = attribute, Arguments = args, KwArguments = kwargsout.ToArray() };
             }
         }
-        
+
         public struct PropertyData
         {
             public string Name;
@@ -1058,7 +1068,7 @@ namespace Dynamic
                     var ad = AttributeData.Create(tap, attr);
                     propData.Attributes[ad.Attribute] = ad;
                 }
-                
+
 
                 properties.Add(propData);
 
@@ -1127,7 +1137,7 @@ namespace Dynamic
                     methodData.ArgumentNames = argNames.ToArray();
                     methodData.ArgumentTypes = argTypes.ToArray();
                 }
-                
+
                 for (int i = 0; i < methodData.ArgumentTypes.Length; i++)
                 {
                     var cstype = methodData.ArgumentTypes[i];
@@ -1216,7 +1226,7 @@ namespace Dynamic
                     var objectCreationExpression = SF.EqualsValueClause(SF.LiteralExpression(SyntaxKind.NumericLiteralExpression, SF.Literal(i + 1)));
                     member = SF.EnumMemberDeclaration(attributeLists: new SyntaxList<AttributeListSyntax>(),
                         identifier: SF.Identifier(data.Name), equalsValue: objectCreationExpression);
-                    
+
                     var attr = SF.Attribute(SF.ParseName("OpenTap.DisplayAttribute"));
                     foreach (var attr_arg in tap.InvokeMethod("GetEnumValue", new PyTuple(new PyObject[] { enumClass, data.Name.ToPython() })))
                     {
@@ -1251,7 +1261,7 @@ namespace Dynamic
             ns = ns.AddMembers(declaration);
             return ns;
         }
-        
+
         /// <summary>
         /// Creates PythonStepWrapper classes to be used in the C# DLL based on the input Python code.
         /// </summary>
@@ -1259,12 +1269,12 @@ namespace Dynamic
         /// <param name="ns"></param>
         /// <param name="codeFileName"></param>
         /// <param name="attrs"></param>
-        NamespaceDeclarationSyntax buildTapClass(PyObject classobj, NamespaceDeclarationSyntax  ns, string codeFileName, List<AttributeData> attrs, List<Type> interfaces)
+        NamespaceDeclarationSyntax buildTapClass(PyObject classobj, NamespaceDeclarationSyntax ns, string codeFileName, List<AttributeData> attrs, List<Type> interfaces)
         {
             string name = classobj.GetAttr("__name__").ToString();
             log.Info("Building " + name + " plugin.");
             ClassDeclarationSyntax targetClass = SF.ClassDeclaration(name).WithModifiers(SF.TokenList(SF.Token(SyntaxKind.PublicKeyword)));
-                
+
             var load_instance = SF.MethodDeclaration(SF.PredefinedType(SF.Token(SyntaxKind.VoidKeyword)), "load_instance").WithModifiers(SF.TokenList(SF.Token(SyntaxKind.PublicKeyword), SF.Token(SyntaxKind.OverrideKeyword)))
                 .WithBody(SF.Block(SF.ExpressionStatement(
                     SF.InvocationExpression(SF.IdentifierName("load"))
@@ -1273,7 +1283,7 @@ namespace Dynamic
                         SF.Argument(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(codeFileName)))))));
             targetClass = targetClass.AddMembers(load_instance);
             loadedTypes[classobj.GetAttr("__module__").ToString() + "." + name] = name;
-            
+
             { // Add PythonNameAttribute
                 targetClass = targetClass.AddAttributeLists(
                     SF.AttributeList().AddAttributes(
@@ -1281,7 +1291,7 @@ namespace Dynamic
                                 SF.ParseName("PythonWrapper.PythonName"))
                                 .AddArgumentListArguments(SF.AttributeArgument(SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal(classobj.GetAttr("__module__").ToString() + "." + classobj.GetAttr("__name__").ToString()))))));
             }
-            
+
             foreach (var attribute in attrs)
             {
                 var attr = loadAttributeData(attribute);
@@ -1291,7 +1301,7 @@ namespace Dynamic
             var prototype = classobj.Invoke();
             object protoObject = prototype.AsManagedObject(typeof(object));
             Type protoType = protoObject.GetType();
-            
+
             PyObject tap = Py.Import("PythonTap");
             var clsname = tap.InvokeMethod("base_class_name", classobj).ToString();
             bool isabstract = (bool)tap.InvokeMethod("IsAbstract", classobj).AsManagedObject(typeof(bool));
@@ -1339,7 +1349,7 @@ namespace Dynamic
             return SF.AttributeArgument(getExpression(type, value));
         }
 
-static ExpressionSyntax getExpression(Type type, object value)
+        static ExpressionSyntax getExpression(Type type, object value)
         {
             if (value == null)
                 return SF.LiteralExpression(SyntaxKind.NullLiteralExpression);
@@ -1370,7 +1380,7 @@ static ExpressionSyntax getExpression(Type type, object value)
                         return SF.LiteralExpression(SyntaxKind.FalseLiteralExpression);
                 }
             }
-            if(!(lst==null))
+            if (!(lst == null))
                 return SF.ArrayCreationExpression(SF.ArrayType(SF.ParseTypeName(type.GetElementType().FullName)),
                     SF.InitializerExpression(SyntaxKind.ArrayInitializerExpression, new SeparatedSyntaxList<ExpressionSyntax>().AddRange(lst.Select(x => getExpression(x.ArgumentType, x.Value)))));
 
@@ -1381,10 +1391,18 @@ static ExpressionSyntax getExpression(Type type, object value)
                     SF.SingletonList<ArrayRankSpecifierSyntax>(SF.ArrayRankSpecifier()));
 
                 return SF.ArrayCreationExpression(SF.Token(SyntaxKind.NewKeyword), initStrArray,
-                    SF.InitializerExpression(SyntaxKind.ArrayInitializerExpression, 
+                    SF.InitializerExpression(SyntaxKind.ArrayInitializerExpression,
                     new SeparatedSyntaxList<ExpressionSyntax>()
                     .AddRange(array.Select(x => getExpression(type, x)))));
             }
+            
+            if(value.GetType() != type && type.IsAssignableFrom(value.GetType())){
+                // this is often the case for varadic attributes, for example
+                // EnabledIf attribute ends with a list of object[]. In this case
+                // we need to try again when the explicit type of value.
+                return getExpression(value.GetType(), value);
+            }
+
             return SF.LiteralExpression(SyntaxKind.StringLiteralExpression, SF.Literal((string)value));
         }
 
@@ -1472,7 +1490,7 @@ static ExpressionSyntax getExpression(Type type, object value)
     class BuildException : Exception
     {
         public readonly IEnumerable<string> Messages;
-        public BuildException(IEnumerable<string> messages): base(string.Join("\n", messages))
+        public BuildException(IEnumerable<string> messages) : base(string.Join("\n", messages))
         {
             this.Messages = messages;
         }
