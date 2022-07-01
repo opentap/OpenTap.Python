@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestPlan type="OpenTap.TestPlan" Locked="false">
+  <Steps>
+    <TestStep type="Examples.ChargeStep.ChargeStep" Version="0.1" Id="f3d33787-cc4e-4153-8e70-2f24785f4e30">
+      <Current>30</Current>
+      <Voltage>5</Voltage>
+      <TargetCellVoltageMargin>0.1</TargetCellVoltageMargin>
+      <ChargeType>0</ChargeType>
+      <MeasurementInterval>0.2</MeasurementInterval>
+      <PowerAnalyzer Source="OpenTap.InstrumentSettings">PyPowerAnalyzer</PowerAnalyzer>
+    </TestStep>
+    <TestStep type="Examples.DischargeStep.DischargeStep" Version="0.1" Id="bbf33c21-f1a8-454f-a2b5-5d9b82abe2c2">
+      <Current>20</Current>
+      <Voltage>2.2</Voltage>
+      <TargetCellVoltageMargin>0.8</TargetCellVoltageMargin>
+      <DischargeTime>1.9292528</DischargeTime>
+      <MeasurementInterval>0.2</MeasurementInterval>
+      <PowerAnalyzer Source="OpenTap.InstrumentSettings">PyPowerAnalyzer</PowerAnalyzer>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Discharge</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="Examples.OutputInput.OutputStep" Version="0.1" Id="439d8a75-cbb3-42b3-bc29-1dbb9019bf4c">
+      <OutputValue>1010</OutputValue>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Test Step Output</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="Examples.OutputInput.InputStep" Version="0.1" Id="45322d0f-dc35-4439-a63b-faaa3e2732a0">
+      <InputValue>
+        <PropertyName>Examples.OutputInput.OutputStep|OutputValue</PropertyName>
+        <Step>439d8a75-cbb3-42b3-bc29-1dbb9019bf4c</Step>
+      </InputValue>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Test Step Input</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="Examples.BasicFunctionality.BasicFunctionality" Version="0.1" Id="3223ebed-52c9-46e2-85bf-8ace15e9c811">
+      <Frequency>1000000100</Frequency>
+      <Instrument Source="OpenTap.InstrumentSettings">INST</Instrument>
+      <Dut Source="OpenTap.DutSettings">DUT</Dut>
+      <Selectable>0</Selectable>
+      <Available>1, 2, 3, 4</Available>
+      <Logging>
+        <Value>C:\SessionLogs\</Value>
+        <IsEnabled>true</IsEnabled>
+      </Logging>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Basic Functionality</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+  </Steps>
+  <BreakConditions>Inherit</BreakConditions>
+  <OpenTap.Description />
+  <Package.Dependencies>
+    <Package Name="OpenTAP" Version="^9.18.2+946081e8" />
+  </Package.Dependencies>
+</TestPlan>

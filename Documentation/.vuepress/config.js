@@ -18,11 +18,7 @@ module.exports = {
             {
                 title: "Getting Started",
                 children:[
-                    'TAP_Python_Help/Python_Development_Examples/',
-                    ['TAP_Python_Help/Python_Development_Examples/Building_the_Python_Examples_for_Windows.md', 'Building the Examples on Windows'],
-                    ['TAP_Python_Help/Python_Development_Examples/Building_the_Python_Examples_for_Ubuntu.md', 'Building the Examples on Ubuntu'],
-                    ['TAP_Python_Help/Python_Development_Examples/Create_and_Run_a_Simple_Test_Plan_for_Windows.md', 'Create and Run a Simple Test Plan on Windows'],
-                    ['TAP_Python_Help/Python_Development_Examples/Create_and_Run_a_Simple_Test_Plan_for_Ubuntu.md', 'Create and Run a Simple Test Plan on Ubuntu']
+                    'TAP_Python_Help/Python_Development_Examples/'
                 ]
             },
             {
@@ -30,9 +26,8 @@ module.exports = {
                 children:
                     [
                         [ 'TAP_Python_Help/Project_Creation_Wizard.md', 'Project Creation Wizard' ],
-                        [ 'TAP_Python_Help/Creating_a_plugin_with_Python_for_Windows.md', 'Windows'],
-                        [ 'TAP_Python_Help/Creating_a_plugin_with_Python_for_Ubuntu.md', 'Ubuntu']
-                    ]
+                        [ 'TAP_Python_Help/Creating_a_plugin.md', 'Windows'],
+                        ]
             },
             [ 'TAP_Python_Help/Code_Examples.md', 'Example Code'],
             [ 'TAP_Python_Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],

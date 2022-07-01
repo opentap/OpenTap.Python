@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenTap.Python\OpenTap.Python.csproj" />
+    <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Python.Runtime, Version=3.0.0.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd">
+      <HintPath>..\Python.Dependencies\Python.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="test.TapPlan">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="DUTs.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Settings/Bench/Default/DUTs.xml</Link>
+    </None>
+    <None Update="Instruments.xml">
+      <Link>Settings/Bench/Default/Instruments.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Results.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>Settings/Results.xml</Link>
+    </None>
+  </ItemGroup>
+  
+</Project>

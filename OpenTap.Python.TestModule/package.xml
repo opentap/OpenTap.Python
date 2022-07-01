@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="Python.TestModule" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux">
+    <Description>
+    </Description>
+    <Owner>Keysight Technologies, Inc.</Owner>
+    <SourceUrl>https://gitlab.com/OpenTAP/Plugins/python</SourceUrl>
+    <Repository Url="https://opentap.gitlab.io/Plugins/python/" />
+    <Files>
+        <File Path="Packages/Python/TestModule/*.py" />
+        <File Path="Packages/Python/TestModule/*.TapPlan" />
+    </Files>
+</Package>
+
+

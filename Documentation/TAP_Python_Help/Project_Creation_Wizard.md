@@ -5,13 +5,7 @@ Creating a Python plugin from scratch could be done manually or with the help of
 Command available:
 1. `tap sdk new python-project`
 
-The following diagram provides the guideline of using the project creation wizard.
-
-![](./Images/project_creation_wizard.png)
-
 The structure of a project created using the project creation wizard is shown in the following diagram.
-
-*Remarks: This project is created with 5 different types of the plugin.*
 
 ![](./Images/project_creation_wizard_sample.png)
 
@@ -20,8 +14,7 @@ After creating the Python plugin project, you may start the plugin development f
 The project creation wizard is supported on both Windows and Ubuntu.
 
 Otherwise, if you would like to create a project manually, please refer to:
-1. [Creating an OpenTAP Plugin with Python for Windows](./Creating_a_plugin_with_Python_for_Windows.md)
-2. [Creating an OpenTAP Plugin with Python for Ubuntu](./Creating_a_plugin_with_Python_for_Ubuntu.md)
+1. [Creating an OpenTAP Plugin](./Creating_a_plugin.md)
 
 ## Generate Plugin Template in Existing Python Plugin Project
 
