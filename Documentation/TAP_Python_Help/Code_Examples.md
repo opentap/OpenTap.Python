@@ -28,16 +28,12 @@ public class ExampleTestStep: TestStep
 **Python Implementation**
 
 ```py
-@Attribute(OpenTap.DisplayAttribute, "Example Test Step", "Test Step Description", "Examples")
-class ExampleTestStep(TestStep):
-	def __init__(self):
-		super(ExampleTestStep, self).__init__()
-
-		prop = self.AddProperty("StepSetting", 10, Int32)
-		prop.AddAttribute(OpenTap.DisplayAttribute, "Step Setting")
-
+@attribute(Display("Example Test Step", "Test Step Description", "Examples")
+class ExampleTestStep(TestStep)
+    StepSetting = property(Int32, 10).add_attribute(OpenTap.Display("Step Setting"))
+    
 	def Run(self):
-		self.Info("Running Test Step")
+		self.log.Info("Running Test Step")
 		self.UpgradeVerdict(OpenTap.Verdict.Pass)
 ```
 
@@ -48,11 +44,10 @@ when ```self.AddProperty``` is called, it returns an object that represents meta
 In addition, a python 'attribute' is created by the name defined by the string, for example "StepSetting".
 
 
-
 ## Test Step Example
 The following example of a test step shows:
 
-- How **@Attribute** and **AddAttribute** integrate with Windows Presentation Foundation (WPF) to create the GUI 
+- How **@attribute** and **add_attribute** are used to control how data is presented to the user.
 - Inheritance from base classes
 
 ![](./Images/python_code_example.png) 

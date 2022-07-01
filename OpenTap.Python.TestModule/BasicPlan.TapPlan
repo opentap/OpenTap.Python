@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TestPlan type="OpenTap.TestPlan" Locked="false">
+  <Steps>
+    <TestStep type="TestModule.BasicStep2Test" Version="0.0.0" Id="250a021b-f4f8-4507-a8d9-887d811a05f0">
+      <Frequency>1</Frequency>
+      <Enabled>true</Enabled>
+      <Name>BasicStep2 Test</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+      <OpenTap.Description />
+    </TestStep>
+  </Steps>
+  <BreakConditions>Inherit</BreakConditions>
+  <OpenTap.Description />
+  <Package.Dependencies>
+    <Package Name="OpenTAP" Version="9.15.2+39e6c2a2" />
+  </Package.Dependencies>
+</TestPlan>

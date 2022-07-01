@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ResultSettings type="OpenTap.ResultSettings">
+  <CsvPythonResultListener type="Examples.CsvResultListener.CsvPythonResultListener" Source="">
+    <FilePath>MyFile.csv</FilePath>
+  </CsvPythonResultListener>
+</ResultSettings>

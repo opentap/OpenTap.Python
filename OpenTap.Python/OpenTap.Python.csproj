@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>..\bin\Release</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PackageId>OpenTap.Python</PackageId>
+    <LangVersion>10</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsDebug)'=='true'">
+    <OutputPath>..\bin\Debug</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="..\Directory.Build.props">
+      <Link>Directory.Build.props</Link>
+    </Content>
+    <Content Include="..\Documentation\icon.png">
+      <Link>icon.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="opentap.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    
+    <EmbeddedResource Include="Resources\*.txt" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="2.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.10" PrivateAssets="all">
+        <Private>False</Private>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0">
+      <Private>False</Private>
+    </PackageReference>
+    
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0">
+      <Private>False</Private>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenTap.Python.Examples\OpenTap.Python.Examples.csproj" />
+    <ProjectReference Include="..\OpenTap.Python.TestModule\OpenTap.Python.TestModule.csproj" />
+    <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenTap" Version="$(OpenTapVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <OpenTapPackageReference Include="OpenTAP" />
+    <Reference Include="Python.Runtime">
+      <HintPath>..\Python.Dependencies\Python.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

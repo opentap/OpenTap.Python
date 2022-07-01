@@ -5,16 +5,8 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TargetFramework>netstandard2.0</TargetFramework>
-
-    <!--<Authors></Authors>
-    <Company></Company>
-    <Product>OpenTAP Python Integration</Product>
-    <PackageId></PackageId>
-    <AssemblyVersion>2.2.0.0</AssemblyVersion>
-    <FileVersion>2.2.0.0</FileVersion>-->
     <NeutralLanguage>en</NeutralLanguage>
-    <OpenTapVersion>9.15.2</OpenTapVersion>
-    
+    <OpenTapVersion>9.18.2</OpenTapVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <IsDebug>true</IsDebug>

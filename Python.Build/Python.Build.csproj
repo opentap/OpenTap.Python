@@ -5,16 +5,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenTap" Version="$(OpenTapVersion)" >
+        <PackageReference Include="OpenTap" Version="$(OpenTapVersion)">
             <Private>False</Private>
-        </PackageReference  >
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Keysight.OpenTap.Plugins.Python\Keysight.OpenTap.Plugins.Python.csproj">
+      <ProjectReference Include="..\OpenTap.Python\OpenTap.Python.csproj">
           <Private>False</Private>
       </ProjectReference>
-      <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj" >
+      <ProjectReference Include="..\Python.Dependencies\Python.Dependencies.csproj">
           <Private>False</Private>
       </ProjectReference>
     </ItemGroup>

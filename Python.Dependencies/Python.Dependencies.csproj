@@ -6,9 +6,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="OpenTap" Version="$(OpenTapVersion)" >
+        <PackageReference Include="OpenTap" Version="$(OpenTapVersion)">
             <Private>False</Private>
-        </PackageReference  >
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Python.Runtime.dll" />
+      <Content Include="Python.Runtime.dll">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
