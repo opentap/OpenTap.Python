@@ -65,12 +65,9 @@ namespace OpenTap.Python
 
         public IEnumerable<string> GetSearchPaths() =>
             SearchPathList.Where(x => x.Enabled).Select(x => x.SearchPath).Append(DefaultSearchPath);
-
-        [Browsable(true)]
-        [Layout(LayoutMode.FullRow, rowHeight: 2)]
-        [Display("A note on reloading", Group:"Debug", Order:1)]
-        public string ReloadingNote { get; private set; } = "Dynamic code reloading can cause some instabilities. Not all code supports dynamic reloading. "
-            + "This is meant as a convenience feature for Python development. In case of errors consider restarting the TAP process.";
+        
+        [Display("Enable", "Whether to enable the debugging server inside the python interpreter. This can cause instabilities on some platforms. Not verified to work on MacOS.", "Debug")]
+        public bool Debug { get; set; }
         
         public PythonSettings()
         {
