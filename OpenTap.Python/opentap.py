@@ -27,12 +27,13 @@ from System.Collections.Generic import List
 debugpy_imported = False
 
 try:
-    import debugpy
-    debugpy.configure(subProcess = False)
-    debugpy.listen(5678)
-    debugpy_imported = True
-except:
-    pass
+    if OpenTap.Python.PythonSettings.Current.Debug:
+        import debugpy
+        debugpy.configure(subProcess = False)
+        debugpy.listen(5678)
+        debugpy_imported = True
+except Exception as e:
+    print("Could not enable debugging: " + str(e));
 attribute = clr.attribute
 
 def debug_this_thread():

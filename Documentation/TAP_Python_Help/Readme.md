@@ -8,11 +8,6 @@ With the Python plugin you can:
 - Leverage existing Python code. 
 - Integrate with other OpenTAP plugins. 
 
-Users can:
-
-- Run scripts as test steps. 
-- Use Python-based OpenTAP plugins.
-
 The following example shows how a test step plugin can be defined in Python:
 
 ```py
@@ -28,7 +23,7 @@ All other normal OpenTAP SDK constructs can be used in a similar fashion:
 
 - Core components of the OpenTAP C# API are directly supported. 
 - .NET types and OpenTAP classes can be used. 
-- Attributes let you easily integrate with GUI.
+- Attributes let you create user friendly configurations for your plugins.
 
 Refer to the OpenTAP SDK for OpenTAP constructs that can be created.
 
