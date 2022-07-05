@@ -15,6 +15,9 @@ import math
 import types
 import traceback
 import weakref
+import subprocess
+import os
+
 clr.AddReference("OpenTap")
 clr.AddReference("OpenTap.Python")
 import OpenTap
@@ -23,6 +26,27 @@ from System.ComponentModel import Browsable, BrowsableAttribute
 import System
 from System import String, Double, Array, IConvertible
 from System.Collections.Generic import List
+
+# find the installed python executable.
+# the sys.executable contains dotnet, so it is not useful
+# for starting a python sub process. 
+def find_python():
+    for name in ["python3", "py.exe", "python.exe"]:
+        p = os.path.join(sys.prefix, "bin", name)
+        if os.path.isfile(p):
+            return p
+        p = os.path.join(sys.prefix, name)
+        if os.path.isfile(p):
+            return p
+    return None
+
+pyexe = find_python()      
+
+# consider settings this to get debugging to work on MacOS.      
+#sys.executable = pyexe
+
+def install_package(file):
+    subprocess.check_call([pyexe, '-m', 'pip', 'install', '-r', os.path.abspath(file)])
 
 debugpy_imported = False
 
@@ -33,7 +57,7 @@ try:
         debugpy.listen(5678)
         debugpy_imported = True
 except Exception as e:
-    print("Could not enable debugging: " + str(e));
+    print("Could not enable debugging: " + str(e))
 attribute = clr.attribute
 
 def debug_this_thread():
@@ -114,7 +138,7 @@ class Logger:
         self.terminal.flush()
 
 sys.stdout = Logger()
-sys.stderr = Logger(OpenTap.LogEventType.Error);
+sys.stderr = Logger(OpenTap.LogEventType.Error)
 
 def reload_module(module):
     """Internal: Reloads modules and sub-modules. Similar to imp.reload, but recurses to included sub-modules."""
@@ -177,7 +201,7 @@ class PyTestStep(OpenTap.TestStep):
         names = List[String]()
         r = Array[IConvertible](len(rows))
         for i in range(len(rows)):
-            r[i] = Double(rows[i]);
+            r[i] = Double(rows[i])
         for name in columnNames:
             names.Add(name)
         if isinstance(rows[0], list):

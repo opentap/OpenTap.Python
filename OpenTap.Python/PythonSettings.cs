@@ -43,15 +43,16 @@ namespace OpenTap.Python
         public string[] GetSearchList()
         {
             var lst = new List<string>();
-            var dir = Path.GetDirectoryName(GetType().Assembly.Location);
+            var dir = Path.GetDirectoryName(typeof(TestPlan).Assembly.Location);
             lst.Add(dir);
-            if(File.Exists(Path.Combine(dir, "OpenTap.dll")))
-            {
-                var dir2 = Path.Combine(dir, "Packages", "Python");
-                if (Directory.Exists(dir2))
-                    lst.Add(dir2);
-            }
+            var dir2 = Path.Combine(dir, "Packages", "Python");
+            if (Directory.Exists(dir2))
+                lst.Add(dir2);
 
+            dir2 = Path.Combine(dir, "Packages");
+            if (Directory.Exists(dir2))
+                lst.Add(dir2);
+            
             foreach (var path in SearchPathList)
             {
                 if (path.Enabled && Directory.Exists(path.SearchPath))
