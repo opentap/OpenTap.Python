@@ -15,27 +15,29 @@ The interface requires two methods to be implemented, AfterClose and BeforeOpen,
 For more information about the ILockManager interface, please refer to the OpenTAP API Reference.
 
 """
-import OpenTap
-import opentap
-from opentap import *
-
-import System
-from System.Collections.Generic import IEnumerable
-from System.Threading import CancellationToken
-
-class LockManager(OpenTap.ILockManager):
+loadLockManager = False
+if loadLockManager:
+    import OpenTap
+    import opentap
+    from opentap import *
     
-    def __init__(self):
-        super(LockManager, self).__init__()
-
-    #Define what happens before open
-    def BeforeOpen(self, resources, abortToken):
-        #Logic that locks the resource can be implemented here.
-        for resourceNode in resources:
-            print("Locking: " + str(resourceNode.Resource))
-
-    #Define what happens after close.
-    def AfterClose(self, resources, abortToken):
-        #Logic that unlocks the resource can be implemented here.
-        for resourceNode in resources:
-            print("Unlocking: " + str(resourceNode.Resource))
+    import System
+    from System.Collections.Generic import IEnumerable
+    from System.Threading import CancellationToken
+    
+    class LockManager(OpenTap.ILockManager):
+        
+        def __init__(self):
+            super(LockManager, self).__init__()
+    
+        #Define what happens before open
+        def BeforeOpen(self, resources, abortToken):
+            #Logic that locks the resource can be implemented here.
+            for resourceNode in resources:
+                print("Locking: " + str(resourceNode.Resource))
+    
+        #Define what happens after close.
+        def AfterClose(self, resources, abortToken):
+            #Logic that unlocks the resource can be implemented here.
+            for resourceNode in resources:
+                print("Unlocking: " + str(resourceNode.Resource))

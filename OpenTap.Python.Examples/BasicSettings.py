@@ -8,5 +8,7 @@ from System import Int32
 
 @attribute(OpenTap.Display("Example Settings", "A basic example of how to define settings."))
 class BasicSettings(OpenTap.ComponentSettings):
+    def __init__(self):
+        super().__init__()
     NumberOfPoints = property(Int32, 600)\
         .add_attribute(OpenTap.Display("Number of points"))
