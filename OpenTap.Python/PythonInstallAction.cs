@@ -12,7 +12,7 @@ public class PythonInstallAction : ICustomPackageAction
     public bool Execute(PackageDef package, CustomPackageActionArgs customActionArgs)
     {
         if (PythonInitializer.LoadPython() == false)
-            throw new Exception("Python not configured");
+            return true;
         using (Py.GIL())
         {
             var opentap = Py.Import("opentap");

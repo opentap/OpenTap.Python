@@ -32,7 +32,8 @@ def add_dir(x):
             {
                 if (initialized && !reinit) return initSuccess;
                 initialized = true;
-                InitInternal();
+                if (!InitInternal())
+                    return false;
                 initSuccess = true;
                 return true;
             }
@@ -42,7 +43,7 @@ def add_dir(x):
         /// init_internal refers to Python.Runtime, but to find this we need to help the assembly resolver by adding site-packages to DirectoriesToSearch.
         /// </summary>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        static void InitInternal()
+        static bool InitInternal()
         {
             if (!PythonEngine.IsInitialized)
             {
@@ -53,7 +54,7 @@ def add_dir(x):
                     if (!installations.Any())
                     {
                         log.Warning("No python installations found.");
-                        return;
+                        return false;
                     }
 
                     var (pyLoc, pyPath) = installations.First();
@@ -61,7 +62,7 @@ def add_dir(x):
                     if (File.Exists(pyLoc) == false)
                     {
                         log.Warning($"Unable to load Python.net: File does not exist " + pyLoc);
-                        return;
+                        return false;
                     }
 
                     Runtime.PythonDLL = pyLoc;
@@ -74,11 +75,11 @@ def add_dir(x):
                 {
                     log.Error("Unable to load python: " + ex.Message);
                     log.Debug(ex);
-                    return;
+                    return false;
                 }
 
                 if (!PythonEngine.IsInitialized)
-                    return;
+                    return false;
 
                 using (Py.GIL())
                 {
@@ -96,6 +97,8 @@ def add_dir(x):
                     }
                 }
             }
+
+            return true;
         }
 
         static void PrintPythonException(PythonException pyx)

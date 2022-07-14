@@ -7,6 +7,7 @@ namespace OpenTap.Python;
 class SharedLib
 {
     public static bool IsWin32 => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+    public static bool IsMacOs => RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
 
     static IntPtr load(string name)
     {
