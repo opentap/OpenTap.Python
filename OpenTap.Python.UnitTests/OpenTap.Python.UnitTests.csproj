@@ -10,7 +10,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Python.Runtime, Version=3.0.0.0, Culture=neutral, PublicKeyToken=5000fea6cba702dd">
+    <Reference Include="Python.Runtime">
       <HintPath>..\Python.Dependencies\Python.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>

@@ -111,7 +111,7 @@ namespace OpenTap.Python.UnitTests
                     Assert.IsTrue(prePlanRunExecuted);
                     Assert.IsTrue(run.Verdict == Verdict.NotSet);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
 
                 }
@@ -260,6 +260,21 @@ namespace OpenTap.Python.UnitTests
             using(Py.GIL())
                 pl.SetAttr("Frequency".ToPython(), 1.0.ToPython());
             return 0;   
+        }
+    }
+
+    [Display("list-installations", Group: "python")]
+    public class ListPythonInstallations  : ICliAction
+    {
+        static readonly TraceSource log = Log.CreateSource("python");
+        public int Execute(CancellationToken cancellationToken)
+        {
+            foreach (var ins in new PythonDiscoverer().GetAvailablePythonInstallations())
+            {
+               log.Info("{0} {1}", ins.library ?? "(null)", ins.pyPath ?? "(null)"); 
+            }
+
+            return 0;
         }
     }
     static class AnnotationExtensions

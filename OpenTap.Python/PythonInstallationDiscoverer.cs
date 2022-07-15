@@ -30,22 +30,31 @@ class PythonDiscoverer
     }
     static IEnumerable<string> GetPythonsInFolder(string folderPath)
     {
-        if (!Directory.Exists(folderPath))
+        try
         {
-            return Enumerable.Empty<string>();
-        }
-        List<string> pys = new List<string>();
-        foreach(var dir in Directory.GetDirectories(folderPath))
-        {
-            if (Path.GetFileName(dir).StartsWith("Python", StringComparison.CurrentCultureIgnoreCase))
+            if (!Directory.Exists(folderPath))
             {
-                pys.Add(dir);
+                return Enumerable.Empty<string>();
             }
+
+            List<string> pys = new List<string>();
+            foreach (var dir in Directory.GetDirectories(folderPath))
+            {
+                if (Path.GetFileName(dir).Contains("Python"))
+                {
+                    pys.Add(dir);
+                }
+            }
+
+            return pys;
         }
-        return pys;
+        catch
+        {
+            return Array.Empty<string>();
+        }
 
     }
-    static IEnumerable<string> LocatePythons()
+    static IEnumerable<string> LocatePythonsWin32()
     {
         if (!SharedLib.IsWin32)
             return Array.Empty<string>();
@@ -53,15 +62,13 @@ class PythonDiscoverer
         var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
         var programFiles2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
         var programFiles3 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
-        var programFiles4 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        var programFiles4 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WindowsApps");
         var programFiles5 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Programs", "Python");
 
         return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5 })
             .SelectMany(GetPythonsInFolder).Distinct().ToArray();
     }
-
-    public IEnumerable<string> PyFolders => LocatePythons();
 
     IEnumerable<(string lib, string pyPath, int weight)> GetAvailablePythonInstallationCandidates()
     {
@@ -99,6 +106,18 @@ class PythonDiscoverer
                 Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
                 if(python != null)
                     yield return (python, null, weight);
+            }
+        }
+        else
+        {
+            foreach (var targetFolder in LocatePythonsWin32())
+            {
+                var loc = TryFindPythons(targetFolder).FirstOrDefault();
+                if (loc != null && pythonVersionParser.IsMatch(loc))
+                {
+                    Int32.TryParse(pythonVersionParser.Match(loc).Groups["v"].Value, out int weight);
+                    yield return (loc, null, weight);
+                }
             }
         }
     }
