@@ -67,7 +67,7 @@ namespace OpenTap.Python
         public IEnumerable<string> GetSearchPaths() =>
             SearchPathList.Where(x => x.Enabled).Select(x => x.SearchPath).Append(DefaultSearchPath);
         
-        [Display("Enable", "Whether to enable the debugging server inside the python interpreter. This can cause instabilities on some platforms. Not verified to work on MacOS.", "Debug")]
+        [Display("Enable", "Whether to enable the debugging server inside the python interpreter. This can cause instabilities on some platforms. Not verified to work on MacOS.", "Debug", Order: 1)]
         public bool Debug { get; set; }
         
         public PythonSettings()

@@ -42,8 +42,10 @@ def find_python():
 
 pyexe = find_python()      
 
-# consider settings this to get debugging to work on MacOS.      
-#sys.executable = pyexe
+if pyexe != None:
+    # sys.executable is set to dotnet. This is not really useful for anybody
+    # hence we set it to the python executable so that scripts can be run.
+    sys.executable = pyexe
 
 def install_package(file):
     subprocess.check_call([pyexe, '-m', 'pip', 'install', '-r', os.path.abspath(file)])
