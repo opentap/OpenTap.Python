@@ -69,10 +69,10 @@ jobs:
         with:
           version: 9.18.4
       - name: Test Install
-        run: find
+        run: tap package install ./Python.*.TapPackage
       - name: Install PackagePublish
         run: tap package install -f PackagePublish --version beta
       - name: Publish
-        run: tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} bin/Release/Python.*.TapPackage
+        run: tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
           
         
