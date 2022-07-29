@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -23,3 +21,27 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: ./bin/Debug/tap python test
+  build2:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: ./bin/Debug/tap python test
+  buildWin:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: ./bin/Debug/tap python test
