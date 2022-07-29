@@ -21,9 +21,16 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -c Release
     - name: Test
-      run: ./bin/Debug/tap python test
+      run: ./bin/Release/tap python test
+    - name: Upload binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: TapPackage
+        retention-days: 14
+        path: |
+          bin/Release/Python.*.TapPackage
   buildWin:
     runs-on: windows-latest
     steps:
