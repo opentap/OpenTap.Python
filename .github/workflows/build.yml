@@ -7,7 +7,7 @@ on:
     branches: [ "dev" ]
 
 jobs:
-  build:
+  build-ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -37,7 +37,7 @@ jobs:
           retention-days: 14
           path: |
             bin/Release/Python.*.TapPackage
-  buildWin:
+  build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -51,4 +51,28 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: ./bin/Debug/tap python test
-      
+
+  publish-package:
+    if: github.ref == 'refs/heads/dev' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
+    environment: packages.opentap.io
+    runs-on: ubuntu-latest
+    needs:
+      - build-ubuntu
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: TapPackage
+          path: ./
+      - name: Setup OpenTAP
+        uses: opentap/setup-opentap@v1.0
+        with:
+          version: 9.18.4
+      - name: Test Install
+        run: tap package install ./Python.*.TapPackage
+      - name: Install PackagePublish
+        run: tap package install -f PackagePublish --version beta
+      - name: Publish
+        run: tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
+          
+        
