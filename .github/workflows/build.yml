@@ -53,8 +53,8 @@ jobs:
         run: ./bin/Debug/tap python test
 
   publish-package:
-    #if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
-    #environment: packages.opentap.io
+    if: github.ref == 'refs/heads/dev' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
+    environment: packages.opentap.io
     runs-on: ubuntu-latest
     needs:
       - build-ubuntu
