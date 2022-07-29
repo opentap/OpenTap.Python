@@ -77,7 +77,8 @@ class PythonDiscoverer
             yield return (PythonSettings.Current.PythonLibraryPath, PythonSettings.Current.PythonPath, 1000);
         }
 
-        if (Environment.GetEnvironmentVariable("PYTHONHOME") is string home && Directory.Exists(home))
+        //pythonLocation  for github builds.
+        if ((Environment.GetEnvironmentVariable("PYTHONHOME") ?? Environment.GetEnvironmentVariable("pythonLocation")) is string home && Directory.Exists(home))
         {
             var pyInHome = TryFindPythons(home).FirstOrDefault();
             if (File.Exists(pyInHome))

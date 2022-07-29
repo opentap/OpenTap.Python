@@ -72,6 +72,13 @@ namespace OpenTap.Python.UnitTests
         public int Execute(CancellationToken cancellationToken)
         {
             PythonInitializer.LoadPython();
+            if (!PythonEngine.IsInitialized)
+            {
+                foreach (var env in Environment.GetEnvironmentVariables().Keys)
+                {
+                    log.Info("  {0} = {1}", env, Environment.GetEnvironmentVariable(env.ToString()));
+                }
+            }
             Assert.IsTrue(PythonEngine.IsInitialized);
             PythonEngine.DebugGIL = true;
 
