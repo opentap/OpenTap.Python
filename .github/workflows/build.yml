@@ -54,12 +54,12 @@ jobs:
 
   publish-package:
     #if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
-    environment: packages.opentap.io
+    #environment: packages.opentap.io
     runs-on: ubuntu-latest
     needs:
       - build-ubuntu
     steps:
-      - name: Download REST-API
+      - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
           name: TapPackage
