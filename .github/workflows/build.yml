@@ -13,17 +13,30 @@ jobs:
       matrix:
         os: [ ubuntu-22.04, ubuntu-20.04]
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: ./bin/Debug/tap python test
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Fix tags
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: git fetch -f origin ${{ github.ref }}:${{ github.ref }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore -c Release
+      - name: Test
+        run: ./bin/Release/tap python test
+      - name: Upload binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: TapPackage
+          retention-days: 14
+          path: |
+            bin/Release/Python.*.TapPackage
   buildWin:
     runs-on: windows-latest
     steps:

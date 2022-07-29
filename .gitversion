@@ -13,7 +13,7 @@ version = 3.0.0
 # When specified multiple times later sprcifications of "beta branch" will only be tried
 # if earlier ones did not match any branches in the git repository
 #beta branch = develop
-#beta branch = dev
+beta branch = dev
 #beta branch = master
 
 # A version is determined to be a "rc" prerelease if it originates from a branch that matches
