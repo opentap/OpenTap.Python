@@ -69,7 +69,7 @@ jobs:
         with:
           version: 9.18.4
       - name: Test Install
-        run: ls ./bin/Release/Python.*.TapPackage
+        run: find
       - name: Install PackagePublish
         run: tap package install -f PackagePublish --version beta
       - name: Publish
