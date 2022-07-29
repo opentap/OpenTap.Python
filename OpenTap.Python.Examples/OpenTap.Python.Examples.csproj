@@ -7,11 +7,11 @@
     <ItemGroup>
       <Content Include="*.py">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-          <Link>Packages\Python Examples\%(Filename)%(Extension)</Link>
+          <Link>Packages\PythonExamples\%(Filename)%(Extension)</Link>
       </Content>
         <Content Include="requirements.txt">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-            <Link>Packages\Python Examples\%(Filename)%(Extension)</Link>
+            <Link>Packages\PythonExamples\%(Filename)%(Extension)</Link>
         </Content>
     </ItemGroup>
 

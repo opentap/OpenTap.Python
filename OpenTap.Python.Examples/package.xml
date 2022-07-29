@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Package Name="Python Examples" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
+<Package Name="PythonExamples" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
     <Description>
     </Description>
     <Owner>MyOrg</Owner>
     <SourceUrl>https://github.com/myorg/plugin</SourceUrl>
     <Files>
-        <File Path="Packages/Python Examples/*.py" />
-        <File Path="Packages/Python Examples/requirements.txt">
+        <File Path="Packages/PythonExamples/*.py" />
+        <File Path="Packages/PythonExamples/requirements.txt">
             <PythonRequirements/> <!-- this defines pip dependencies -->
         </File>
     </Files>
