@@ -28,6 +28,11 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore -c Release
+      - name: Package Examples
+        run: |
+             pushd bin/Release
+             ./tap package create ../../OpenTap.Python.Examples/package.xml
+             popd    
       - name: Test
         run: ./bin/Release/tap python test
       - name: Upload binaries
