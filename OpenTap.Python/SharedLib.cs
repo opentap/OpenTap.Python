@@ -13,7 +13,7 @@ class SharedLib
     {
         if (IsWin32)
             return LoadLibrary(name);
-        return dlopen(name, rtld_now);
+        return libdl.dlopen(name, rtld_now);
     }
 
     void close(IntPtr ptr)
@@ -24,7 +24,7 @@ class SharedLib
         }
         else
         {
-            dlclose(ptr);
+            libdl.dlclose(ptr);
         }
     }
             
@@ -41,9 +41,9 @@ class SharedLib
         }
         else
         {
-            var error = dlerror();
+            var error = libdl.dlerror();
             if(error != null)
-                return "Unable to load python: " + error.ToString();
+                throw new Exception("Unable to load python: " + error.ToString());
         }
 
         return null;
@@ -57,7 +57,7 @@ class SharedLib
         }
         else
         {
-            dlerror();
+            libdl.dlerror();
         }
     }
 
@@ -66,21 +66,72 @@ class SharedLib
     static extern IntPtr LoadLibrary(string dllToLoad);
 
     const int rtld_now = 2;
-    [DllImport("libdl.so")]
-    static extern IntPtr dlopen(string fileName, int flags);
+
+    interface ILibDL
+    {
+        IntPtr dlopen(string filename, int flags);
+        int dlclose(IntPtr handle);
+        string dlerror();
+    }
+
+    class libdl1 : ILibDL
+    {
+        [DllImport("libdl.so")]
+        static extern IntPtr dlopen(string fileName, int flags);
+
+        [DllImport("libdl.so")]
+        static extern int dlclose(IntPtr handle);
+
+        [DllImport("libdl.so")]
+
+        static extern string dlerror();
+
+        IntPtr ILibDL.dlopen(string fileName, int flags) => dlopen(fileName, flags);
+        int ILibDL.dlclose(IntPtr handle) => dlclose(handle);
+        string ILibDL.dlerror() => dlerror();
+
+    }
+
+    class libdl2 : ILibDL
+    {
+        [DllImport("libdl.so.2")]
+        static extern IntPtr dlopen(string fileName, int flags);
         
-    [DllImport("libdl.so")]
-    static extern int dlclose(IntPtr handle);
+        [DllImport("libdl.so.2")]
+        static extern int dlclose(IntPtr handle);
 
-    [DllImport("libdl.so")]
+        [DllImport("libdl.so.2")]
+        static extern string dlerror();
+        
+        IntPtr ILibDL.dlopen(string fileName, int flags) => dlopen(fileName, flags);
+        int ILibDL.dlclose(IntPtr handle) => dlclose(handle);
+        string ILibDL.dlerror() => dlerror();
+    }
 
-    static extern string dlerror();
+    static readonly ILibDL libdl;
 
+    static SharedLib()
+    {
+        if (!IsWin32)
+        {
+            try
+            {
+                libdl = new libdl2();
+                // call dlerror to ensure library is resolved
+                libdl.dlerror();
+            }
+            catch (DllNotFoundException)
+            {
+                libdl = new libdl1();
+            }
+        }
+    }
+    
     IntPtr lib = IntPtr.Zero;
-
     public SharedLib(IntPtr ptr)
     {
         lib = ptr;
+        
     }
 
     public static SharedLib Load(string name)
