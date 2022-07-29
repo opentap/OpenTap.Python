@@ -156,15 +156,14 @@ class PythonDiscoverer
                             { 
                                 continue; // not a shared object file.
                             }
-                            
                         }
 
-                        var sharedLib = SharedLib.Load(subPath3);
-                        if (sharedLib != null)
+                        if (SharedLib.Load(subPath3) is SharedLib slib)
                         {
-                            sharedLib.Unload();
+                            slib.Unload();
                             yield return subPath3;
                         }
+
                     }
                 }
             }
