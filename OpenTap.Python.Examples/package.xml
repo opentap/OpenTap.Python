@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package Name="PythonExamples" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
-    <Description> This package is an example of how to create a plugin from python code.</Description>
-    <Owner>OpenTAP</Owner> <!-- replace this with your org -->
+    <Description> This package is an example of how to create a plugin from python code. Feel free to use the python code included here as a basis for a new plugin.</Description>
+    <Owner>Keysight Technologies, Inc.</Owner> <!-- replace this with your org -->
     <SourceUrl>https://github.com/opentap/OpenTap.Python</SourceUrl> <!-- replace this with your URL -->
+    <License>Apache-2.0</License>
     <Dependencies>
         <!-- Unfortunately package dependencies currently has to be manually managed. -->
         <PackageDependency Package="OpenTAP" Version="^9.18.2" />
@@ -10,6 +11,7 @@
     </Dependencies>
     <Files>
         <File Path="Packages/PythonExamples/*.py" />
+        <File Path="Packages/PythonExamples/LICENSE.txt" />
         <File Path="Packages/PythonExamples/requirements.txt">
             <PythonRequirements/> <!-- this defines pip dependencies -->
         </File>
