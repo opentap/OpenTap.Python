@@ -13,6 +13,10 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
             <Link>Packages\PythonExamples\%(Filename)%(Extension)</Link>
         </Content>
+        <Content Include="../LICENSE.md">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <Link>Packages\PythonExamples\LICENSE.txt</Link>
+        </Content>
     </ItemGroup>
 
 </Project>
