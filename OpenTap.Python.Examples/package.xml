@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package Name="PythonExamples" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
-    <Description>
-    </Description>
-    <Owner>MyOrg</Owner>
-    <SourceUrl>https://github.com/myorg/plugin</SourceUrl>
+    <Description> This package is an example of how to create a plugin from python code.</Description>
+    <Owner>OpenTAP</Owner> <!-- replace this with your org -->
+    <SourceUrl>https://github.com/opentap/OpenTap.Python</SourceUrl> <!-- replace this with your URL -->
+    <Dependencies>
+        <!-- Unfortunately package dependencies currently has to be manually managed. -->
+        <PackageDependency Package="OpenTAP" Version="^9.18.4" />
+        <PackageDependency Package="Python" Version="^$(GitVersion)" />
+    </Dependencies>
     <Files>
         <File Path="Packages/PythonExamples/*.py" />
         <File Path="Packages/PythonExamples/requirements.txt">
