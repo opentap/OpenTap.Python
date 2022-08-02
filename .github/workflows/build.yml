@@ -80,6 +80,6 @@ jobs:
       - name: Publish
         run: |
           tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
-          tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS2 }} PythonExample.*.TapPackage
+          tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS2 }} PythonExamples.*.TapPackage
           
         
