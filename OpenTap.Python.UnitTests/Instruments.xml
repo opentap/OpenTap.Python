@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <InstrumentSettings type="OpenTap.InstrumentSettings">
-  <BasicInstrument type="Examples.BasicInstrument.BasicInstrument" Source="">
+  <BasicInstrument type="PythonExamples.BasicInstrument.BasicInstrument" Source="">
     <Name>INST</Name>
   </BasicInstrument>
-  <PowerAnalyzer type="Examples.PowerAnalyzer.PowerAnalyzer" Source="">
+  <PowerAnalyzer type="PythonExamples.PowerAnalyzer.PowerAnalyzer" Source="">
     <Name>PyPowerAnalyzer</Name>
   </PowerAnalyzer>
 </InstrumentSettings>

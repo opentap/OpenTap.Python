@@ -28,6 +28,11 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore -c Release
+      - name: Package Examples
+        run: |
+             pushd bin/Release
+             ./tap package create ../../OpenTap.Python.Examples/package.xml
+             popd    
       - name: Test
         run: ./bin/Release/tap python test
       - name: Upload binaries
@@ -36,7 +41,7 @@ jobs:
           name: TapPackage
           retention-days: 14
           path: |
-            bin/Release/Python.*.TapPackage
+            bin/Release/Python*.TapPackage
   build-windows:
     runs-on: windows-latest
     steps:
@@ -73,6 +78,8 @@ jobs:
       - name: Install PackagePublish
         run: tap package install -f PackagePublish --version beta
       - name: Publish
-        run: tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
+        run: |
+          tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
+          tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS2 }} PythonExample.*.TapPackage
           
         

@@ -231,7 +231,7 @@ namespace OpenTap.Python.UnitTests
         }
 
         readonly string[] pluginTypes = {
-            "Examples.CsvResultListener.CsvPythonResultListener",
+            "PythonExamples.CsvResultListener.CsvPythonResultListener",
             "TestModule.StepWithNoCtor",
             "TestModule.BasicStepTest.TestStep2",
             "TestModule.BasicStepTest.LockManager", 
@@ -250,7 +250,7 @@ namespace OpenTap.Python.UnitTests
         private static TraceSource log = Log.CreateSource("test3");
         public int Execute(CancellationToken cancellationToken)
         {
-            var pyStep = TypeData.GetTypeData("Examples.BasicFunctionality.BasicFunctionality");
+            var pyStep = TypeData.GetTypeData("PythonExamples.BasicFunctionality.BasicFunctionality");
             var x = pyStep.CreateInstance();
             if (pyStep.GetMember("Frequency") == null)
                 throw new Exception("Expected Frequency to be defined.");

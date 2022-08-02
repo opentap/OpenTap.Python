@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DutSettings type="OpenTap.DutSettings">
-  <BasicDut type="Examples.BasicDut.BasicDut" Source="">
+  <BasicDut type="PythonExamples.BasicDut.BasicDut" Source="">
     <Name>DUT</Name>
   </BasicDut>
 </DutSettings>

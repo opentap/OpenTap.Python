@@ -32,7 +32,6 @@
             <IgnoreDependency>System.Xml.XDocument</IgnoreDependency>
             <IgnoreDependency>netstandard2.0</IgnoreDependency>
         </File>
-        <File Path="Packages/Python/Examples/*.py" />
         <File Path="Packages/Python/opentap.py" />
         <File Path="Packages/Python/icon.png">
             <PackageIcon/>
