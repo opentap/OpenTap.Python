@@ -106,7 +106,7 @@ jobs:
           name: Pages
           retention-days: 14
           path: |
-            Documentation/public
+            Documentation/TAP_Python_Help/public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
