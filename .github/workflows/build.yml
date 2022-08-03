@@ -57,6 +57,26 @@ jobs:
       - name: Test
         run: ./bin/Debug/tap python test
 
+  test-macos:
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: |
+          ./bin/Debug/tap python set-path $Python3_ROOT_DIR
+          ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.10.dylib
+          ./bin/Debug/tap python test
+  
+  
+  
   publish-package:
     if: github.ref == 'refs/heads/dev' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
     environment: packages.opentap.io
