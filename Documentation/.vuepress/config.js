@@ -3,12 +3,12 @@ module.exports = {
     description: 'Python Integration for OpenTAP',
     
     themeConfig: {
-        repo: 'https://gitlab.com/opentap/plugins/Python',
+        repo: 'https://github.com/opentap/opentap.python',
         editLinks: true,
         editLinkText: 'Help improve this page!',
         docsDir: 'Documentation',
         nav: [
-            { text: 'OpenTAP', link: 'https://gitlab.com/opentap/opentap' },
+            { text: 'OpenTAP', link: 'https://github.com/opentap/opentap' },
             { text: 'OpenTAP Homepage', link: 'https://www.opentap.io' }
         ],
         sidebar: [
@@ -45,6 +45,6 @@ module.exports = {
         ]
     },
     dest: '../public',
-    base: '/Plugins/python/'
+    base: '/opentap.python/'
 }
 
