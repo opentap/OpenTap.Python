@@ -16,20 +16,7 @@ module.exports = {
             ['/', "Welcome"],
             ['TAP_Python_Help/', 'OpenTAP Python'],
             ['TAP_Python_Help/Prerequisites.md', 'Prerequisites'],
-            {
-                title: "Getting Started",
-                children:[
-                    'TAP_Python_Help/Python_Development_Examples/'
-                ]
-            },
-            {
-                title: "Creating a Plugin",
-                children:
-                    [
-                        [ 'TAP_Python_Help/Project_Creation_Wizard.md', 'Project Creation Wizard' ],
-                        [ 'TAP_Python_Help/Creating_a_plugin.md', 'Windows'],
-                        ]
-            },
+            [ 'TAP_Python_Help/Getting_Started.md', 'Getting Started'],
             [ 'TAP_Python_Help/Code_Examples.md', 'Example Code'],
             [ 'TAP_Python_Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],
             ['TAP_Python_Help/Limitations.md', 'Limitations'],
