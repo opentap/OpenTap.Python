@@ -99,7 +99,7 @@ jobs:
         working-directory: Documentation/TAP_Python_Help
       - name: Build
         run: npm run build
-        working-directory: doc
+        working-directory: Documentation/TAP_Python_Help
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
@@ -113,5 +113,5 @@ jobs:
     steps:
       - uses: docker://pandoc/core:2.9
         with:
-          working-directory: Documentation/TAP_Python_Help
+          working-directory: Documentation/
           args: ./Release_Notes/ReleaseNotes_2_4.md ../Release_Notes/ReleaseNotes_2_3_1.md ../Release_Notes/ReleaseNotes_2_3.md ../Release_Notes/ReleaseNotes_2_0.md -o ../../index.html
