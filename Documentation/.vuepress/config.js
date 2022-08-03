@@ -6,6 +6,7 @@ module.exports = {
         repo: 'https://github.com/opentap/OpenTap.Python',
         editLinks: true,
         editLinkText: 'Help improve this page!',
+        docsBranch: 'dev',
         docsDir: 'Documentation',
         nav: [
             { text: 'OpenTAP', link: 'https://github.com/opentap/opentap' },
