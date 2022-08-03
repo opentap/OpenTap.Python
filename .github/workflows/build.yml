@@ -99,7 +99,14 @@ jobs:
         working-directory: Documentation/TAP_Python_Help
       - name: Build
         run: npm run build
-        working-directory: doc
+        working-directory: Documentation/TAP_Python_Help
+      - name: Upload Docs
+        uses: actions/upload-artifact@v2
+        with:
+          name: Pages
+          retention-days: 14
+          path: |
+            public
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
@@ -107,4 +114,4 @@ jobs:
           publish_dir: public
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: pages
-        
+      
