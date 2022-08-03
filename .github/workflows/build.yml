@@ -107,11 +107,3 @@ jobs:
           publish_dir: public
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: pages
-          
-  build-pages2:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: docker://pandoc/core:2.9
-        with:
-          working-directory: Documentation/
-          args: ./Release_Notes/ReleaseNotes_2_4.md ../Release_Notes/ReleaseNotes_2_3_1.md ../Release_Notes/ReleaseNotes_2_3.md ../Release_Notes/ReleaseNotes_2_0.md -o ../../index.html
