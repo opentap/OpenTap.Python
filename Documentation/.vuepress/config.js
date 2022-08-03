@@ -3,7 +3,7 @@ module.exports = {
     description: 'Python Integration for OpenTAP',
     
     themeConfig: {
-        repo: 'https://github.com/opentap/opentap.python',
+        repo: 'https://github.com/opentap/OpenTap.Python',
         editLinks: true,
         editLinkText: 'Help improve this page!',
         docsDir: 'Documentation',
@@ -45,6 +45,6 @@ module.exports = {
         ]
     },
     dest: '../public',
-    base: '/opentap.python/'
+    base: '/OpenTap.Python/'
 }
 
