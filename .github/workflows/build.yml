@@ -71,8 +71,9 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: |
-        ./bin/Debug/tap python set-path $Python3_ROOT_DIR -v
-        ./bin/Debug/tap python test
+          ./bin/Debug/tap python set-path $Python3_ROOT_DIR
+          ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.10.dylib
+          ./bin/Debug/tap python test
   
   
   
