@@ -16,7 +16,7 @@ class MyPythonStep(TestStep):
       super(MyPythonStep, self).__init__()
 
    def Run(self):
-      self.Debug("Hello from Python")
+      self.log.Debug("Hello from Python")
 ```
 
 All other normal OpenTAP SDK constructs can be used in a similar fashion:

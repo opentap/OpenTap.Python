@@ -100,16 +100,7 @@ class PythonDiscoverer
                 }
             }
         }
-        if (SharedLib.IsWin32 == false)
-        {
-            foreach (var python in TryFindPythons("/usr/lib/x86_64-linux-gnu/"))
-            {
-                Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
-                if(python != null)
-                    yield return (python, null, weight);
-            }
-        }
-        else
+        if (SharedLib.IsWin32)
         {
             foreach (var targetFolder in LocatePythonsWin32())
             {
@@ -119,6 +110,32 @@ class PythonDiscoverer
                     Int32.TryParse(pythonVersionParser.Match(loc).Groups["v"].Value, out int weight);
                     yield return (loc, null, weight);
                 }
+            }
+        }
+        else if (SharedLib.IsMacOs)
+        {
+            var versionsFolder = "/Library/Frameworks/Python.framework/Versions/";
+            var subdirs = System.IO.Directory.EnumerateDirectories(versionsFolder, "3.*");
+            foreach (var subdir in subdirs)
+            {
+                var subdir2 = Path.Combine(subdir, "lib");
+                foreach (var python in TryFindPythons(subdir2))
+                {
+                    Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
+                    if(python != null)
+                        yield return (python, null, weight);
+                }    
+            }
+        }
+        else
+        {
+            foreach(var basePath in new [] {"/usr/lib/x86_64-linux-gnu/", "/usr/lib/aarch64-linux-gnu/"}
+                        .Where(Directory.Exists))
+            foreach (var python in TryFindPythons(basePath))
+            {
+                Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
+                if(python != null)
+                    yield return (python, null, weight);
             }
         }
     }
@@ -147,11 +164,15 @@ class PythonDiscoverer
 
                     foreach (var subPath3 in files)
                     {
+                        if (SharedLib.IsMacOs)
+                        {
+                            yield return subPath3;
+                            continue;
+                        }
                         if (SharedLib.IsWin32 == false)
                         {
                             if(subPath3.EndsWith(".so") || subPath3.Contains(".so."))
                             {
-                                
                             }
                             else
                             { 
