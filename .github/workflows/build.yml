@@ -100,6 +100,8 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: Documentation/TAP_Python_Help
+      - name: List Files
+        run: find .
       - name: Upload Docs
         uses: actions/upload-artifact@v2
         with:
