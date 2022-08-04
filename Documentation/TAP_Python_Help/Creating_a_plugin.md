@@ -64,3 +64,90 @@ Let's say we want to make sure that numpy is installed when our TapPackage is in
 3. Build your package as usual. 
 
 When you install your package, the Pip dependencies will now also be installed in your python path.
+
+## Projects Outside the OpenTAP Installation
+
+It is possible to create projects outside the OpenTAP installation folder, although it can give issues with packaging and project discovery.
+
+First, it is necessesary to add an additional search path in the Python settings. This can be done through the settings or by using a command line action:
+
+```sh
+# add a python-projects folder to the search paths.
+# inside python-projects there can be a number of modules each defining a plugin module.
+tap python search-path --add /home/user/code/python-projects/
+```
+
+After doing this, OpenTAP should be able to locate the plugins defined inside that folder structure. 
+The folder structure can contain many sub-folders with projects.
+
+This will cause a problem when you want to create a TapPackage file. TapPackage files tries to install the plugin into the OpenTAP installation folder structure and in theory this is not a problem. 
+The only problem is that your added search-path projects does not map directly to the way projects are set up inside the OpenTAP installation folder structure.
+This can be fixed by using the `<ProjectFile/>` element in your package XML file. Take for example this package XML:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="python-test1" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
+    <Description>Description of your package.</Description>
+    <Dependencies>
+        <PackageDependency Package="OpenTAP" Version="^9.18.2" />
+        <PackageDependency Package="Python" Version="^3.0.0-beta" />
+    </Dependencies>
+    <Files>
+        <File Path="python-test1/*.py">
+             <ProjectFile/>  <!-- these files should be moved into Packages/python-test1/*.py -->
+        </File>
+        <File Path="requirements.txt">
+            <PythonRequirements/>
+           <!-- This file should be moved to Packages/python-test1/requirements.txt -->
+           <ProjectFile/>
+        </File>
+    </Files>
+</Package>
+```
+`ProjectFile` does either:
+
+1. If the file name starts with the project name, prepend `Packages/`.
+2. If the file name does not start with the project name, prepend `Packages/[project name]`.
+
+If this is not wanted, simply omit the ProjectFile element.
+
+So, the python-projects folder might look something like this:
+```
+/home/user/code/python-projects/
+                           plugin1/
+                              step.py
+                              step2.py
+                              package.xml
+                              requirements.txt
+                           plugin2/
+                              instrument.py
+                              package.xml
+                              requirements.txt
+```
+
+However, when plugin1.TapPackage and plugin2.TapPackage, these will get deployed into the OpenTAP folder as such:
+
+```
+/opentap-installation/
+    Dependencies/...
+    Packages/
+       plugin1/
+           step.py
+           step2.py
+           package.xml
+           requirements.txt
+       plugin2/
+           instrument.py
+           package.xml
+           requirements.txt
+       ....
+    SessionLogs/...
+    Settings/...
+    tap.exe
+    OpenTap.dll
+    ...
+```
+
+In either scenario, OpenTAP will be able to find them due to their location with respect to the search path.
+
+*Warning:* If you set the search path and install the TapPackage plugin in the same installation it is undefined what happens. 
+It is recommended to remove the search path when installing the TapPackage for a given Python-based plugin.
