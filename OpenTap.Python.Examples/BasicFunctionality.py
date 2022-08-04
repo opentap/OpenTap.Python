@@ -47,22 +47,29 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         .add_attribute(OpenTap.AvailableValues("Available"))\
         .add_attribute(OpenTap.Display("Selectable", "Values from Available Values can be selected here.", "Selectable"))
     # This property is based on a C# list of items 'List<int>', List<double>, List<string> can also be used.
-    Available = property(List[Int32], List[Int32]())\
+    Available = property(List[Int32], None)\
         .add_attribute(OpenTap.Display("Available Values", "Select which values are available for 'Selectable'.", "Selectable"))
     
-    Logging = property(OpenTap.Enabled[String], OpenTap.Enabled[String]())\
+    Logging = property(OpenTap.Enabled[String], None)\
         .add_attribute(OpenTap.Display("Logging", "Path of where the log file will be stored.", "Result Logging", 1))
         
     def __init__(self):
         super(BasicFunctionality, self).__init__() # The base class initializer must be invoked.
+        
+        # object types should be initialized in the constructor.
+        Logging = OpenTap.Enabled[String]()
+        
+        self.Available = List[Int32]()
         self.Available.Add(1)
         self.Available.Add(2)
         self.Available.Add(3)
+        self.Available.Add(4) # the backing data behaves as a python list in this case.
+        
         # Add validation rules for the property. This makes it possible to tell the user about invalid property values.
         self.Rules.Add(opentap.Rule("Frequency", lambda: self.Frequency >= 0, lambda: '{} Hz is an invalid value. Frequency must not be negative'.format(self.Frequency)))
         self.Rules.Add(opentap.Rule("Frequency", lambda: self.Frequency <= 2e9, 'Frequency cannot be greater than {}.'.format(2e9)))
     
-        self.Available.Add(4) # the backing data behaves as a python list in this case.
+        
 
         # C# type 'Enabled<T>' allows the users to specify the status (enable/disable) and the value of the property.
         self.Logging.IsEnabled = True
