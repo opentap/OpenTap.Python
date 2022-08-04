@@ -8,16 +8,6 @@ With the Python plugin you can:
 - Leverage existing Python code. 
 - Integrate with other OpenTAP plugins. 
 
-The following example shows how a test step plugin can be defined in Python:
-
-```py
-class MyPythonStep(TestStep):
-   def __init__(self):
-      super(MyPythonStep, self).__init__()
-
-   def Run(self):
-      self.log.Debug("Hello from Python")
-```
 
 All other normal OpenTAP SDK constructs can be used in a similar fashion:
 
@@ -25,6 +15,9 @@ All other normal OpenTAP SDK constructs can be used in a similar fashion:
 - .NET types and OpenTAP classes can be used. 
 - Attributes let you create user friendly configurations for your plugins.
 
-Refer to the OpenTAP SDK for OpenTAP constructs that can be created.
+It is highly recommended to refer to the [OpenTAP documentation](https://doc.opentap.io) for information about how to program plugins.
+Most of the concepts defined there are available in a Python flavor.
+
+It is also highly recommended to check out the [PythonExamples](http://packages.opentap.io/index.html#/?name=PythonExamples) plugin which contains sample code showing how to implement various types of plugins.
 
 To get started, see [Getting Started](./Python_Development_Examples/Readme.md)

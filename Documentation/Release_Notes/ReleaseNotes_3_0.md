@@ -9,6 +9,9 @@ Version 3.0 is a breaking release. This means that what was previously supported
 - Every .NET type can be inherited from and every plugin type can be created.
 - Added support for Mac OS.
 - Added support for Arm64 architectures.
+- Added support for debugging on Linux and MacOS (experimental for now)
+- Python projects can now be added in the Packages folder and does not need an ```__init__``` file for classes to be discovered.
+- Pip support when Python packages are installed.
 
 ## Breaking Changes
 
