@@ -18,8 +18,9 @@ module.exports = {
             ['TAP_Python_Help/Prerequisites.md', 'Prerequisites'],
             [ 'TAP_Python_Help/Getting_Started.md', 'Getting Started'],
             [ 'TAP_Python_Help/Code_Examples.md', 'Example Code'],
-            [ 'TAP_Python_Help/Debugging_with_Microsoft_Visual_Studio.md', 'Debugging on Visual Studio'],
+            [ 'TAP_Python_Help/Debugging.md', 'Debugging'],
             ['TAP_Python_Help/Limitations.md', 'Limitations'],
+            ['TAP_Python_Help/Migration_Notes.md', 'Migrating from 2.X'],
             {
                 title: "Release Notes",
                 children:
@@ -28,6 +29,8 @@ module.exports = {
                     ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0.0"],
                     ['Release_Notes/ReleaseNotes_2_3.md', "Version 2.3.0"],
                     ['Release_Notes/ReleaseNotes_2_3_1.md', "Version 2.3.1"],
+                    ['Release_Notes/ReleaseNotes_2_4.md', "Version 2.4"],
+                    ['Release_Notes/ReleaseNotes_3_0.md', "Version 3.0"],
                 ]
             }
         ]

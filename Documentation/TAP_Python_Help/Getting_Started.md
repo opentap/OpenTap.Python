@@ -30,7 +30,6 @@ Here is an example of how this is done on a Mac OS GitHub builds:
 ```
           ./bin/Debug/tap python set-path $Python3_ROOT_DIR
           ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.10.dylib
-
 ```
 
 # Create and Run a Simple Test Plan
