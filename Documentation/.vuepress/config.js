@@ -26,12 +26,13 @@ module.exports = {
                 title: "Release Notes",
                 children:
                 [
-                    ['Release_Notes/ReleaseNotes_1_1.md', "Version 1.1.0"],
-                    ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0.0"],
-                    ['Release_Notes/ReleaseNotes_2_3.md', "Version 2.3.0"],
-                    ['Release_Notes/ReleaseNotes_2_3_1.md', "Version 2.3.1"],
-                    ['Release_Notes/ReleaseNotes_2_4.md', "Version 2.4"],
                     ['Release_Notes/ReleaseNotes_3_0.md', "Version 3.0"],
+                    ['Release_Notes/ReleaseNotes_2_4.md', "Version 2.4"],
+                    ['Release_Notes/ReleaseNotes_2_3_1.md', "Version 2.3.1"],
+                    ['Release_Notes/ReleaseNotes_2_3.md', "Version 2.3.0"],
+                    ['Release_Notes/ReleaseNotes_2_0.md', "Version 2.0.0"],
+                    ['Release_Notes/ReleaseNotes_1_1.md', "Version 1.1.0"],
+                    
                 ]
             }
         ]
