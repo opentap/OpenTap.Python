@@ -80,8 +80,16 @@ namespace OpenTap.Python
 
                             log.Debug("Loading: {0}", moduleName);
 
-                            PyObject module = Py.Import(moduleName);
-
+                            PyObject module;
+                            try
+                            {
+                                module = Py.Import(moduleName);
+                            }
+                            catch(Exception e){
+                                log.Error("Caught exception loading {0}: {1}", moduleName, e.Message);
+                                log.Debug(e);
+                                continue;
+                            }
                             var files = module.GetAttr("__dict__");
 
                             var objValues = new PyDict(files);
@@ -117,10 +125,11 @@ namespace OpenTap.Python
                     }
                     catch (Exception e)
                     {
+                        log.Error("Caught exception loading {0}: {1}", file, e.Message);
                         log.Debug(e);
+                        continue;
                     }
                 }
-
 
                 PythonPluginProvider.types =
                     types.ToImmutableDictionary(x => x.Name, x => new PythonTypeDataWrapper(x));
