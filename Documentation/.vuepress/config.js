@@ -14,7 +14,6 @@ module.exports = {
         ],
         sidebar: [
             ['/', "Welcome"],
-            ['TAP_Python_Help/', 'OpenTAP Python'],
             ['TAP_Python_Help/Prerequisites.md', 'Prerequisites'],
             [ 'TAP_Python_Help/Getting_Started.md', 'Getting Started'],
             [ 'TAP_Python_Help/Creating_a_plugin.md', 'Creating a New Plugin'],
