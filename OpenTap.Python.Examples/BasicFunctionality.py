@@ -52,7 +52,10 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
     
     Logging = property(OpenTap.Enabled[String], None)\
         .add_attribute(OpenTap.Display("Logging", "Path of where the log file will be stored.", "Result Logging", 1))
-        
+    Points = property(Int32, 200)\
+        .add_attribute(OpenTap.Display("Points", "Number points to store.", "Result Logging", 1))
+    
+
     def __init__(self):
         super(BasicFunctionality, self).__init__() # The base class initializer must be invoked.
         
@@ -92,7 +95,7 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         self.log.Warning("Warning Message")
         
         self.log.Info("Create some results")
-        for i in range(0, 200):
+        for i in range(0, self.Points):
             self.PublishResult("MyResults1", ["X", "Y"], [i, math.sin(i * 0.1 * 0.5) + math.sin(i * 0.15 * 0.5)])
             self.PublishResult("MyResults2", ["X", "Y"], [i, math.sin(i * 0.3 * 0.5) + math.sin(i * 0.2 * 0.5)])
 
