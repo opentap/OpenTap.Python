@@ -57,7 +57,7 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         super(BasicFunctionality, self).__init__() # The base class initializer must be invoked.
         
         # object types should be initialized in the constructor.
-        Logging = OpenTap.Enabled[String]()
+        self.Logging = OpenTap.Enabled[String]()
         
         self.Available = List[Int32]()
         self.Available.Add(1)
