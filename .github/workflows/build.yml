@@ -36,7 +36,9 @@ jobs:
       - name: Test
         run: ./bin/Release/tap python test
       - name: Test Plan
-        run: ./bin/Release/tap run bin/Release/test.TapPlan
+        run: |
+          pip install numpy
+          ./bin/Release/tap run bin/Release/test.TapPlan
       - name: Upload binaries
         uses: actions/upload-artifact@v2
         with:
@@ -59,7 +61,9 @@ jobs:
       - name: Test
         run: ./bin/Debug/tap python test
       - name: Test Plan
-        run: ./bin/Debug/tap run bin/Debug/test.TapPlan
+        run: |
+          pip install numpy
+          ./bin/Debug/tap run bin/Debug/test.TapPlan
 
   test-macos:
     runs-on: macos-11
@@ -79,7 +83,9 @@ jobs:
           ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.10.dylib
           ./bin/Debug/tap python test
       - name: Test Plan
-        run: ./bin/Debug/tap run bin/Debug/test.TapPlan
+        run: |
+          pip install numpy
+          ./bin/Debug/tap run bin/Debug/test.TapPlan
   
   
   
