@@ -38,7 +38,7 @@ jobs:
       - name: Test Plan
         run: |
           pip install numpy
-          ./bin/Release/tap run bin/Release/test.TapPlan
+          ./bin/Release/tap run bin/Release/test.TapPlan --non-interactive
       - name: Upload binaries
         uses: actions/upload-artifact@v2
         with:
@@ -63,7 +63,7 @@ jobs:
       - name: Test Plan
         run: |
           pip install numpy
-          ./bin/Debug/tap run bin/Debug/test.TapPlan
+          ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
 
   test-macos:
     runs-on: macos-11
@@ -85,7 +85,7 @@ jobs:
       - name: Test Plan
         run: |
           pip install numpy
-          ./bin/Debug/tap run bin/Debug/test.TapPlan
+          ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
   
   
   
