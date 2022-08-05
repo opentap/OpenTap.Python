@@ -17,7 +17,7 @@
       <Current>30</Current>
       <Voltage>0.2</Voltage>
       <TargetCellVoltageMargin>0.8</TargetCellVoltageMargin>
-      <DischargeTime>0</DischargeTime>
+      <DischargeTime>2.9913263</DischargeTime>
       <MeasurementInterval>0.2</MeasurementInterval>
       <PowerAnalyzer Source="OpenTap.InstrumentSettings">PyPowerAnalyzer</PowerAnalyzer>
       <Enabled>true</Enabled>
@@ -26,14 +26,37 @@
       <BreakConditions>Inherit</BreakConditions>
     </TestStep>
     <TestStep type="PythonExamples.NumpyStep.NumpyStep" Version="0.1" Id="17ce93b9-1553-42e4-aad6-fddbf6558917">
+      <Points>32</Points>
       <Enabled>true</Enabled>
       <Name Metadata="Step Name">NumpyStep</Name>
       <ChildTestSteps />
       <BreakConditions>Inherit</BreakConditions>
-      <OpenTap.Description />
+    </TestStep>
+    <TestStep type="PythonExamples.OutputInput.OutputStep" Version="0.1" Id="19669232-8571-4eb9-b376-c363735a2285">
+      <OutputValue>10</OutputValue>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Test Step Output</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="PythonExamples.OutputInput.InputStep" Version="0.1" Id="43010822-4d80-4f3f-8c30-44681f0df20c">
+      <InputValue>
+        <PropertyName>PythonExamples.OutputInput.OutputStep|OutputValue</PropertyName>
+        <Step>19669232-8571-4eb9-b376-c363735a2285</Step>
+      </InputValue>
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Test Step Input</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="PythonExamples.ErrorExample.ErrorExample" Version="0.1" Id="74259f80-6935-4634-a528-2e17d42260f8">
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Error Handling</Name>
+      <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
     </TestStep>
     <TestStep type="PythonExamples.BasicFunctionality.BasicFunctionality" Version="0.1" Id="6d00d32b-47a4-498d-848d-efd2ae82ed21">
-      <Frequency>1000000000</Frequency>
+      <Frequency>1000000010</Frequency>
       <Instrument Source="OpenTap.InstrumentSettings">INST</Instrument>
       <Dut Source="OpenTap.DutSettings">DUT</Dut>
       <Selectable>0</Selectable>
@@ -42,9 +65,65 @@
         <Value>C:\SessionLogs\</Value>
         <IsEnabled>true</IsEnabled>
       </Logging>
+      <Points>20</Points>
       <Enabled>true</Enabled>
       <Name Metadata="Step Name">Basic Functionality</Name>
       <ChildTestSteps />
+      <BreakConditions>Inherit</BreakConditions>
+    </TestStep>
+    <TestStep type="OpenTap.Plugins.BasicSteps.ParallelStep" Version="9.18.3+fc9e60e0" Id="7fcd63c2-8dd3-4818-ade7-c2f130b936b1" OpenTap.Visibility="Visible">
+      <Enabled>true</Enabled>
+      <Name Metadata="Step Name">Parallel</Name>
+      <ChildTestSteps>
+        <TestStep type="PythonExamples.BasicFunctionality.BasicFunctionality" Version="0.1" Id="00208d36-d488-4cb8-8563-681d0b5f26b9">
+          <Frequency>1000000010</Frequency>
+          <Instrument Source="OpenTap.InstrumentSettings">INST</Instrument>
+          <Dut Source="OpenTap.DutSettings">DUT</Dut>
+          <Selectable>0</Selectable>
+          <Available>1, 2, 3, 4</Available>
+          <Logging>
+            <Value>C:\SessionLogs\</Value>
+            <IsEnabled>true</IsEnabled>
+          </Logging>
+          <Points>20</Points>
+          <Enabled>true</Enabled>
+          <Name Metadata="Step Name">Basic Functionality</Name>
+          <ChildTestSteps />
+          <BreakConditions>Inherit</BreakConditions>
+        </TestStep>
+        <TestStep type="PythonExamples.BasicFunctionality.BasicFunctionality" Version="0.1" Id="cb5cde72-4431-403c-b374-a63a273add70">
+          <Frequency>1000000010</Frequency>
+          <Instrument Source="OpenTap.InstrumentSettings">INST</Instrument>
+          <Dut Source="OpenTap.DutSettings">DUT</Dut>
+          <Selectable>0</Selectable>
+          <Available>1, 2, 3, 4</Available>
+          <Logging>
+            <Value>C:\SessionLogs\</Value>
+            <IsEnabled>true</IsEnabled>
+          </Logging>
+          <Points>20</Points>
+          <Enabled>true</Enabled>
+          <Name Metadata="Step Name">Basic Functionality</Name>
+          <ChildTestSteps />
+          <BreakConditions>Inherit</BreakConditions>
+        </TestStep>
+        <TestStep type="PythonExamples.BasicFunctionality.BasicFunctionality" Version="0.1" Id="dd1c0c2c-6b38-407f-a717-07f33bdbd6ac">
+          <Frequency>1000000010</Frequency>
+          <Instrument Source="OpenTap.InstrumentSettings">INST</Instrument>
+          <Dut Source="OpenTap.DutSettings">DUT</Dut>
+          <Selectable>0</Selectable>
+          <Available>1, 2, 3, 4</Available>
+          <Logging>
+            <Value>C:\SessionLogs\</Value>
+            <IsEnabled>true</IsEnabled>
+          </Logging>
+          <Points>20</Points>
+          <Enabled>true</Enabled>
+          <Name Metadata="Step Name">Basic Functionality</Name>
+          <ChildTestSteps />
+          <BreakConditions>Inherit</BreakConditions>
+        </TestStep>
+      </ChildTestSteps>
       <BreakConditions>Inherit</BreakConditions>
     </TestStep>
   </Steps>
