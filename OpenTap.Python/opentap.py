@@ -53,13 +53,15 @@ def install_package(file):
 debugpy_imported = False
 
 try:
+    # setup debugging this is done using debugpy, but is an optional feature.
     if OpenTap.Python.PythonSettings.Current.Debug:
         import debugpy
         debugpy.configure(subProcess = False)
-        debugpy.listen(5678)
+        debugpy.listen(OpenTap.Python.PythonSettings.Current.DebugPort)
         debugpy_imported = True
 except Exception as e:
     print("Could not enable debugging: " + str(e))
+    
 attribute = clr.attribute
 
 def debug_this_thread():
