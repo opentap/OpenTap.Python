@@ -53,7 +53,7 @@ def add_dir(x):
                         .ToArray();
                     if (!installations.Any())
                     {
-                        log.Warning("No python installations found.");
+                        log.Warning("No Python installations found.");
                         return false;
                     }
 
@@ -61,7 +61,7 @@ def add_dir(x):
 
                     if (File.Exists(pyLoc) == false)
                     {
-                        log.Warning($"Unable to load Python.net: File does not exist " + pyLoc);
+                        log.Warning($"Unable to load Python: File does not exist " + pyLoc);
                         return false;
                     }
 
@@ -69,7 +69,7 @@ def add_dir(x):
 
                     PythonEngine.Initialize(false);
                     PythonEngine.BeginAllowThreads();
-                    log.Debug($"Loaded PythonNet for Python Version {PythonEngine.Version}");
+                    log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
                 }
                 catch (Exception ex)
                 {

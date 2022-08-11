@@ -63,3 +63,15 @@ This should generate a launch.json file like so:
 6. If there is no error message shown, and the stop button is enabled, you can now feel free to debug the Python script.
 
 ![](./Images/PythonDebug_StopButtonEnabled.png)
+
+## Debugging And Threads
+
+When you debug multi-threaded Python applications, you might need to register each new thread you create. This is not the case for 'native debugging', but when using debugpy, the thread needs to be registered.
+
+To ensure debugging works in a given thread, call ```opentap.debug_this_thread()```.
+
+This is already being done from the opentap.TestStep baseclass, but in other contexts you might to call it explicitly.
+
+The only way you notice the problem is that breakpoints does not get registered in the given thread. 
+
+Additionally, debugging can lead to instabilities on Linux and MacOS, most often noticed by a segmentation fault towards the end of a process.
