@@ -7,7 +7,8 @@ import OpenTap
 from OpenTap import Display
 from opentap import *
 
-class BasicUserInput(Object): # Must inherit from _some_ .NET type, for example Object
+# Notice, this class inherits from System.Object(see line 4), a .NET class, not the default python object class.
+class BasicUserInput(Object):
    Frequency = property(Double, 1.0).add_attribute(Display("Frequency", "The selected frequency."))
    def __init__(self):
       super().__init__()
