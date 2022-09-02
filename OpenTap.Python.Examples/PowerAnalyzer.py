@@ -27,16 +27,14 @@ class PowerAnalyzer(Instrument):
         self.Name = "PyPowerAnalyzer"
 
     def Open(self):
-        self.log.Info("Device PSU open!");
         super().Open()
         self._voltage = 0
         self._cellVoltage = 2.7
 
     def Close(self):
-        self.log.Info("Device PSU closed");
         if self._sw != None:
             self._sw.Stop()
-        #super().Close()
+        super().Close()
     @method(Double)
     def MeasureCurrent(self):
         self.UpdateCurrentAndVoltage()
