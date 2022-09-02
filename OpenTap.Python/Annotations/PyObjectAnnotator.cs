@@ -25,15 +25,21 @@ public class PyObjectAnnotator : IAnnotator
             {
                 // Handling enum: enums has _member_map_.
                 var member_map = type.GetAttr("_member_map_");
-
-                var dict = new PyDict(member_map);
-                List<PyObject> list = new List<PyObject>();
-                foreach (var pair in dict.Values())
+                try
                 {
-                    list.Add(type.GetAttr(pair.GetAttr("name")));
-                }
+                    var dict = new PyDict(member_map);
+                    List<PyObject> list = new List<PyObject>();
+                    foreach (var pair in dict.Values())
+                    {
+                        list.Add(type.GetAttr(pair.GetAttr("name")));
+                    }
 
-                annotations.Add(new PythonEnumValueProperty(list));
+                    annotations.Add(new PythonEnumValueProperty(list));
+                }
+                catch
+                {
+                    
+                }
             }
 
             // classes that implement describe() can provide a description string for a value.
