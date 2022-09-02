@@ -40,6 +40,7 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
     # about if the frequency has changed from the default.
     # if that is the case, then the reset button should appear.
     @property(Boolean)
+    @attribute(Browsable(False)) # property not visible for the user.
     def FrequencyIsDefault(self):
         return abs(self.Frequency - 1e9) < 0.001
 
