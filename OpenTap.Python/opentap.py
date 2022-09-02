@@ -218,6 +218,11 @@ class PyDut(OpenTap.Dut):
     def __init__(self):
         super().__init__()
         self.log = Trace(self)
+    def Open(self):
+        super().Open()
+    def Close(self):
+        super().Open()
+
 
 class PyInstrument(OpenTap.Instrument):
     __clr_abstract__ = True
@@ -226,6 +231,10 @@ class PyInstrument(OpenTap.Instrument):
     def __init__(self):
         super().__init__()
         self.log = Trace(self)
+    def Open(self):
+        super().Open()
+    def Close(self):
+        super().Open()
 
 class PyResultListener(OpenTap.ResultListener):
     __clr_abstract__ = True
@@ -236,9 +245,9 @@ class PyResultListener(OpenTap.ResultListener):
         self.log = Trace(self)
         
     def Open(self):
-        self.IsConnected = True
+        super().Open()
     def Close(self):
-        self.IsConnected = False
+        super().Close()
 
 ResultListener = PyResultListener
 TestStep = PyTestStep

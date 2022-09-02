@@ -18,28 +18,25 @@ class PowerAnalyzer(Instrument):
     CellSizeFactor = property(Double, 0.005)\
         .add_attribute(DisplayAttribute, "Cell Size Factor", "A larger cell size will result in faster charging and discharging.")
     def __init__(self):
-        super(PowerAnalyzer, self).__init__() # The base class initializer must be invoked.
+        super().__init__() # The base class initializer must be invoked.
         self._voltage = 1.0
         self._cellVoltage = 2.7
         self._current = 10
         self._currentLimit = 0.0
         self._sw = None
-        
         self.Name = "PyPowerAnalyzer"
-        self.log.Info("Device PSU open!");
 
     def Open(self):
         self.log.Info("Device PSU open!");
         super().Open()
         self._voltage = 0
         self._cellVoltage = 2.7
-        self.log.Info("Device PSU opened");
 
     def Close(self):
         self.log.Info("Device PSU closed");
         if self._sw != None:
             self._sw.Stop()
-        super().Close()
+        #super().Close()
     @method(Double)
     def MeasureCurrent(self):
         self.UpdateCurrentAndVoltage()

@@ -93,13 +93,13 @@ class TestScpiInstrument(OpenTap.ScpiInstrument):
     __namespace__ = "Test"
     def __init__(self):
         print("SCPI Instrument init")
-        super(TestScpiInstrument,self).__init__()
+        super().__init__()
         print("SCPI Instrument init done!")
     
 class TestScpiInstrument2(OpenTap.ScpiInstrument):
     def __init__(self):
         print("SCPI Instrument init")
-        super(TestScpiInstrument2,self).__init__()
+        super().__init__()
         print("SCPI Instrument init done!")
 
 class TestStep2(OpenTap.RfConnection):
