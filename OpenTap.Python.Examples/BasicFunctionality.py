@@ -6,19 +6,23 @@ clr.AddReference("System.Collections")
 from System.Collections.Generic import List
 from opentap import *
 
-import OpenTap
+import OpenTap 
 import math
 from OpenTap import Log, AvailableValues, EnabledIfAttribute
-from System import Array, Double, Byte, Int32, String, Boolean # Import types to reference for generic methods
+
+## Import necessary .net APIs
+# These represents themselves as regular Python modules but they actually reflect
+# .NET libraries.
 import System
+from System import Array, Double, Byte, Int32, String, Boolean # Import types to reference for generic methods
 from System.ComponentModel import Browsable # BrowsableAttribute can be used to hide things from the user.
+import System.Xml
+from System.Xml.Serialization import XmlIgnore
 
 from .BasicInstrument import BasicInstrument
 from .BasicDut import BasicDut
 from .BasicSettings import BasicSettings
 
-import System.Xml
-from System.Xml.Serialization import XmlIgnore
 
 # Here is how a test step plugin is defined: 
 
