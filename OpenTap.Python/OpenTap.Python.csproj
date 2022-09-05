@@ -61,4 +61,10 @@
       <HintPath>..\Python.Dependencies\Python.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Readme.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>Packages/Python/Readme.md</Link>
+    </None>
+  </ItemGroup>
 </Project>
