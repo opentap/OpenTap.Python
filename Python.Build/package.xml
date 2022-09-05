@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package Name="Python" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
     <Description>
-        OpenTAP Python SDK plugin. This plugin includes all tools, examples, and documentation to develop OpenTAP plugins using Python.
+        OpenTAP Python plugin. This plugin includes all tools, and documentation to develop OpenTAP plugins using Python.
         <Links>
-            <Link Name="Source Code" Description="Go to the source code repository." Url="https://gitlab.com/OpenTAP/Plugins/python"/>
-            <Link Name="Documentation" Description="Go to the documentation." Url="https://opentap.gitlab.io/Plugins/python/"/>
+            <Link Name="Source Code" Description="Go to the source code repository." Url="https://github.com/OpenTAP/OpenTap.Python"/>
+            <Link Name="Documentation" Description="Go to the documentation." Url="https://doc.opentap.io/OpenTap.Python/"/>
         </Links>
         <Contacts> tap.support@keysight.com </Contacts>
-        <Prerequisites> Python (>3.6) </Prerequisites>
+        <Prerequisites> Python (>3.7) </Prerequisites>
     </Description>
     <Owner>Keysight Technologies, Inc.</Owner>
     <SourceUrl>https://gitlab.com/OpenTAP/Plugins/python</SourceUrl>
@@ -33,6 +33,7 @@
             <IgnoreDependency>netstandard2.0</IgnoreDependency>
         </File>
         <File Path="Packages/Python/opentap.py" />
+        <File Path="Packages/Python/Readme.md" />
         <File Path="Packages/Python/icon.png">
             <PackageIcon/>
         </File>
