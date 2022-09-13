@@ -17,7 +17,7 @@ In the following steps, *PythonExample* refers to your project folder. Follow th
       class Step1(opentap.TestStep):
          def __init__(self):
             super().__init__()
-         def Run(self);
+         def Run(self):
             super().Run()
             self.log.Debug("Step1 Executed")
    ```
