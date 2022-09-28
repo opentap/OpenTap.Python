@@ -107,8 +107,13 @@ class PythonDiscoverer
                 var loc = TryFindPythons(targetFolder).FirstOrDefault();
                 if (loc != null && pythonVersionParser.IsMatch(loc))
                 {
+                    // if the target file folder contains a Lib folder,
+                    // then it can probably be used as a PythonHome.
+                    var fld = Path.GetDirectoryName(loc);
+                    if (fld != null && !Directory.Exists(Path.Combine(fld, "Lib")))
+                        fld = null;
                     Int32.TryParse(pythonVersionParser.Match(loc).Groups["v"].Value, out int weight);
-                    yield return (loc, null, weight);
+                    yield return (loc, fld, weight);
                 }
             }
         }
