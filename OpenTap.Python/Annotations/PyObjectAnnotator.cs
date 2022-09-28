@@ -27,12 +27,12 @@ public class PyObjectAnnotator : IAnnotator
                 var member_map = type.GetAttr("_member_map_");
                 try
                 {
-                    var dict = new PyDict(member_map);
-                    List<PyObject> list = new List<PyObject>();
-                    foreach (var pair in dict.Values())
-                    {
+                    // in some pythons this is not a dict but a OrderedDict.
+                    // so we have to manually pull the values
+                    var list = new List<PyObject>();
+                    using var values = new PyIterable(member_map.InvokeMethod("values"));
+                    foreach (var pair in values)
                         list.Add(type.GetAttr(pair.GetAttr("name")));
-                    }
 
                     annotations.Add(new PythonEnumValueProperty(list));
                 }
