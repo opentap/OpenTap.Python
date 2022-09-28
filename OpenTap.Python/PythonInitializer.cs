@@ -66,6 +66,12 @@ def add_dir(x):
                     }
 
                     Runtime.PythonDLL = pyLoc;
+                    // In some cases the python home is not known.
+                    // if som try to get it from pyPath.
+                    // only done on windows, because it is less ambiguous on Linux when 
+                    // python is installed with a package.
+                    if(pyPath != null && SharedLib.IsWin32 && PythonEngine.PythonHome == "")
+                        PythonEngine.PythonHome = pyPath;
 
                     PythonEngine.Initialize(false);
                     PythonEngine.BeginAllowThreads();
