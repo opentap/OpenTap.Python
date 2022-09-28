@@ -56,7 +56,8 @@ namespace OpenTap.Python
                         .Where(dir => Directory.EnumerateFiles(dir, "*.py").Any()).ToList();
                     modules.AddRange(mod2);
                 }
-
+                if(modules.Any())
+                    Py.Import("opentap");
 
                 var sources = new Dictionary<string, PythonTypeDataSource>();
 
@@ -64,9 +65,10 @@ namespace OpenTap.Python
                 foreach (var file in modules)
                 {
                     var baseModule = Path.GetFileNameWithoutExtension(file);
+                    
                     try
                     {
-                        PyObject tap = Py.Import("opentap");
+                        
                         var pyFiles = Directory.EnumerateFiles(file, "*.py");
                         foreach (var py in pyFiles)
                         {
@@ -77,6 +79,9 @@ namespace OpenTap.Python
                             {
                                 moduleName = baseModule + "." + subName;
                             }
+
+                            if (moduleName == "Python.opentap")
+                                continue;
 
                             log.Debug("Loading: {0}", moduleName);
 
@@ -127,7 +132,6 @@ namespace OpenTap.Python
                     {
                         log.Error("Caught exception loading {0}: {1}", file, e.Message);
                         log.Debug(e);
-                        continue;
                     }
                 }
 

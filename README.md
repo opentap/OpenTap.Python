@@ -8,6 +8,8 @@ __More Information__
 - Documentation can be found at https://doc.opentap.io/OpenTap.Python
 - Example code is located in ```%TAP_PATH%\Packages\Python\MyExamplePlugin\```
 
+This work is based on a fork of [PythonNet](https://github.com/pythonnet/pythonnet/): https://github.com/rmadsen-ks/pythonnet
+
 __Developers__
 - Lim Jing Huey
 - Kyler Lee
