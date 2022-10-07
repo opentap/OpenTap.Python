@@ -44,14 +44,14 @@ namespace OpenTap.Python.SDK
                 string fullSearchPath = Path.GetFullPath(searchPath);
                 if (!Directory.Exists(fullSearchPath))
                 {
-                    log.Warning("Warning: The directory '{0}' does not exist.", fullSearchPath);
+                    log.Warning("The directory '{0}' does not exist.", fullSearchPath);
                 }
                 else if (currentPluginSearchPath.Remove(
                              currentPluginSearchPath.Find(x => string.Compare(x.SearchPath, fullSearchPath) == 0)))
                     log.Info("Removed '{0}' from the additional search path list.", fullSearchPath);
                 else
                 {
-                    log.Warning("Warning: The directory '{0}' is not in the additional search path list.",
+                    log.Debug("The directory '{0}' is not in the additional search path list.",
                         fullSearchPath);
                 }
             }
@@ -60,10 +60,10 @@ namespace OpenTap.Python.SDK
                 string fullSearchPath = Path.GetFullPath(path);
                 if (!Directory.Exists(fullSearchPath))
                 {
-                    log.Warning("Warning: The directory '{0}' does not exist.", fullSearchPath);
+                    log.Warning("The directory '{0}' does not exist.", fullSearchPath);
                 }
                 else if (currentPluginSearchPath.Exists(x => string.Compare(x.SearchPath, fullSearchPath) == 0))
-                    log.Warning("Warning: '{0}' exists in the additional search path list.", fullSearchPath);
+                    log.Debug("'{0}' exists in the additional search path list.", fullSearchPath);
                 else
                 {
                     currentPluginSearchPath.Add(new PluginSearchPath() {SearchPath = fullSearchPath});
@@ -71,8 +71,6 @@ namespace OpenTap.Python.SDK
                 }
             }
             
-
-
             if (GetSearchPathList)
             {
                 if (currentPluginSearchPath.Count == 0)
@@ -81,8 +79,8 @@ namespace OpenTap.Python.SDK
                 {
                     currentPluginSearchPath.ForEach(x =>
                     {
-                        string status = x.Enabled ? "Enabled" : "Disabled";
-                        log.Info($"Path: '{x.SearchPath}', Status: {status}");
+                        string status = x.Enabled ? "" : " (Disabled)";
+                        log.Info($"Path: '{x.SearchPath}'{status}");
                     });
                 }
             }
