@@ -29,7 +29,7 @@ namespace OpenTap.Python.CliActions
             if (string.IsNullOrEmpty(ProjectName))
                 throw new ArgumentException("The project name (--project-name) must be set.", nameof(ProjectName));
             if (string.IsNullOrEmpty(Directory))
-                throw new ArgumentException("The output directory name must be set.", nameof(Directory));
+                throw new ArgumentException("The output directory (--directory) must be set.", nameof(Directory));
             
             using var fstr = File.OpenRead(TemplateFile);
             using var archive = new ZipArchive(fstr, ZipArchiveMode.Read);

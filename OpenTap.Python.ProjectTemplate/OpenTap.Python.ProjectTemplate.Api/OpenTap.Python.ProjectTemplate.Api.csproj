@@ -25,6 +25,6 @@
       </Reference>
     </ItemGroup>
     <Target Name="AfterBuildLicensing" BeforeTargets="Build;PostBuildEvent">
-        <Exec Command="$(OutputPath)tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
+        <Exec Command=".\tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
     </Target>
 </Project>
