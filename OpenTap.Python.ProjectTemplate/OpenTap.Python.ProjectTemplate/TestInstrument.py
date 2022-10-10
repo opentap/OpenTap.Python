@@ -9,7 +9,7 @@ import math
 clr.AddReference("OpenTap.Python.ProjectTemplate.Api")
 from OpenTap.Python.ProjectTemplate.Api import PythonInstrumentApi
 
-@attribute(OpenTap.Display("Test Instrument", "This class implements a shared Python API.", "Python Project Template"))
+@attribute(OpenTap.Display("Test Instrument", "This class implements a shared Python API.", "OpenTap.Python.ProjectTemplate"))
 class TestInstrument(Instrument, PythonInstrumentApi):
     def __init__(self):
         "Set up the properties, methods and default values of the instrument."

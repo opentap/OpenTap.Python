@@ -2,7 +2,7 @@
 from System import Int32
 import OpenTap
 
-@attribute(OpenTap.Display("Test Step Example", "A simple python test step", "Python Project Template"))
+@attribute(OpenTap.Display("Test Step Example", "A simple python test step", "OpenTap.Python.ProjectTemplate"))
 class TestStepExample (TestStep):
     Number = property(Int32, 1000)
     def __init__(self):
