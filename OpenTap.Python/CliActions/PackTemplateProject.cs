@@ -24,6 +24,9 @@ public class PackTemplateProject : ICliAction
     {
         if (TemplateDir == null) throw new ArgumentException("TemplateDir cannot be null", nameof(TemplateDir));
         var dir = Directory.GetCurrentDirectory();
+        var outDirName = Path.GetDirectoryName(OutFile);
+        if (string.IsNullOrWhiteSpace(outDirName) == false && !Directory.Exists(outDirName))
+            Directory.CreateDirectory(outDirName);
         using var fstr = File.OpenWrite(OutFile);
         using var archive = new ZipArchive(fstr, ZipArchiveMode.Create);
         Directory.SetCurrentDirectory(TemplateDir);
