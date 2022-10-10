@@ -11,7 +11,7 @@ public class PythonSetLibPath : ICliAction
     [UnnamedCommandLineArgument("libpath")]
     public string LibPath { get; set; }
 
-    readonly TraceSource log = Log.CreateSource("python");
+    static readonly  TraceSource log = Log.CreateSource("python");
     public int Execute(CancellationToken cancellationToken)
     {
         if (!File.Exists(LibPath))

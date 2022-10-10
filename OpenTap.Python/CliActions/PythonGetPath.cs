@@ -6,7 +6,7 @@ namespace OpenTap.Python.SDK;
 [Display("get-path", Group: "python", Description: "Get the path to the Python library. (Windows only)")]
 public class PythonGetPath : ICliAction
 {
-    readonly TraceSource log = Log.CreateSource("CLI");
+    static readonly  TraceSource log = Log.CreateSource("CLI");
 
     public int Execute(CancellationToken cancellationToken)
     {

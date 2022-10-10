@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <OutputPath>../bin/</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <RootNamespace>Python.Test.CSharpApi</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="OpenTAP" Version="9.19.1" />
+        <OpenTapPackageReference Include="Python" Version="3.0.0-rc.2" />
+        <AdditionalOpenTapPackage Include="PythonExamples" Version="3.0.0-rc.2" />
+        
+        <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
+        <!-- <OpenTapPackageReference Include="Editor"/> -->
+        <!-- <OpenTapPackageReference Include="EditorX"/> -->
+        <!-- <OpenTapPackageReference Include="TUI"/> -->
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="Microsoft.CSharp">
+        <HintPath>..\bin\Dependencies\Microsoft.CSharp.4.0.4.0\Microsoft.CSharp.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+    <Target Name="AfterBuildLicensing" BeforeTargets="Build;PostBuildEvent">
+        <Exec Command="$(OutputPath)tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
+    </Target>
+</Project>

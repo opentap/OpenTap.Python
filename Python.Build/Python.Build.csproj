@@ -2,12 +2,14 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
+        <CreateOpenTapPackage>False</CreateOpenTapPackage>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="OpenTap" Version="$(OpenTapVersion)">
             <Private>False</Private>
         </PackageReference>
+        
     </ItemGroup>
 
     <ItemGroup>

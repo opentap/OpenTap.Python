@@ -35,4 +35,5 @@ public class PythonInstallAction : ICustomPackageAction
     }
 
     public PackageActionStage ActionStage => PackageActionStage.Install;
+
 }
