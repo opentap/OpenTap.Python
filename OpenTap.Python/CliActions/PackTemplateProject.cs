@@ -18,6 +18,7 @@ public class PackTemplateProject : ICliAction
     [CommandLineArgument("out")] public string OutFile { get; set; } = "OpenTap.Python.ProjectTemplate.zip";
 
     static readonly string[] acceptedFileExtensions = { "csproj", "py", "md", "cs", "sln" };
+    static readonly string[] acceptedFiles = { ".gitversion" };
 
     static readonly TraceSource log = Log.CreateSource("pack");
     public int Execute(CancellationToken cancellationToken)
@@ -45,7 +46,8 @@ public class PackTemplateProject : ICliAction
                 file = file.Substring(rootFolder.Length);
             var ext = Path.GetExtension(file).TrimStart('.');
             if (file.StartsWith(rootFolder)) continue;
-            if (acceptedFileExtensions.Contains(ext) == false) continue;
+            
+            if (acceptedFileExtensions.Contains(ext) == false && acceptedFiles.Contains(Path.GetFileName(file0))) continue;
             log.Debug("Packing: {0}", file);
             using var str = File.OpenRead(file);
             

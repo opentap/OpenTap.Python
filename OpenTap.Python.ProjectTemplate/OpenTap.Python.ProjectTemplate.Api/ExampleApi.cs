@@ -3,7 +3,7 @@
 using OpenTap;
 using System.Collections.Generic;
 
-namespace OpenTap.Python.ProjectTemplate.CSharpApi
+namespace OpenTap.Python.ProjectTemplate.Api
 {
     // this API can be implemented in python and used from C#.
     public interface PythonInstrumentApi : IInstrument

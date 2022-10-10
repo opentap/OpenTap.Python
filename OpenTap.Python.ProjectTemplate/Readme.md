@@ -28,3 +28,15 @@ A C# project has been included here for a few reasons:
       # or ./bin/tap.exe editorx
       ```
 
+## Building The TapPackage
+
+Consider using git for managing your Python project. If you dont want to use git, edit package.xml, replaceing Version="$(GitVersion)" with e.g Version="0.1.0". 
+
+From the root of the project folder:
+
+```shell
+bin/tap package create ./package.xml
+```
+
+This should create a package with you package name.
+

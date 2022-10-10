@@ -50,6 +50,7 @@ public class PythonPackageBuildAction : ICustomPackageAction
             {
                 foreach (var cd in d.CustomData.ToArray())
                 {
+                    // if the file is a ProjectFile
                     if (cd is ProjectFile)
                     {
                         if (d.RelativeDestinationPath.StartsWith(package.Name))
