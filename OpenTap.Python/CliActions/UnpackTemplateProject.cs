@@ -1,8 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
 using OpenTap.Cli;
+using OpenTap.Package;
 
 namespace OpenTap.Python.CliActions
 {
@@ -10,24 +12,32 @@ namespace OpenTap.Python.CliActions
         Groups: new[] { "python" })]
     public class UnpackTemplateProject : ICliAction
     {
-        TraceSource log = Log.CreateSource("pack");
+        static readonly TraceSource log = Log.CreateSource("pack");
 
-        [CommandLineArgument("template-archive")]
-        public string TemplateFile { get; set; } = "Packages/Python/OpenTap.Python.ProjectTemplate.zip";
+        [Browsable(false)]
+        [CommandLineArgument("template-archive", Description = "The template archive from which to pull the templates.")]
+        public string TemplateFile { get; set; } = Path.Combine(Installation.Current?.Directory ?? ".", "Packages/Python/OpenTap.Python.ProjectTemplate.zip");
 
-        [CommandLineArgument("directory")] public string OutDir { get; set; }
+        [CommandLineArgument("directory", Description = "The directory where to put the new project.")] 
+        public string Directory { get; set; }
 
-        [CommandLineArgument("project-name")] public string ProjectName { get; set; }
+        [CommandLineArgument("project-name",  Description = "The name of the newly create project.")] 
+        public string ProjectName { get; set; }
 
         public int Execute(CancellationToken cancellationToken)
         {
+            if (string.IsNullOrEmpty(ProjectName))
+                throw new ArgumentException("The project name (--project-name) must be set.", nameof(ProjectName));
+            if (string.IsNullOrEmpty(Directory))
+                throw new ArgumentException("The output directory name must be set.", nameof(Directory));
+            
             using var fstr = File.OpenRead(TemplateFile);
             using var archive = new ZipArchive(fstr, ZipArchiveMode.Read);
 
-            if (File.Exists(OutDir)) throw new ArgumentException("Directory does already exist: " + OutDir);
-            var cd = Directory.GetCurrentDirectory();
-            Directory.CreateDirectory(OutDir);
-            Directory.SetCurrentDirectory(OutDir);
+            if (File.Exists(Directory)) throw new ArgumentException("Directory does already exist: " + Directory);
+            var cd = System.IO.Directory.GetCurrentDirectory();
+            System.IO.Directory.CreateDirectory(Directory);
+            System.IO.Directory.SetCurrentDirectory(Directory);
             try
             {
                 foreach (var item in archive.Entries)
@@ -35,8 +45,8 @@ namespace OpenTap.Python.CliActions
                     var outName = item.FullName.Replace("OpenTap.Python.ProjectTemplate", ProjectName);
                     var dirname = Path.GetDirectoryName(outName);
 
-                    if (!string.IsNullOrWhiteSpace(dirname) && !Directory.Exists(dirname))
-                        Directory.CreateDirectory(dirname);
+                    if (!string.IsNullOrWhiteSpace(dirname) && !System.IO.Directory.Exists(dirname))
+                        System.IO.Directory.CreateDirectory(dirname);
                     string content = null;
 
                     using (var reader = item.Open())
@@ -49,11 +59,12 @@ namespace OpenTap.Python.CliActions
             }
             finally
             {
-                Directory.SetCurrentDirectory(cd);
+                System.IO.Directory.SetCurrentDirectory(cd);
             }
+            
+            log.Info("Project '{0}' created", Directory);
 
             return 0;
-
         }
     }
 }

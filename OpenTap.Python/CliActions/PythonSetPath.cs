@@ -10,7 +10,7 @@ public class PythonSetPath : ICliAction
     [UnnamedCommandLineArgument("Path", Required = true)]
     public string Path { get; set; }
 
-    TraceSource log = global::OpenTap.Log.CreateSource("CLI");
+    static readonly TraceSource log = Log.CreateSource("CLI");
     public int Execute(CancellationToken cancellationToken)
     {
         if(Directory.Exists(Path) == false)

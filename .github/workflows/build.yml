@@ -41,6 +41,13 @@ jobs:
         run: |
           pip install numpy
           ./bin/Release/tap run bin/Release/test.TapPlan --non-interactive
+      - name: Test Project Creation
+        run: |
+          ./bin/Release/tap python new-project --directory /tmp/MyProject/Test2 --project-name Test2 --verbose
+          pushd /tmp/MyProject/Test2
+          dotnet build
+          bin/tap package create ./package.xml
+          popd
       - name: Upload binaries
         uses: actions/upload-artifact@v2
         with:
@@ -48,6 +55,7 @@ jobs:
           retention-days: 14
           path: |
             bin/Release/Python*.TapPackage
+
   build-windows:
     runs-on: windows-latest
     steps:
