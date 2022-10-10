@@ -32,6 +32,7 @@ jobs:
         run: |
              pushd bin/Release
              ./tap python pack-template-project --dir ../../OpenTap.Python.ProjectTemplate/ --out Packages/Python/OpenTap.Python.ProjectTemplate.zip --verbose
+             ./tap package create ../../Python.Build/package.xml --install
              ./tap package create ../../OpenTap.Python.Examples/package.xml
              popd    
       - name: Test
