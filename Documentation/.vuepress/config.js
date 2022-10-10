@@ -17,6 +17,7 @@ module.exports = {
             ['TAP_Python_Help/Prerequisites.md', 'Prerequisites'],
             [ 'TAP_Python_Help/Getting_Started.md', 'Getting Started'],
             [ 'TAP_Python_Help/Creating_a_plugin.md', 'Creating a New Plugin'],
+            [ 'TAP_Python_Help/New_Project_Creation.md', 'New Project Creation'],
             [ 'TAP_Python_Help/Code_Examples.md', 'Example Code'],
             [ 'TAP_Python_Help/Debugging.md', 'Debugging'],
             ['TAP_Python_Help/Limitations.md', 'Limitations'],
