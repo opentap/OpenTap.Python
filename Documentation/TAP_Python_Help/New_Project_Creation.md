@@ -1,6 +1,6 @@
 # New Project Creation
 
-Creating a Python plugin from scratch could be done manually or with the help of the project creation wizard. The project tool helps you to start the development of a Python plugin project faster.
+Creating a Python plugin from scratch could be done manually or with the help of the project creation. The project tool helps you to start the development of a Python plugin project faster.
 
 To create a new project, first find out where you want to place it and what to name it. Maybe you keep your python projects under your user folder or under C:\Projects. let's say C:\Projects and we want to name it MyPythonProject. In this case, do the following from your TAP installation folder:
 
