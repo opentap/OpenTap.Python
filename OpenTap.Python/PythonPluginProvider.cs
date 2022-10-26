@@ -118,7 +118,7 @@ namespace OpenTap.Python
                                 var mod = pyType.GetAttr("__module__").As<string>();
                                 if (!sources.TryGetValue(mod, out var asm))
                                 {
-                                    asm = sources[mod] = new PythonTypeDataSource(mod, mod);
+                                    asm = sources[mod] = new PythonTypeDataSource(mod, py);
                                 }
 
                                 var td = TypeData.FromType(type);
