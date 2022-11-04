@@ -1,3 +1,4 @@
+using System.IO;
 using OpenTap.Package;
 using Python.Runtime;
 
@@ -6,7 +7,7 @@ namespace OpenTap.Python;
 public class PythonInstallAction : ICustomPackageAction
 {
     public int Order() => 0;
-    private TraceSource log = Log.CreateSource("python");
+    static readonly TraceSource log = Log.CreateSource("python");
 
     public bool Execute(PackageDef package, CustomPackageActionArgs customActionArgs)
     {
@@ -15,6 +16,7 @@ public class PythonInstallAction : ICustomPackageAction
         using (Py.GIL())
         {
             var opentap = Py.Import("opentap");
+            var tapFolder = Installation.Current.Directory;
 
             foreach (var d in package.Files)
             {
@@ -23,7 +25,7 @@ public class PythonInstallAction : ICustomPackageAction
                     if (cd is PythonRequirements)
                     {
                         log.Info("Installing requirements from {0}", d.FileName);
-                        opentap.InvokeMethod("install_package", d.FileName.ToPython());
+                        opentap.InvokeMethod("install_package", Path.Combine(tapFolder, d.FileName).ToPython());
                     }
                 }
             }
@@ -33,43 +35,5 @@ public class PythonInstallAction : ICustomPackageAction
     }
 
     public PackageActionStage ActionStage => PackageActionStage.Install;
-}
 
-public class PythonPackageBuildAction : ICustomPackageAction
-{
-    public int Order() => 0;
-    private TraceSource log = Log.CreateSource("python");
-
-    public bool Execute(PackageDef package, CustomPackageActionArgs customActionArgs)
-    {
-        if (PythonInitializer.LoadPython() == false)
-            return true;
-        using (Py.GIL())
-        {
-            foreach (var d in package.Files)
-            {
-                foreach (var cd in d.CustomData.ToArray())
-                {
-                    if (cd is ProjectFile)
-                    {
-                        if (d.RelativeDestinationPath.StartsWith(package.Name))
-                        {
-                            d.SourcePath = d.RelativeDestinationPath;
-                            d.RelativeDestinationPath = "Packages/" + d.RelativeDestinationPath;
-                        }else if (d.RelativeDestinationPath.Contains("/" + package.Name + "/") == false)
-                        {
-                            d.SourcePath = d.RelativeDestinationPath;
-                            d.RelativeDestinationPath = "Packages/" + package.Name + "/" + d.RelativeDestinationPath;
-                        }
-
-                        d.CustomData.Remove(cd);
-                    }
-                }
-            }
-        }
-
-        return true;
-    }
-
-    public PackageActionStage ActionStage => PackageActionStage.Create;
 }

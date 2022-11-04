@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package Name="OpenTap.Python.ProjectTemplate" xmlns="http://keysight.com/Schemas/tap" Version="$(GitVersion)" OS="Windows,Linux,MacOS">
+    <Description>
+        OpenTap.Python.ProjectTemplate
+        <Prerequisites> Python (>3.7) </Prerequisites>
+    </Description>
+    
+    <Files>
+        <File Path="OpenTap.Python.ProjectTemplate/*.py" >
+            <ProjectFile/>
+        </File>
+                    
+        <File Path="Packages/OpenTap.Python.ProjectTemplate/OpenTap.Python.ProjectTemplate.Api.dll" SourcePath="bin/OpenTap.Python.ProjectTemplate.Api.dll" >
+            <ProjectFile/>
+        </File>
+        <File Path="Readme.md" >
+            <ProjectFile/>
+        </File>
+    </Files>
+</Package>

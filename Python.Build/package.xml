@@ -31,8 +31,10 @@
             <IgnoreDependency>System.Xml.ReaderWriter</IgnoreDependency>
             <IgnoreDependency>System.Xml.XDocument</IgnoreDependency>
             <IgnoreDependency>netstandard2.0</IgnoreDependency>
+            <SetAssemblyInfo Attributes="Version"/>
         </File>
         <File Path="Packages/Python/opentap.py" />
+        <File Path="Packages/Python/OpenTap.Python.ProjectTemplate.zip" />
         <File Path="Packages/Python/Readme.md" />
         <File Path="Packages/Python/icon.png">
             <PackageIcon/>

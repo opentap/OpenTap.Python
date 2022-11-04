@@ -9,7 +9,7 @@ public class PythonInstallRequirementsCliAction : ICliAction
     public int Execute(CancellationToken cancellationToken)
     {
         var i = new PythonInstallAction();
-        foreach (var pkg in OpenTap.Package.Installation.Current.GetPackages())
+        foreach (var pkg in Package.Installation.Current.GetPackages())
         {
             i.Execute(pkg, null);
         }
