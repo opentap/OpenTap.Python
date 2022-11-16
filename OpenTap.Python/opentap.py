@@ -52,15 +52,6 @@ def install_package(file):
 
 debugpy_imported = False
 
-try:
-    # setup debugging this is done using debugpy, but is an optional feature.
-    if OpenTap.Python.PythonSettings.Current.Debug:
-        import debugpy
-        debugpy.configure(subProcess = False)
-        debugpy.listen(OpenTap.Python.PythonSettings.Current.DebugPort)
-        debugpy_imported = True
-except Exception as e:
-    print("Could not enable debugging: " + str(e))
     
 attribute = clr.attribute
 
@@ -69,6 +60,9 @@ def debug_this_thread():
         debugpy.debug_this_thread()
     else:
         pass
+
+    
+attribute = clr.attribute
 
 class Rule(OpenTap.Python.VirtualValidationRule):
     def __init__(self, property, validFunc, errorFunc):
@@ -143,6 +137,18 @@ class Logger:
 
 sys.stdout = Logger()
 sys.stderr = Logger(OpenTap.LogEventType.Error)
+
+try:
+    # setup debugging this is done using debugpy, but is an optional feature.
+    if OpenTap.Python.PythonSettings.Current.UseFakeDebugServer:
+        import debugpy
+        debugpy.configure(subProcess = False)
+        print("Debugger on port: ", OpenTap.Python.PythonSettings.Current.DebugPort2)
+        debugpy.listen(OpenTap.Python.PythonSettings.Current.DebugPort2)
+        debugpy_imported = True
+except Exception as e:
+    print("Could not enable debugging: " + str(e))
+
 
 def reload_module(module):
     """Internal: Reloads modules and sub-modules. Similar to imp.reload, but recurses to included sub-modules."""

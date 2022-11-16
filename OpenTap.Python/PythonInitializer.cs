@@ -6,6 +6,7 @@
 
 using Python.Runtime;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -72,7 +73,18 @@ def add_dir(x):
                     // python is installed with a package.
                     if(pyPath != null && SharedLib.IsWin32 && PythonEngine.PythonHome == "")
                         PythonEngine.PythonHome = pyPath;
-
+                    if (PythonSettings.Current.Debug)
+                    {
+                        if (PythonSettings.Current.UseFakeDebugServer)
+                        { 
+                            FakeDebugServer.Instance.Port = PythonSettings.Current.DebugPort;
+                            FakeDebugServer.Instance.Port2 = PythonSettings.Current.DebugPort2;
+                            FakeDebugServer.Instance.Start();    
+                        }else{
+                            DebugServer.Instance.Port = PythonSettings.Current.DebugPort;
+                            DebugServer.Instance.Start();
+                        }
+                    }
                     PythonEngine.Initialize(false);
                     PythonEngine.BeginAllowThreads();
                     log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
@@ -88,18 +100,16 @@ def add_dir(x):
                     return false;
 
                 using (Py.GIL())
-                {
+                {   
                     PyObject mod = PyModule.FromString("init_mod", loadScript);
                     foreach (var s in PythonSettings.Current.GetSearchList())
                         mod.InvokeMethod("add_dir", s.ToPython());
-
-                    try
-                    {
-                        Py.Import("opentap");
-                    }
-                    catch (PythonException e)
-                    {
-                        PrintPythonException(e);
+                }
+                if (PythonSettings.Current.Debug)
+                {
+                    if (!PythonSettings.Current.UseFakeDebugServer)
+                    {     
+                        Runtime.TraceCallback += DebugServer.Instance.TraceCallback;
                     }
                 }
             }
