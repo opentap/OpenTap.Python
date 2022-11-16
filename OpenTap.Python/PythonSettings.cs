@@ -20,7 +20,6 @@ namespace OpenTap.Python
     [Obfuscation(Exclude = true)]
     public class PythonSettings : ComponentSettings<PythonSettings>
     {
-
         /// <summary>
         /// Makes it possible to configure a custom path to a python installation.
         /// </summary>
@@ -79,8 +78,12 @@ namespace OpenTap.Python
         [Display("Port",
             "The port which debugpy uses to connect with the developer environment. This needs to match the one defined in the launch configuration.",
             "Debug", Order: 1)]
-        public int DebugPort { get; set; } = 5678;
-
+        public int DebugPort { get; set; } = 5679;
+        
+        // packages sent to port2 is forwarded to port1.
+        public int DebugPort2 { get; set; } = 5678;
+        
+        public bool UseFakeDebugServer { get; set; }
         
         public PythonSettings()
         {

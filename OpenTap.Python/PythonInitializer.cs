@@ -73,6 +73,18 @@ def add_dir(x):
                     // python is installed with a package.
                     if(pyPath != null && SharedLib.IsWin32)
                         PythonEngine.PythonHome = pyPath;
+                    if (PythonSettings.Current.Debug)
+                    {
+                        if (PythonSettings.Current.UseFakeDebugServer)
+                        { 
+                            FakeDebugServer.Instance.Port = PythonSettings.Current.DebugPort;
+                            FakeDebugServer.Instance.Port2 = PythonSettings.Current.DebugPort2;
+                            FakeDebugServer.Instance.Start();    
+                        }else{
+                            DebugServer.Instance.Port = PythonSettings.Current.DebugPort;
+                            DebugServer.Instance.Start();
+                        }
+                    }
                     PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
                     var venv = PythonSettings.Current.VirtualEnvironment;
                     if (string.IsNullOrWhiteSpace(venv) == false)
@@ -100,21 +112,17 @@ def add_dir(x):
                     return false;
 
                 using (Py.GIL())
-                {
+                {   
                     PyObject mod = PyModule.FromString("init_mod", loadScript);
                     foreach (var s in PythonSettings.Current.GetSearchList())
                         mod.InvokeMethod("add_dir", s.ToPython());
-
-                    try
-                    {
-                        Py.Import("opentap");
-                    }
-                    catch (PythonException e)
-                    {
-                        PrintPythonException(e);
-                        log.Error("Unable to initialize OpenTAP.");
-                                
-                        return false;
+                }
+                if (PythonSettings.Current.Debug)
+                {
+                    if (!PythonSettings.Current.UseFakeDebugServer)
+                    {     
+                        Runtime.TraceCallback += DebugServer.Instance.TraceCallback;
+                        //log.Error("Unable to initialize OpenTAP.");
                     }
                 }
             }
