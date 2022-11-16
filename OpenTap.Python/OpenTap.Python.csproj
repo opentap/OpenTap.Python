@@ -5,7 +5,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <OutputPath>..\bin\Release</OutputPath>
+    <OutputPath>../bin/Release</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageId>OpenTap.Python</PackageId>
@@ -13,13 +13,13 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsDebug)'=='true'">
-    <OutputPath>..\bin\Debug</OutputPath>
+    <OutputPath>../bin/Debug</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\Directory.Build.props">
+    <Content Include="../Directory.Build.props">
       <Link>Directory.Build.props</Link>
     </Content>
-    <Content Include="..\Documentation\icon.png">
+    <Content Include="../Documentation\icon.png">
       <Link>icon.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -28,8 +28,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    
-    <EmbeddedResource Include="Resources\*.txt" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -61,10 +59,10 @@
       <HintPath>..\Python.Dependencies\Python.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
-      <HintPath>..\bin\Debug\Dependencies\System.Memory.4.0.1.1\System.Memory.dll</HintPath>
+      <HintPath>$(OutputPath)/Dependencies/System.Memory.4.0.1.1/System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Text.Json">
-      <HintPath>..\bin\Debug\Dependencies\System.Text.Json.4.0.1.0\System.Text.Json.dll</HintPath>
+      <HintPath>$(OutputPath)/Dependencies/System.Text.Json.4.0.1.0/System.Text.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
