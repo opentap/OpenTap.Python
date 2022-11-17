@@ -4,12 +4,18 @@
 from System import String, Object, Double
 import System.Threading
 import OpenTap
-from OpenTap import Display
+from OpenTap import Display, Submit
 from opentap import *
+from enum import Enum
+
+
+class OkEnum(Enum):
+   OK = 1
 
 # Notice, this class inherits from System.Object(see line 4), a .NET class, not the default python object class.
 class BasicUserInput(Object):
    Frequency = property(Double, 1.0).add_attribute(Display("Frequency", "The selected frequency."))
+   Ok = property(OkEnum, OkEnum.OK).add_attribute(Submit())
    def __init__(self):
       super().__init__()
 
