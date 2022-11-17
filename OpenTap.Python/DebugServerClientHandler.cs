@@ -19,7 +19,7 @@ namespace OpenTap.Python;
 /// </summary>
 class DebugServerClientHandler
 {
-    record BreakStackFrames(StackFrame[] stackFrames, int totalFrames);
+    record BreakStackFrames(StackFrame[] stackFrames, int totalFrames, int threadId);
     record StackFrame(int id, string name, int line, int column, object source);
     class NextLine
     {
@@ -27,6 +27,7 @@ class DebugServerClientHandler
         public int CurrentLine { get; set; }
         public string Name { get; set; }
         public int BreakLevel { get; set; }
+        public string Mode { get; set; }
     }
     
     static readonly object successObject = new ();
@@ -150,26 +151,34 @@ class DebugServerClientHandler
 
     void ProcessRequests()
     {
-        while (client.Connected)
+        try
         {
-            TapThread.ThrowIfAborted();
-            var msg = ReadMessage();
-            var command = msg.RootElement.GetProperty("command").GetString();
-            var reqseq = msg.RootElement.GetProperty("seq").GetInt32();
-            lock (clientLock)
+            while (client.Connected)
             {
-                msg.RootElement.TryGetProperty("arguments", out var arguments);
-                try
+                TapThread.ThrowIfAborted();
+                var msg = ReadMessage();
+                if (msg == null) continue;
+                var command = msg.RootElement.GetProperty("command").GetString();
+                var reqseq = msg.RootElement.GetProperty("seq").GetInt32();
+                lock (clientLock)
                 {
-                    var responseBody = ProcessCommand(command, arguments);
-                    if (responseBody != null)
-                        SendMessage(WrapResponse(command, responseBody, reqseq));
-                }
-                catch
-                {
-                    // lost event.
+                    msg.RootElement.TryGetProperty("arguments", out var arguments);
+                    try
+                    {
+                        var responseBody = ProcessCommand(command, arguments);
+                        if (responseBody != null)
+                            SendMessage(WrapResponse(command, responseBody, reqseq));
+                    }
+                    catch
+                    {
+                        // lost event.
+                    }
                 }
             }
+        }
+        finally
+        {
+            Disconnected?.Invoke();
         }
     }
     
@@ -251,13 +260,20 @@ class DebugServerClientHandler
                 return NextRequest(args);
             case "continue":
                 return ContinueRequest(args);
+            case "stepIn":
+                return StepInRequest(args);
+            case "stepOut":
+                return StepOutRequest(args);
             case "disconnect":
+                client.Close();
                 return successObject;
             case "scopes":
                 return ScopesRequest(args);
         }
         return null;
     }
+
+
 
     object InitializeRequest()
     {
@@ -297,21 +313,13 @@ class DebugServerClientHandler
         };
     }
     
-    object AttachRequest(JsonElement args)
-    {
-        return successObject;
-    }
+    object AttachRequest(JsonElement args) =>  successObject;
 
-    
-
-    //{"command":"setBreakpoints","arguments":{"source":{"name":"EnumUsage.py","path":"c:\\Keysight\\Development\\python\\bin\\Debug\\Packages\\PythonExamples\\EnumUsage.py"},"lines":[62],"breakpoints":[{"line":62}],"sourceModified":false},"type":"request","seq":3}Content-Length: 265
-    //{"seq": 6, "type": "response", "request_seq": 3, "success": true, "command": "setBreakpoints", "body": {"breakpoints": [{"verified": true, "id": 0, "source": {"name": "EnumUsage.py", "path": "c:\\Keysight\\Development\\python\\bin\\Debug\\Packages\\PythonExamples\\EnumUsage.py"}, "line": 62}]}}Content-Length: 301
-    
     object SetBreakpointsRequest(JsonElement args)
     {
         var idbase = breakPoints.Count;
         var source = args.GetProperty("source");
-        var name = source.GetProperty("name").GetString();
+        var name = source.TryGetProperty("name", out var p) ? p.GetString() : "";
         var path = source.GetProperty("path").GetString();
         var lines = args.GetProperty("lines").EnumerateArray().Select(x => x.GetInt32()).ToArray();
         
@@ -380,17 +388,14 @@ class DebugServerClientHandler
     object StackTraceRequest(JsonElement args)
     {
         int threadId = args.GetProperty("threadId").GetInt32();
-        int startFrame = args.GetProperty("startFrame").GetInt32();
-        int levels = args.GetProperty("levels").GetInt32();
-        if (breakStackFrames != null)
+        //int startFrame = args.GetProperty("startFrame").GetInt32();
+        //int levels = args.GetProperty("levels").GetInt32();
+        if (breakStackFrames != null && breakStackFrames.threadId == threadId)
             return breakStackFrames;
         
         return new
         {
-            stackFrames = new object[]
-            {
-                
-            },
+            stackFrames = new object[] { },
             totalFrames = 1
         };
     }
@@ -425,6 +430,34 @@ class DebugServerClientHandler
             BreakLevel = breakStackFrames.totalFrames
         };
         
+        return successObject;
+    }
+    object StepOutRequest(JsonElement args)
+    {
+        var threadId = args.GetProperty("threadId").GetInt32();
+        debugState = new NextLine
+        {
+            ThreadId = threadId,
+            CurrentLine = breakStackFrames.stackFrames.FirstOrDefault()?.line ?? -1,
+            Name = breakStackFrames.stackFrames.FirstOrDefault().name,
+            BreakLevel = breakStackFrames.totalFrames,
+            Mode = "stepOut"
+        };
+        return successObject;
+    }
+
+    object StepInRequest(JsonElement args)
+    {
+        var threadId = args.GetProperty("threadId").GetInt32();
+        debugState = new NextLine
+        {
+            ThreadId = threadId,
+            CurrentLine = breakStackFrames.stackFrames.FirstOrDefault()?.line ?? -1,
+            Name = breakStackFrames.stackFrames.FirstOrDefault().name,
+            BreakLevel = breakStackFrames.totalFrames,
+            
+            Mode = "stepIn"
+        };
         return successObject;
     }
 
@@ -604,13 +637,17 @@ class DebugServerClientHandler
         ScopeVariableReferences = kv;
         ScopeVariableReferenceLookup = new();
 
-        breakStackFrames = new BreakStackFrames(stackFrames.ToArray(), stackFrames.Count);
+        breakStackFrames = new BreakStackFrames(stackFrames.ToArray(), stackFrames.Count, thisState.threadId);
         var cancel = new CancellationTokenSource();
         breakCancel = cancel.Token;
         processor = new ConcurrentQueue<Action>();
         Interlocked.Increment(ref isWaiting);
         while (debugState == thisState)
         {
+            if (client.Connected == false)
+            {
+                debugState = null;
+            }
             while (processor.TryDequeue(out var item))
             {
                 item();
@@ -665,7 +702,12 @@ class DebugServerClientHandler
         {
             if (nl.ThreadId != GetThreadId(TapThread.Current))
                 return;
-            
+            if (nl.Mode == "stepIn")
+            {
+                // step in is as simple as just stepping to the next line executed.
+                debugState = null;
+                return;
+            }
             var p1 = pyFrameObject.AsPyObject();
             int frameCount = 0;
             while (p1.IsNone() == false)
@@ -677,6 +719,10 @@ class DebugServerClientHandler
             }
 
             if (frameCount > nl.BreakLevel) return;
+            if (nl.Mode == "stepOut")
+            {
+                if (frameCount > Math.Max(1, nl.BreakLevel - 1)) return;
+            }
             debugState = null;
             using var p3 = pyFrameObject.AsPyObject();
             // ok, next location found
@@ -705,4 +751,6 @@ class DebugServerClientHandler
             }
         }
     }
+
+    public event Action Disconnected;
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Net.Sockets;
 using Python.Runtime;
 
@@ -31,9 +30,13 @@ class DebugServer
             var cli = listener.AcceptTcpClient();
             if (handler != null)
             {
-                throw new Exception("Only one debug client can be attached at a time");
+                Log.CreateSource("Debug").Error("Only one debugging client can be connected at a time.");
+                cli.Close();
+                continue;
             }
+
             handler = new DebugServerClientHandler(cli);
+            handler.Disconnected += () => handler = null;
         }
     }
     
