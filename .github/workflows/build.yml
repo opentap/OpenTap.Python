@@ -69,7 +69,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: ./bin/Debug/tap python test
+        run: ./bin/Debug/tap python test --verbose
       - name: Test Plan
         run: |
           pip install numpy
