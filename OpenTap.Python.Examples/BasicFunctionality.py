@@ -93,13 +93,15 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         self.Frequency = 1e9
 
     def Run(self):
+        super().Run() ## 3.0: Required for debugging to work. 
+        
         # Write some log messages
         self.log.Debug("Frequency: {0}Hz", self.Frequency)
         self.log.Info("Info message")
         self.log.Error("Error message")
         self.log.Warning("Warning Message")
         
-        self.log.Info("Create some results")
+        self.log.Info("Lets create some results:")
         for i in range(0, self.Points):
             self.PublishResult("MyResults1", ["X", "Y"], [i, math.sin(i * 0.1 * 0.5) + math.sin(i * 0.15 * 0.5)])
             self.PublishResult("MyResults2", ["X", "Y"], [i, math.sin(i * 0.3 * 0.5) + math.sin(i * 0.2 * 0.5)])
