@@ -119,18 +119,25 @@ class PythonDiscoverer
         }
         else if (SharedLib.IsMacOs)
         {
-            var versionsFolder = "/Library/Frameworks/Python.framework/Versions/";
-            var subdirs = System.IO.Directory.EnumerateDirectories(versionsFolder, "3.*");
-            foreach (var subdir in subdirs)
-            {
-                var subdir2 = Path.Combine(subdir, "lib");
-                foreach (var python in TryFindPythons(subdir2))
+            var homebrew = "/opt/homebrew/Frameworks/Python.framework/Versions/";
+            var libraryFrameworks = "/Library/Frameworks/Python.framework/Versions/";
+            foreach(var dir in new []{homebrew, libraryFrameworks}){
+                if (Directory.Exists(dir))
                 {
-                    Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
-                    if(python != null)
-                        yield return (python, null, weight);
-                }    
+                    var subdirs = System.IO.Directory.EnumerateDirectories(dir, "3.*");
+                    foreach (var subdir in subdirs)
+                    {
+                        var subdir2 = Path.Combine(subdir, "lib");
+                        foreach (var python in TryFindPythons(subdir2))
+                        {
+                            Int32.TryParse(pythonVersionParser.Match(python)?.Groups["v"].Value, out int weight);
+                            if (python != null)
+                                yield return (python, null, weight);
+                        }
+                    }
+                }
             }
+
         }
         else
         {
