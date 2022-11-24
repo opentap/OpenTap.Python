@@ -13,6 +13,7 @@ class Color1(Enum):
     GREEN = ("Green color", "This is green color")
     BLUE = ("Blue color", "This is blue color")
     
+    # The following two methods defines how an enum will present itself to the user. 
     def __str__(self):
         return self.value[0]
     def describe(self):

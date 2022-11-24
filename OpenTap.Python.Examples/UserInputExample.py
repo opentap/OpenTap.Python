@@ -13,6 +13,11 @@ class OkEnum(Enum):
     Ok = ("Ok", "Ok")
     Cancel = ("Cancel", "Cancel")
 
+    def __str__(self):
+        return self.value[0]
+    def describe(self):
+        return self.value[1]
+
 # Notice, this class inherits from System.Object(see line 4), a .NET class, not the default python object class.
 class BasicUserInput(Object):
    Frequency = property(Double, 1.0).add_attribute(Display("Frequency", "The selected frequency."))
