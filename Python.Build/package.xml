@@ -7,11 +7,14 @@
             <Link Name="Documentation" Description="Go to the documentation." Url="https://doc.opentap.io/OpenTap.Python/"/>
         </Links>
         <Contacts> tap.support@keysight.com </Contacts>
-        <Prerequisites> Python (>3.7) </Prerequisites>
+        <Prerequisites> Python (>=3.7) </Prerequisites>
     </Description>
     <Owner>Keysight Technologies, Inc.</Owner>
     <SourceUrl>https://gitlab.com/OpenTAP/Plugins/python</SourceUrl>
     <Repository Url="https://opentap.gitlab.io/Plugins/python/" />
+    <Dependencies>
+        <PackageDependency Package="OpenTAP" Version="^9.18.3+fc9e60e0" />
+    </Dependencies>
     <Files>
         <File Path="Packages/Python/OpenTap.Python.dll" >
             <IgnoreDependency>Microsoft.CSharp</IgnoreDependency>

@@ -8,6 +8,7 @@ using Python.Runtime;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using OpenTapTraceSource = OpenTap;
 
@@ -66,14 +67,16 @@ def add_dir(x):
                     }
 
                     Runtime.PythonDLL = pyLoc;
+                    
                     // In some cases the python home is not known.
                     // if som try to get it from pyPath.
                     // only done on windows, because it is less ambiguous on Linux when 
                     // python is installed with a package.
-                    if(pyPath != null && SharedLib.IsWin32 && PythonEngine.PythonHome == "")
+                    if(pyPath != null && SharedLib.IsWin32)
                         PythonEngine.PythonHome = pyPath;
-
+                    PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
                     PythonEngine.Initialize(false);
+                    
                     PythonEngine.BeginAllowThreads();
                     log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
                 }

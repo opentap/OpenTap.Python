@@ -9,7 +9,7 @@ using OpenTap.Cli;
 namespace OpenTap.Python.CliActions;
 
 [Browsable(false)]
-[Display(Name: "pack-template-project", Description: "Pack the project templates into a zip file.", Groups: new[] { "python" })]
+[Display(Name: "pack-template-project", Description: "Pack the project templates into a zip file. This is only used when the python project itself is being built.", Groups: new[] { "python" })]
 public class PackTemplateProject : ICliAction
 {
     [CommandLineArgument("dir")]

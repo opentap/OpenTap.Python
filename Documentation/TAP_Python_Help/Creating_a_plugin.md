@@ -1,8 +1,67 @@
 # Creating an OpenTAP plugin
-Python development is done in modules (.py files) that reside in a Python package folder. 
-Each module contains the code for one or more OpenTAP plugins.
 
-## Creating a Basic Plugin
+Developing Python plugin projects can be done in two ways. 
+
+1. Develop the plugin in an isolated 'project' folder. This is recommended for bigger projects.
+2. Develop the plugin inside the 'Packages' folder. This way it's easy to get started and make something quick, but maintaining the project becomes harder in the long run.
+
+
+### Developing the plugin in an insolated project folder.
+
+This way of developing plugins makes it easier to do source control, manage dependencies and makes builds very reproducible. It also makes it simple to build the plugin using Continous Integration.
+
+
+1. Setting up the project. 
+
+   First find the location of your tap.exe application. This is usually found inside your OpenTAP installation folder. Here you need to have the Python plugin installed. Do so by running.
+
+   ```tap package install Python```
+
+   Now, you have access to the new-project command. This needs two pieces of information:
+   - Where do you want your plugin to be located?
+   - What do you want to call the project?
+
+   Then you can call the new-project command:
+   ```tap python new-project --project-name "TestProject" --directory /Users/user/code/work/py-test-project```
+
+2. Selecting an editor and install OpenTAP.
+   in the file named (in this case) './TestProject.Api/TestProject.Api.csproj' you can select which editor to use. To install the Editor application, change
+
+   ```<!-- <OpenTapPackageReference Include="Editor"/> -->```
+   
+   to 
+   
+   ``` <OpenTapPackageReference Include="Editor"/>```
+
+   In this file you can also add other package dependencies as needed.
+
+   When this is done run `dotnet build` from the root of the project. Now you should have a `bin` folder containing `tap` and the editor you've selected.
+
+   Now run `bin/Debug/Editor.exe` (if you've selected the Editor package) to load the editor application.
+
+3. Build a package file
+   
+   Let's say that you've developed your plugin and want to share it with the world. This is simple. From the root of the project, invoke:
+   ```sh
+   bin/tap package create package.xml
+   ```
+   This will compile all files in your python module and insert it into a TapPackage file in the right location.
+
+   If you want to add more files to the package, you can open the package.xml file and modify according to your needs. For more information on this check out the [doc.opentap.io](OpenTAP Developer Guide).
+   
+
+
+
+
+
+
+## Develop the plugin inside the Packages folder.
+
+This way has been used since version 2 of the Python plugin. It
+
+Python development is done in modules (.py files) that reside in a Python package folder.
+
+Each module contains the code for one or more OpenTAP plugins.
 
 In the following steps, *PythonExample* refers to your project folder. Follow these steps to create a Python plugin:
 
