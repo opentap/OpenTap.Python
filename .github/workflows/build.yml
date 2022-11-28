@@ -3,6 +3,8 @@ name: .NET
 on:
   push:
     branches: [ "dev", "release3x" ]
+    tags:
+      - v*
   pull_request:
     branches: [ "dev", "release3x" ]
 
