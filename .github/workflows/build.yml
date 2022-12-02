@@ -120,7 +120,7 @@ jobs:
       - name: Test Install
         run: tap package install ./Python.*.TapPackage
       - name: Install PackagePublish
-        run: tap package install -f PackagePublish --version beta
+        run: tap package install -f PackagePublish --version 3.0.0+efea95ee
       - name: Publish
         run: |
           tap package publish -r http://packages.opentap.io -k ${{ secrets.REPO_PASS }} Python.*.TapPackage
