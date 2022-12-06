@@ -10,8 +10,8 @@
     
     <ItemGroup>
         <PackageReference Include="OpenTAP" Version="9.19.1" />
-        <OpenTapPackageReference Include="Python" Version="3.0.0-rc.2" />
-        <AdditionalOpenTapPackage Include="PythonExamples" Version="3.0.0-rc.2" />
+        <OpenTapPackageReference Include="Python" Version="3.0" />
+        <AdditionalOpenTapPackage Include="PythonExamples" Version="3.0" />
         
         <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
         <!-- <OpenTapPackageReference Include="Editor"/> -->
