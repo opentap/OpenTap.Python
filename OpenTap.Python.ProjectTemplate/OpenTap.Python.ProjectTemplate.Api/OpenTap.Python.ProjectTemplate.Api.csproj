@@ -9,7 +9,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="OpenTAP" Version="9.19.1" />
+        <PackageReference Include="OpenTAP" Version="9.19.4" />
         <OpenTapPackageReference Include="Python" Version="3.0" />
         <AdditionalOpenTapPackage Include="PythonExamples" Version="3.0" />
         
