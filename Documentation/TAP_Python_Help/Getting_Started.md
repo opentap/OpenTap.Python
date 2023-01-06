@@ -1,19 +1,19 @@
 # Getting Started
 The best way to get started is to explore the example plugins. 
-These can be downloaded from [packages.opentap.io](http://packages.opentap.io/index.html#/?name=PythonExamples).
+These can be downloaded from [packages.opentap.io](https://packages.opentap.io/index.html#name=%2FPackages%2FPythonExamples).
 
 Using any supported OpenTap installation you can run:
 
 ```tap package install PythonExamples```
 
-The package contains a number of Python files that shows how to use many of the OpenTAP features that you will need to develop you own plugins.
+The package contains a number of Python files that show how to use many of the OpenTAP features that you will need to develop your own plugins.
 The files are located inside the Packages/PythonExamples inside your installation folder.
 
-The process to get up and running depends a bit on which platform you are on, please follow one of the following:
+The process to get up and running depends a bit on which platform you are on, please proceed with one of the following:
 
 ### Windows and MacOS
 
-We recommend using the installers from https://www.python.org. 
+We recommend using the installers from [Python.org](https://www.python.org).
 
 ### Ubuntu
 
@@ -26,7 +26,7 @@ e.g
 
 On other platforms we might not be able to detect the python installation. 
 In this case you can set the python library and installation path manually.
-Here is an example of how this is done on a Mac OS GitHub builds:
+Here is an example of how this is done on a MacOS GitHub builds:
 ```
           ./bin/Debug/tap python set-path $Python3_ROOT_DIR
           ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.10.dylib
@@ -51,5 +51,5 @@ The **Log** panel shows that the test passed:
 
 Now we recommend exploring the rest of the Python Examples project. Try for example:
 - Running a battery charge / discharge scenario with the simulated power analyzer.
-- Connect steps using the Input/Output examples
-- Try modifying the Basic Functionality example to include your own log messages. You can also try this with code reloading enabled (In Python settings).
+- Connecting steps using the Input/Output examples
+- Modifying the Basic Functionality example to include your own log messages. You can also try this with code reloading enabled (In Python settings).
