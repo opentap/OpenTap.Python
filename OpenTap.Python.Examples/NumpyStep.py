@@ -16,8 +16,7 @@ map_np_to_net = {
    np.dtype(np.uint8)  : System.Byte,
    np.dtype(np.uint16) : System.UInt16,
    np.dtype(np.uint32) : System.UInt32,
-   np.dtype(np.uint64) : System.UInt64,
-   np.dtype(np.bool)   : System.Boolean,
+   np.dtype(np.uint64) : System.UInt64
 }
 
 def toNetArrayFast(npArray):
