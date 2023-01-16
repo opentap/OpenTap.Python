@@ -142,7 +142,7 @@ class Logger:
         self.terminal.flush()
 
 sys.stdout = Logger()
-sys.stderr = Logger(OpenTap.LogEventType.Error)
+sys.stderr = Logger(level = OpenTap.LogEventType.Error)
 
 def reload_module(module):
     """Internal: Reloads modules and sub-modules. Similar to imp.reload, but recurses to included sub-modules."""
