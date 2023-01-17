@@ -103,6 +103,7 @@ def add_dir(x):
                     catch (PythonException e)
                     {
                         PrintPythonException(e);
+                        return false;
                     }
                 }
             }
