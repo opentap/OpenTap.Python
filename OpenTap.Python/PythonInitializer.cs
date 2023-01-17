@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using OpenTap.Package;
 using OpenTapTraceSource = OpenTap;
 
 namespace OpenTap.Python
@@ -103,6 +104,21 @@ def add_dir(x):
                     catch (PythonException e)
                     {
                         PrintPythonException(e);
+                        log.Error("Unable to initialize OpenTAP, printing debug information:");
+                        log.Info("Search list:");
+                        foreach(var s in PythonSettings.Current.GetSearchList())
+                            log.Info("   {0}", s);
+                        log.Info("CD: {0}", Directory.GetCurrentDirectory());
+                        foreach (var pkg in Installation.Current.GetPackages())
+                        {
+                            log.Info("Package: {0}", pkg.Name);
+                            foreach (var file in pkg.Files)
+                            {
+                                log.Info("   -  {0}", file.FileName);
+                            }
+                        }
+                                
+                        return false;
                     }
                 }
             }
