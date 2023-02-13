@@ -5,6 +5,7 @@
 from opentap import *
 from System import Double, String
 import OpenTap
+import math
 
 @attribute(OpenTap.Display("Basic Instrument", "A basic example of an instrument driver.", "Python Example"))
 class BasicInstrument(Instrument):

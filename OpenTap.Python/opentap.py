@@ -11,19 +11,13 @@ __copyright__ = """
 
 import sys
 import clr
-import math
-import types
-import traceback
-import weakref
-import subprocess
+import traceback    
 import os
 
 clr.AddReference("OpenTap")
 clr.AddReference("OpenTap.Python")
 import OpenTap
 import OpenTap.Python
-from System.ComponentModel import Browsable, BrowsableAttribute
-import System
 from System import String, Double, Array, IConvertible
 from System.Collections.Generic import List
 
@@ -48,6 +42,7 @@ if pyexe != None:
     sys.executable = pyexe
 
 def install_package(file):
+    import subprocess
     subprocess.check_call([pyexe, '-m', 'pip', 'install', '-r', os.path.abspath(file)])
 
 debugpy_imported = False
