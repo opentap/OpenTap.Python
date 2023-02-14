@@ -103,6 +103,9 @@ def add_dir(x):
                     catch (PythonException e)
                     {
                         PrintPythonException(e);
+                        log.Error("Unable to initialize OpenTAP.");
+                                
+                        return false;
                     }
                 }
             }

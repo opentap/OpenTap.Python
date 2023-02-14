@@ -65,8 +65,9 @@ class PythonDiscoverer
         var programFiles4 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "WindowsApps");
         var programFiles5 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Programs", "Python");
+        var programFiles6 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
 
-        return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5 })
+        return drives.Concat(new[] { programFiles, programFiles6, programFiles2, programFiles3, programFiles4, programFiles5 })
             .SelectMany(GetPythonsInFolder).Distinct().ToArray();
     }
 
