@@ -200,7 +200,11 @@ class PyTestStep(OpenTap.TestStep):
         names = List[String]()
         r = Array[IConvertible](len(rows))
         for i in range(len(rows)):
-            r[i] = Double(rows[i])
+            value = rows[i]
+            if isinstance(value, str):
+                r[i] = String(value)
+            else:
+                r[i] = Double(value)
         for name in columnNames:
             names.Add(name)
         if isinstance(rows[0], list):

@@ -103,7 +103,8 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         
         self.log.Info("Lets create some results:")
         for i in range(0, self.Points):
-            self.PublishResult("MyResults1", ["X", "Y"], [i, math.sin(i * 0.1 * 0.5) + math.sin(i * 0.15 * 0.5)])
+            # PublishResult takes a result name, column names, and a list of number values or strings.
+            self.PublishResult("MyResults1", ["X", "Y", "Z"], [i, math.sin(i * 0.1 * 0.5) + math.sin(i * 0.15 * 0.5), "ABC"])
             self.PublishResult("MyResults2", ["X", "Y"], [i, math.sin(i * 0.3 * 0.5) + math.sin(i * 0.2 * 0.5)])
 
         self.log.Info("Run the child steps.")
