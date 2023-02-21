@@ -142,6 +142,9 @@ jobs:
         working-directory: Documentation/TAP_Python_Help
       - name: Build
         run: npm run build
+        env:
+          # Newer versions of ssl no longer supports the hashing used by vuepress(webpack).
+          NODE_OPTIONS: --openssl-legacy-provider
         working-directory: Documentation/TAP_Python_Help
       - name: Upload Docs
         uses: actions/upload-artifact@v2
