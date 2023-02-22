@@ -13,7 +13,7 @@
         <File Path="Packages/OpenTap.Python.ProjectTemplate/OpenTap.Python.ProjectTemplate.Api.dll" SourcePath="bin/OpenTap.Python.ProjectTemplate.Api.dll" >
             <ProjectFile/>
         </File>
-        <File Path="Readme.md" >
+        <File Path="README.md" >
             <ProjectFile/>
         </File>
     </Files>
