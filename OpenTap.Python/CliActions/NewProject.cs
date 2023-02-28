@@ -62,7 +62,7 @@ namespace OpenTap.Python.CliActions
                 System.IO.Directory.SetCurrentDirectory(cd);
             }
             
-            log.Info("Project '{0}' created", Directory);
+            log.Info("Project '{0}' created at '{1}'.", ProjectName, Directory);
 
             return 0;
         }
