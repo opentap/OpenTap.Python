@@ -5,22 +5,26 @@ The following code shows a basic test step implemented in both C# and Python.
 **C# Implementation** 
 
 ```cs
-[Display("Example Test Step", Group: "Examples", Description: "Test Step Description")]
-public class ExampleTestStep: TestStep
+using OpenTap;
+namespace Example 
 {
-	[Display("Step Setting")]
-	public int StepSetting {get; set;}
+   [Display("Example Test Step", Group: "Examples", Description: "Test Step Description")]
+   public class ExampleTestStep: TestStep
+   {
+      [Display("Step Setting")]
+      public int StepSetting {get; set;}
 	
-	public ExampleTestStep()
-	{
-		StepSetting = 10;
-	}
-
-	public override void Run()
-	{
-		Log.Info("Running Test Step");
-		UpgradeVerdict(Verdict.Pass);
-	}
+      public ExampleTestStep()
+      {
+          StepSetting = 10;
+      }
+          
+      public override void Run()
+      {
+          Log.Info("Running Test Step");
+          UpgradeVerdict(Verdict.Pass);
+      }
+   }
 }
 
 ```
@@ -28,13 +32,20 @@ public class ExampleTestStep: TestStep
 **Python Implementation**
 
 ```py
-@attribute(Display("Example Test Step", "Test Step Description", "Examples")
-class ExampleTestStep(TestStep)
+from opentap import *
+from System import Int32
+import OpenTap
+
+@attribute(OpenTap.Display("Example Test Step", "Test Step Description", "Examples"))
+class ExampleTestStep(TestStep):
     StepSetting = property(Int32, 10).add_attribute(OpenTap.Display("Step Setting"))
     
-	def Run(self):
-		self.log.Info("Running Test Step")
-		self.UpgradeVerdict(OpenTap.Verdict.Pass)
+    def __init__(self):
+        super().__init__()
+    
+    def Run(self):
+        self.log.Info("Running Test Step")
+        self.UpgradeVerdict(OpenTap.Verdict.Pass)
 ```
 
 So if you have developed a plugin in either language before you can see some clear similarities. 
