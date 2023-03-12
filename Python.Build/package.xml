@@ -10,7 +10,7 @@
         <Prerequisites> Python (>=3.7) </Prerequisites>
     </Description>
     <Owner>Keysight Technologies, Inc.</Owner>
-    <SourceUrl>https://gitlab.com/OpenTAP/Plugins/python</SourceUrl>
+    <SourceUrl>https://github.com/OpenTAP/OpenTap.Python</SourceUrl>
     <Repository Url="https://opentap.gitlab.io/Plugins/python/" />
     <Dependencies>
         <PackageDependency Package="OpenTAP" Version="^9.18.3+fc9e60e0" />
