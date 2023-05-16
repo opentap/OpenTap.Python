@@ -66,14 +66,15 @@ def debug_this_thread():
         pass
 
 class Rule(OpenTap.Python.VirtualValidationRule):
+    __namespace__ = "OpenTap.py"
     def __init__(self, property, validFunc, errorFunc):
         super(Rule, self).__init__(property)
         self.validFunc = validFunc
         self.errorFunc = errorFunc
-    def Error():
+    def Error(self):
         if self.validFunc():
             return None
-        return self.errorfunc()
+        return self.errorFunc()
 
 property = clr.property
 method = clr.clrmethod
