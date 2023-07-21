@@ -138,3 +138,40 @@ class TestStep3(opentap.TestStep):
         self.B = NestedType()
     def Run(self):
         assert self.C == self.B.A
+        
+@attribute(OpenTap.Display(Name="parent", Description="", Groups=["Python Test"]))
+@attribute(OpenTap.AllowAnyChild())
+class ParentTest(OpenTap.TestStep):
+    __namespace__ = "Test"
+    outputProp = property(Double, 0.0).add_attribute(OpenTap.Output(OpenTap.OutputAvailability.BeforeRun))
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.childStep = ChildTest()
+        self.ChildTestSteps.Add(self.childStep)
+        self.InputOutputRelation(self.childStep, "inputProp", self, "outputProp")
+
+    def InputOutputRelation(self, inputstep, inputparam: str, outputstep, outputparam: str):
+        inmem = OpenTap.TypeData.GetTypeData(inputstep).GetMember(inputparam)
+        outmem = OpenTap.TypeData.GetTypeData(outputstep).GetMember(outputparam)
+        OpenTap.InputOutputRelation.Assign(inputstep, inmem, outputstep, outmem)
+
+    def Run(self):
+        self.outputProp = 5.0
+        self.RunChildSteps()
+ 
+@attribute(OpenTap.Display(Name="child", Description="", Groups=["Python Test"]))
+class ChildTest(OpenTap.TestStep):
+
+    inputProp = property(Double, 0.0)
+
+    log = OpenTap.Log.CreateSource("TEST")
+
+    def __init__(self, *args):
+        super().__init__(*args)
+
+        self.inputProp = Double(0)
+
+    def Run(self):
+        self.log.TraceEvent(OpenTap.LogEventType.Information, 0, f"{self.inputProp}")
