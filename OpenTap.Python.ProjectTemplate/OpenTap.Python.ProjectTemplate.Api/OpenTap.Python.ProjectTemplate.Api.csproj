@@ -15,7 +15,7 @@
         
         <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
         <!-- <OpenTapPackageReference Include="Editor"/> -->
-        <!-- <OpenTapPackageReference Include="EditorX"/> -->
+        <!-- <OpenTapPackageReference Include="Editor X"/> -->
         <!-- <OpenTapPackageReference Include="TUI"/> -->
     </ItemGroup>
     
