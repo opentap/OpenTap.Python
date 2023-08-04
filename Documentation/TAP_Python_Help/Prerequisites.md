@@ -1,7 +1,7 @@
 # Prerequisites
-The Python Plugin is available at [the OpenTAP website](https://packages.opentap.io). This plugin requires the following:
+The Python Plugin is available at [the OpenTAP website](https://packages.opentap.io/index.html#name=%2FPackages%2FPython). This plugin requires the following:
 
-- **OpenTAP** version 9.15.4 or later
+- **OpenTAP** version 9.19.4 or later
   - Open source development tools can be downloaded from [OpenTap.io](https://opentap.io) 
   - Commercial development tools can be downloaded from [Keysight](http://www.keysight.com/find/tap).
 
