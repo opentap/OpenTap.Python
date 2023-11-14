@@ -133,7 +133,7 @@ namespace OpenTap.Python.UnitTests
                 var lckManagerType2 = TypeData.GetTypeData(name);
                 var ins2 = lckManagerType2.CreateInstance();
                 Assert.IsNotNull(ins2);
-                Assert.IsTrue(type.IsAssignableFrom(ins2.GetType()));
+                Assert.Assignable(type, ins2);
             }
             
             var pyStep3 = TypeData.GetTypeData("TestModule.BasicStepTest.StepWithNoNamespace");
@@ -143,7 +143,7 @@ namespace OpenTap.Python.UnitTests
             var freq = td2.GetMember("Frequency");
             freq.SetValue(teststep2, 10.0);
             var val = (double)freq.GetValue(teststep2);
-            Assert.IsTrue(val == 10.0);
+            Assert.AreEqual(val, 10.0);
             
             var instr1Type = TypeData.GetTypeData("Test.TestScpiInstrument");
             var instr1 = instr1Type.CreateInstance();
@@ -179,13 +179,13 @@ namespace OpenTap.Python.UnitTests
                 set2 = ComponentSettings.GetCurrent(compsetType);
                 cv = compsetType.GetMember("A").GetValue(set2);
 
-                Assert.AreEqual(cv, 1.0);
+                Assert.AreEqual((double)cv, 1.0);
                 compsetType.GetMember("A").SetValue(set2, 10.0);
                 set2.Save();
                 set2.Invalidate();
                 set2 = ComponentSettings.GetCurrent(compsetType);
                 cv = compsetType.GetMember("A").GetValue(set2);
-                Assert.AreEqual(cv, 10.0);
+                Assert.AreEqual((double)cv, 10.0);
             }
 
 
