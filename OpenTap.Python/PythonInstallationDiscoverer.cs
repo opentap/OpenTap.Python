@@ -32,7 +32,7 @@ class PythonDiscoverer
             .Where(x => x.lib != null && File.Exists(x.lib))
             .OrderByDescending(x => x.weight)
             .ToArray()
-            .Where(x => GetVersion(x.lib, out int major, out int minor) && minor <= maxSupportedMinorVersion && minor >= minSupportedMinorVersion && major == supportedMajorVersion)
+            .Where(x => SharedLib.IsMacOs || GetVersion(x.lib, out int major, out int minor) && minor <= maxSupportedMinorVersion && minor >= minSupportedMinorVersion && major == supportedMajorVersion)
             .Select(x => (x.lib, x.pyPath));
     }
 
