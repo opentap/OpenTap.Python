@@ -32,14 +32,18 @@ class PythonDiscoverer
             .Where(x => x.lib != null && File.Exists(x.lib))
             .OrderByDescending(x => x.weight)
             .ToArray()
+            // only specific python version are supported. This is detected by trying to load the dll and get the python version from it.
+            // this does not work on MacOS, so there we just assume that its ok.
             .Where(x => SharedLib.IsMacOs || GetVersion(x.lib, out int major, out int minor) && minor <= maxSupportedMinorVersion && minor >= minSupportedMinorVersion && major == supportedMajorVersion)
             .Select(x => (x.lib, x.pyPath));
     }
 
     delegate IntPtr IntPtrF();
 
+    
     static bool GetVersion(string libPath, out int major, out int minor)
     {
+        // try parsing the version from the python function stymbols.
         major = 0;
         minor = 0;
         
