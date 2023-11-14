@@ -18,6 +18,6 @@ All other normal OpenTAP SDK constructs can be used in a similar fashion:
 It is highly recommended to refer to the [OpenTAP documentation](https://doc.opentap.io) for information about how to program plugins.
 Most of the concepts defined there are available in a Python flavor.
 
-It is also highly recommended to check out the [PythonExamples](http://packages.opentap.io/index.html#/?name=PythonExamples) plugin which contains sample code showing how to implement various types of plugins.
+It is also highly recommended to check out the [PythonExamples](https://packages.opentap.io/index.html#name=%2FPackages%2FPythonExamples) plugin which contains sample code showing how to implement various types of plugins.
 
 To get started, see [Getting Started](./TAP_Python_Help/Getting_Started.md)
