@@ -131,7 +131,22 @@ class SharedLib
     public SharedLib(IntPtr ptr)
     {
         lib = ptr;
+    }
+    
+    [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
+    static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+    [DllImport("libdl.so", CharSet = CharSet.Ansi)]
+    static extern IntPtr dlsym(IntPtr handle, string symbol);
+    
+    public IntPtr GetSymbol(string symbolName)
+    {
+        if (lib == IntPtr.Zero)
+            throw new InvalidOperationException("Library handle is null.");
         
+        if (IsWin32)
+            return GetProcAddress(lib, symbolName);
+        
+        return dlsym(lib, symbolName);
     }
 
     public static SharedLib Load(string name)

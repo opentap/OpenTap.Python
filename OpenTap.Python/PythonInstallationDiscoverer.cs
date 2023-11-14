@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 
 namespace OpenTap.Python;
@@ -20,14 +21,44 @@ class PythonDiscoverer
                 yield return $"3.{pythonVersionParser.Match(ins.library).Groups["v"].Value}";
         }
     }
+
+    const int minSupportedMinorVersion = 7;
+    const int maxSupportedMinorVersion = 12;
+    const int supportedMajorVersion = 3;
     
     public IEnumerable<(string library, string pyPath)> GetAvailablePythonInstallations()
     {
         return GetAvailablePythonInstallationCandidates()
             .Where(x => x.lib != null && File.Exists(x.lib))
             .OrderByDescending(x => x.weight)
+            .ToArray()
+            .Where(x => GetVersion(x.lib, out int major, out int minor) && minor <= maxSupportedMinorVersion && minor >= minSupportedMinorVersion && major == supportedMajorVersion)
             .Select(x => (x.lib, x.pyPath));
     }
+
+    delegate IntPtr IntPtrF();
+
+    static bool GetVersion(string libPath, out int major, out int minor)
+    {
+        major = 0;
+        minor = 0;
+        
+        var sh = SharedLib.Load(libPath);
+
+        var versionSymbol = sh.GetSymbol("Py_GetVersion");
+        if (versionSymbol == IntPtr.Zero) 
+            return false;
+        
+        var versionFunc = Marshal.GetDelegateForFunctionPointer<IntPtrF>(versionSymbol);
+        var versionStringPtr = versionFunc();
+        if (versionStringPtr == IntPtr.Zero)
+            return false;
+        
+        var versionString = Marshal.PtrToStringAnsi(versionStringPtr);
+        
+        return int.TryParse(versionString.Split('.').ElementAtOrDefault(0) ?? "", out major) && int.TryParse(versionString.Split('.').ElementAtOrDefault(1) ?? "", out minor);
+    }
+    
     static IEnumerable<string> GetPythonsInFolder(string folderPath)
     {
         try
