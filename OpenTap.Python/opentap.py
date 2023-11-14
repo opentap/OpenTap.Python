@@ -135,7 +135,8 @@ class Logger:
 
     def flush(self):
         self.log.Flush()
-        self.terminal.flush()
+        if self.terminal is not None:
+            self.terminal.flush()
 
 sys.stdout = Logger()
 sys.stderr = Logger(level = OpenTap.LogEventType.Error)
