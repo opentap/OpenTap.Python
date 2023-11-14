@@ -116,6 +116,14 @@ namespace OpenTap.Python.UnitTests
 
     class Assert
     {
+        public static void Assignable(Type expected, object item)
+        {
+            if (!expected.IsAssignableFrom(item.GetType()))
+            {
+                throw new Exception($"{expected} is not assignable from an object of type {item.GetType()}");
+            }
+        }
+        
         public static void IsTrue(bool expr)
         {
             if (!expr)
@@ -126,6 +134,12 @@ namespace OpenTap.Python.UnitTests
         {
             if(ins == null) 
                 throw new Exception("Assertion failed.");
+        }
+        
+        public static void AreEqual(double cv, double d, double epsilon = 0.0001)
+        {
+            if (Math.Abs(cv- d) > epsilon)
+                throw new Exception($"Assertion {cv} == {d} failed!");
         }
 
         public static void AreEqual(object cv, object d)
