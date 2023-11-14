@@ -64,6 +64,9 @@ class SharedLib
 
     [DllImport("kernel32.dll")]
     static extern IntPtr LoadLibrary(string dllToLoad);
+    
+    [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
+    static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
     const int rtld_now = 2;
 
@@ -71,6 +74,7 @@ class SharedLib
     {
         IntPtr dlopen(string filename, int flags);
         int dlclose(IntPtr handle);
+        IntPtr dlsym(IntPtr handle, string name);
         string dlerror();
     }
 
@@ -85,9 +89,13 @@ class SharedLib
         [DllImport("libdl.so")]
 
         static extern string dlerror();
-
+        [DllImport("libdl.so", CharSet = CharSet.Ansi)]
+        static extern IntPtr dlsym(IntPtr handle, string symbol);
+        
         IntPtr ILibDL.dlopen(string fileName, int flags) => dlopen(fileName, flags);
         int ILibDL.dlclose(IntPtr handle) => dlclose(handle);
+        IntPtr ILibDL.dlsym(IntPtr handle, string name) => dlsym(handle, name);
+        
         string ILibDL.dlerror() => dlerror();
 
     }
@@ -102,10 +110,13 @@ class SharedLib
 
         [DllImport("libdl.so.2")]
         static extern string dlerror();
+        [DllImport("libdl.so.2", CharSet = CharSet.Ansi)]
+        static extern IntPtr dlsym(IntPtr handle, string symbol);
         
         IntPtr ILibDL.dlopen(string fileName, int flags) => dlopen(fileName, flags);
         int ILibDL.dlclose(IntPtr handle) => dlclose(handle);
         string ILibDL.dlerror() => dlerror();
+        IntPtr ILibDL.dlsym(IntPtr handle, string name) => dlsym(handle, name);
     }
 
     static readonly ILibDL libdl;
@@ -133,10 +144,7 @@ class SharedLib
         lib = ptr;
     }
     
-    [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
-    static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
-    [DllImport("libdl.so", CharSet = CharSet.Ansi)]
-    static extern IntPtr dlsym(IntPtr handle, string symbol);
+
     
     public IntPtr GetSymbol(string symbolName)
     {
@@ -146,7 +154,7 @@ class SharedLib
         if (IsWin32)
             return GetProcAddress(lib, symbolName);
         
-        return dlsym(lib, symbolName);
+        return libdl.dlsym(lib, symbolName);
     }
 
     public static SharedLib Load(string name)
