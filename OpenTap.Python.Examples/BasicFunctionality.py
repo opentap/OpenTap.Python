@@ -75,7 +75,7 @@ class BasicFunctionality(TestStep): # Inheriting from opentap.TestStep causes it
         
         # Add validation rules for the property. This makes it possible to tell the user about invalid property values.
         self.Rules.Add(opentap.Rule("Frequency", lambda: self.Frequency >= 0, lambda: '{} Hz is an invalid value. Frequency must not be negative'.format(self.Frequency)))
-        self.Rules.Add(opentap.Rule("Frequency", lambda: self.Frequency <= 2e9, 'Frequency cannot be greater than {}.'.format(2e9)))
+        self.Rules.Add(opentap.Rule("Frequency", lambda: self.Frequency <= 2e9, lambda: 'Frequency cannot be greater than {}.'.format(2e9)))
     
         
 
