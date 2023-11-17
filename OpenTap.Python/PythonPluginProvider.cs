@@ -8,6 +8,7 @@ using Python.Runtime;
 
 namespace OpenTap.Python
 {
+    [PluginOrder(typeof(DotNetTypeDataSearcher))]
     public class PythonPluginProvider : ITypeDataSearcher, ITypeDataProvider, ITypeDataSourceProvider
     {
         class PythonTypeDataSource : ITypeDataSource
