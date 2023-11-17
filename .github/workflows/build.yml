@@ -13,7 +13,7 @@ jobs:
         os: [ ubuntu-22.04, ubuntu-20.04]
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Fix tags
@@ -48,7 +48,7 @@ jobs:
           bin/tap package create ./package.xml
           popd
       - name: Upload binaries
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: TapPackage
           retention-days: 14
@@ -129,7 +129,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Pages Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -145,7 +145,7 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
         working-directory: Documentation/TAP_Python_Help
       - name: Upload Docs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Pages
           retention-days: 14
