@@ -75,6 +75,9 @@ namespace OpenTap.Python.UnitTests
             TestEmbeddedProperties();
             
             TestValidationErrors();
+            
+            new AttributeTests().TestOutputAvailability();
+
             return 0;
         }
 
