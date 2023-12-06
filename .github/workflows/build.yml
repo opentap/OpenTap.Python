@@ -31,6 +31,8 @@ jobs:
         run: |
              pushd bin/Release
              ./tap python pack-template-project --dir ../../OpenTap.Python.ProjectTemplate/ --out Packages/Python/OpenTap.Python.ProjectTemplate.zip --verbose
+             # Update OpenTAP so plugin types will be serialized into package xml files
+             ./tap package install OpenTAP --version 9.23.0
              ./tap package create ../../Python.Build/package.xml --install
              ./tap package create ../../OpenTap.Python.Examples/package.xml
              popd    
