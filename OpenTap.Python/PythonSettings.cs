@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using OpenTap.Package;
 
 namespace OpenTap.Python
 {
@@ -43,7 +44,7 @@ namespace OpenTap.Python
         public string[] GetSearchList()
         {
             var lst = new List<string>();
-            var dir = Path.GetDirectoryName(typeof(TestPlan).Assembly.Location);
+            var dir = Installation.Current.Directory;
             lst.Add(dir);
             var dir2 = Path.Combine(dir, "Packages", "Python");
             if (Directory.Exists(dir2))
