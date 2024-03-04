@@ -12,7 +12,10 @@ public class PythonInstallAction : ICustomPackageAction
     public bool Execute(PackageDef package, CustomPackageActionArgs customActionArgs)
     {
         if (PythonInitializer.LoadPython() == false)
+        {
+            log.Debug("Unable to load python. Skipping python install actions.");
             return true;
+        }
         using (Py.GIL())
         {
             var opentap = Py.Import("opentap");
