@@ -20,4 +20,4 @@ Most of the concepts defined there are available in a Python flavor.
 
 It is also highly recommended to check out the [PythonExamples](https://packages.opentap.io/index.html#name=%2FPackages%2FPythonExamples) plugin which contains sample code showing how to implement various types of plugins.
 
-To get started, see [Getting Started](./TAP_Python_Help/Getting_Started.md)
+To get started, see the [OpenTAP Python Help](./TAP_Python_Help/Readme.md)
