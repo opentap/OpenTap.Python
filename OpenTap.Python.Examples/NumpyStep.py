@@ -50,6 +50,7 @@ class NumpyStep(TestStep):
       super().__init__()
    def Run(self):
       super().Run()
+      print(np.__version__)
       
       # Use numpy to generate some data.
       X = np.arange(self.Points)

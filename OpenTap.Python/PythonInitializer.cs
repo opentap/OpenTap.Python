@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using OpenTapTraceSource = OpenTap;
 
 namespace OpenTap.Python
 {
@@ -75,8 +74,26 @@ def add_dir(x):
                     if(pyPath != null && SharedLib.IsWin32)
                         PythonEngine.PythonHome = pyPath;
                     PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
-                    PythonEngine.Initialize(false);
-                    
+                    var venv = PythonSettings.Current.VirtualEnvironment;
+                    if (!String.IsNullOrEmpty(venv))
+                    {
+                        PythonEngine.Version.ToString();
+                        var path = Environment.GetEnvironmentVariable("PATH").TrimEnd(';');
+                        path = string.IsNullOrEmpty(path) ? venv : path + ";" + venv;
+                        Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Process);
+                        Environment.SetEnvironmentVariable("PATH", venv, EnvironmentVariableTarget.Process);
+                        Environment.SetEnvironmentVariable("PYTHONHOME", venv, EnvironmentVariableTarget.Process);
+                        Environment.SetEnvironmentVariable("PYTHONPATH", $"{venv}\\Lib\\site-packages;{venv}\\Lib", EnvironmentVariableTarget.Process);
+
+                        PythonEngine.PythonHome = venv;
+                        PythonEngine.Initialize(false);
+                        PythonEngine.PythonPath = Environment.GetEnvironmentVariable("PYTHONPATH", EnvironmentVariableTarget.Process);
+                    }
+                    else
+                    {
+                        PythonEngine.Initialize(false);
+                    }
+
                     PythonEngine.BeginAllowThreads();
                     log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
                 }

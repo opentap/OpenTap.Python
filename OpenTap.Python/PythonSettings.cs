@@ -3,6 +3,7 @@
 //  you may not use this file except in compliance with the License.
 //  You may obtain a copy of the License at
 //  http://www.apache.org/licenses/LICENSE-2.0
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -37,6 +38,11 @@ namespace OpenTap.Python
         [SuggestedValues(nameof(AvailableLibraries))]
         public string PythonLibraryPath {get; set; }
 
+        public string[] PythonPathExtra { get; set; } = Array.Empty<string>();
+
+        [DirectoryPath]
+        public string VirtualEnvironment { get; set; } = null;
+        
         [Display("Plugin Module Search Path", "A list containing additional search paths for finding the Python based plugin modules.", Order: 1)]
         public List<PluginSearchPath> SearchPathList { get; set; } = new ();
 
