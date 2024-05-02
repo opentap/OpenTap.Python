@@ -38,9 +38,8 @@ namespace OpenTap.Python
         [SuggestedValues(nameof(AvailableLibraries))]
         public string PythonLibraryPath {get; set; }
 
-        public string[] PythonPathExtra { get; set; } = Array.Empty<string>();
-
         [DirectoryPath]
+        [Display("Virtual Environment", Description:"If a virtual environment is used, point this to the folder of that virtual environment.")]
         public string VirtualEnvironment { get; set; } = null;
         
         [Display("Plugin Module Search Path", "A list containing additional search paths for finding the Python based plugin modules.", Order: 1)]
@@ -85,6 +84,7 @@ namespace OpenTap.Python
         public PythonSettings()
         {
             Rules.Add(() => !SearchPathList.Exists(x => !string.IsNullOrEmpty(x.Error)), "Search path error(s) is found.", nameof(SearchPathList));
+            Rules.Add(() => string.IsNullOrWhiteSpace(VirtualEnvironment) || Directory.Exists(VirtualEnvironment), "Virtual environment folder does not exist", nameof(VirtualEnvironment));
         }
     }
 }
