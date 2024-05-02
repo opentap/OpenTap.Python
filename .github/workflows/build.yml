@@ -5,7 +5,22 @@ on:
     branches: [ "*" ]
     tags:
       - v*
+
+env:
+  INSTANCE: 'Python/p'
+  ARTIFACT: 'webHelpHI2-all.zip'
+  DOCKER_VERSION: '241.15989'
+  
 jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build docs using Writerside Docker builder
+        uses: JetBrains/writerside-github-action@v4
+        with:
+          instance: ${{ env.INSTANCE }}
+          artifact: ${{ env.ARTIFACT }}
+          docker-version: ${{ env.DOCKER_VERSION }}
   build-ubuntu:
     runs-on: ${{ matrix.os }}
     strategy:

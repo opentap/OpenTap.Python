@@ -96,7 +96,7 @@ In the following steps, *PythonExample* refers to your project folder. Follow th
 
 Your plugin package is complete and ready for distribution. When viewed in OpenTAP Package Manager, users will be able to see and install your package.
 
-![](./Images/python_package_in_tap.png)
+![](python_package_in_tap.png)
 
 ## Adding Pip Package Dependencies
 

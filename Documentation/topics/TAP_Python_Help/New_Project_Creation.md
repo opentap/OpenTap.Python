@@ -43,4 +43,4 @@ Uncomment one or more of the lines containing OpenTapPackageReference to install
 
 After this build, you should have the editor installed. If you uncommented "Editor", you can now run bin\Editor.exe. To get an test plan editor running:
 
-![](./Images/MyPythonProject_Editor.png)
+![](MyPythonProject_Editor.png)

@@ -47,7 +47,7 @@ To just run the 'Basic Functionality' step, you can create a test plan with the 
 
 The **Log** panel shows that the test passed:
 
-![](Images/python_passed.png)
+![](python_passed.png)
 
 Now we recommend exploring the rest of the Python Examples project. Try for example:
 - Running a battery charge / discharge scenario with the simulated power analyzer.

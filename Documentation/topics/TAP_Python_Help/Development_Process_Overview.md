@@ -10,4 +10,4 @@ Creating a plugin with Python involves five basic steps:
 
 4. Build the .TapPackage package, which allows the plugin to be distributed.
 
-For details on these steps, see [Creating an OpenTAP Plugin with Python for Windows](./Creating_a_plugin_with_Python_for_Windows.md).
+For details on these steps, see [Creating an OpenTAP Plugin with Python for Windows](Creating_a_plugin_with_Python_for_Windows.md).

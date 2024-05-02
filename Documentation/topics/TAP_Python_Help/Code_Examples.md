@@ -4,7 +4,7 @@ The following code shows a basic test step implemented in both C# and Python.
 
 **C# Implementation** 
 
-```cs
+```c#
 using OpenTap;
 namespace Example 
 {
@@ -31,7 +31,7 @@ namespace Example
 
 **Python Implementation**
 
-```py
+<code-block lang="python">
 from opentap import *
 from System import Int32
 import OpenTap
@@ -46,7 +46,7 @@ class ExampleTestStep(TestStep):
     def Run(self):
         self.log.Info("Running Test Step")
         self.UpgradeVerdict(OpenTap.Verdict.Pass)
-```
+</code-block>
 
 So if you have developed a plugin in either language before you can see some clear similarities. 
 The plugins are defined semantically equally, but in Python there is no concept of Properties and Attributes,
@@ -61,7 +61,7 @@ The following example of a test step shows:
 - How **@attribute** and **add_attribute** are used to control how data is presented to the user.
 - Inheritance from base classes
 
-![](./Images/python_code_example.png) 
+![](python_code_example.png) 
 
 ## Test Plan Run Method
 The code below shows how the run a method:
@@ -71,4 +71,4 @@ The code below shows how the run a method:
 - Enables simple results publishing using self.PublishResult 
 - Integrates with all OpenTAP Result Listeners 
 
-![](./Images/python_test_execute75.png)
+![](python_test_execute75.png)

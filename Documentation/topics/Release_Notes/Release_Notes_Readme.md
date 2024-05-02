@@ -1,4 +1,4 @@
-## Contents
+# Release Notes
 
 [Release Notes for Version 3.0](ReleaseNotes_3_0.md)
 

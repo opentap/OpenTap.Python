@@ -54,19 +54,19 @@ In case an error occurs due to port 5678 being used by another process, the debu
 
 2. Start up Microsoft Visual Studio, and select Debug, Attach to Process.
 
-![](./Images/PythonDebug_AttachToProcess.png)
+![](PythonDebug_AttachToProcess.png)
 
 4. Click on Select, then select `Debug these code types:`, select Python and click OK.
 
-![](./Images/PythonDebug_DebugTheseCodeTypes.png)
+![](PythonDebug_DebugTheseCodeTypes.png)
 
 5. Select Editor.exe from the available process list and click attach.
 
-![](./Images/PythonDebug_KeysightTapGuiExe.png)
+![](PythonDebug_KeysightTapGuiExe.png)
 
 6. If there is no error message shown, and the stop button is enabled, you can now feel free to debug the Python script.
 
-![](./Images/PythonDebug_StopButtonEnabled.png)
+![](PythonDebug_StopButtonEnabled.png)
 
 ## Debugging And Threads
 
