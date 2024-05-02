@@ -1,6 +1,5 @@
 from opentap import *
 import numpy as np
-import matplotlib.pyplot as plt
 import System
 from System import Array, String
 from System.Collections.Generic import List
@@ -68,8 +67,3 @@ class NumpyStep(TestStep):
       # Finally publish the arrays as results
       self.Results.PublishTable("XY", columnNames, xx, yy)
       self.log.Info("Generated {0}x2 Points", self.Points)
-      
-      plt.plot(X, Y)
-      plt.title("Sine Wave")
-      plt.grid(True)
-      plt.show()

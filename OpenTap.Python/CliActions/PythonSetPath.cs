@@ -4,7 +4,7 @@ using OpenTap.Cli;
 
 namespace OpenTap.Python.SDK;
 
-[Display("set-path", Group: "python", Description: "Set the path to the python installation or virtual environment.")]
+[Display("set-path", Group: "python", Description: "Set the path to the python installation.")]
 public class PythonSetPath : ICliAction
 {
     [UnnamedCommandLineArgument("Path", Required = true)]

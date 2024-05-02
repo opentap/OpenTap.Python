@@ -75,34 +75,17 @@ def add_dir(x):
                         PythonEngine.PythonHome = pyPath;
                     PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
                     var venv = PythonSettings.Current.VirtualEnvironment;
-                    if (!string.IsNullOrEmpty(venv))
+                    if (string.IsNullOrWhiteSpace(venv) == false)
                     {
-                        if (!Directory.Exists(venv))
-                        {
-                            log.Error($"Virtual environment folder {venv} does not exist. Falling back to non-virtual environment,");
-                        }
-                        else
-                        {
-                            PythonEngine.Version.ToString();
-                            var path = Environment.GetEnvironmentVariable("PATH").TrimEnd(';');
-                            path = string.IsNullOrEmpty(path) ? venv : path + ";" + venv;
-                            Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Process);
-                            var pythonPathFolder = $"{venv}\\Lib\\site-packages;{venv}\\Lib";
-                            Environment.SetEnvironmentVariable("PYTHONPATH", pythonPathFolder, EnvironmentVariableTarget.Process);
-                            
-                            PythonEngine.Initialize(false);
-                            PythonEngine.PythonPath = pythonPathFolder;
-                        }
+                        var pypath2 = $"{venv}\\Lib\\site-packages\\;{venv}\\LIB";
+                        Environment.SetEnvironmentVariable("PYTHONPATH", pypath2);
                     }
-                    else
-                    {
-                        PythonEngine.Initialize(false);
-                    }
+                    PythonEngine.Initialize(false);
                     
-                    log.Info("PYTHONPATH: " + Environment.GetEnvironmentVariable("PYTHONPATH"));
-                    log.Info("PYTHONHOME: " + Environment.GetEnvironmentVariable("PYTHONHOME"));
-                    log.Info($"PythonEngine.PythonPath: {PythonEngine.PythonPath}");
-                    log.Info($"PythonEngine.PythonPath: {PythonEngine.PythonHome}");
+                    log.Debug("PYTHONPATH: " + Environment.GetEnvironmentVariable("PYTHONPATH"));
+                    log.Debug("PYTHONHOME: " + Environment.GetEnvironmentVariable("PYTHONHOME"));
+                    log.Debug($"PythonEngine.PythonPath: {PythonEngine.PythonPath}");
+                    log.Debug($"PythonEngine.PythonPath: {PythonEngine.PythonHome}");
                     PythonEngine.BeginAllowThreads();
                     log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
                 }

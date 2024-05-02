@@ -24,7 +24,7 @@ namespace OpenTap.Python
         /// <summary>
         /// Makes it possible to configure a custom path to a python installation.
         /// </summary>
-        [Display("Python Path", "Enables a custom path to the Python installation. After configuration, TAP should be restarted for the effect to take place. If set, this overrides your PYTHONHOME and PYTHONPATH environment variables.", Order: 0)]
+        [Display("Python Path", "Enables a custom path to the Python installation. After configuration, TAP should be restarted for the effect to take place. This can be used to select a python installation, which is not location in the usual places.", Order: 0)]
         [DirectoryPath]
         public string PythonPath { get; set; }
 
@@ -32,14 +32,15 @@ namespace OpenTap.Python
 
         [Display("Python Library Path", "" +
                                         "Enables a custom path to the Python installation. " +
-                                        "After configuration, TAP should be restarted for the effect to take place.",
+                                        "After configuration, TAP should be restarted for the effect to take place." +
+                                        "This is for specifying a direct path to a libpython file.",
             Order: 0)]
         [FilePath]
         [SuggestedValues(nameof(AvailableLibraries))]
         public string PythonLibraryPath {get; set; }
 
         [DirectoryPath]
-        [Display("Virtual Environment", Description:"If a virtual environment is used, point this to the folder of that virtual environment.")]
+        [Display("Virtual Environment", Description:"If a virtual environment is used, point this to the folder of that virtual environment. This will cause PYTHONPATH to be overwritten for the application.")]
         public string VirtualEnvironment { get; set; } = null;
         
         [Display("Plugin Module Search Path", "A list containing additional search paths for finding the Python based plugin modules.", Order: 1)]
