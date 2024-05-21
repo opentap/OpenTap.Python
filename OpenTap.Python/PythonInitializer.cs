@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using OpenTapTraceSource = OpenTap;
 
 namespace OpenTap.Python
 {
@@ -75,8 +74,18 @@ def add_dir(x):
                     if(pyPath != null && SharedLib.IsWin32)
                         PythonEngine.PythonHome = pyPath;
                     PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
+                    var venv = PythonSettings.Current.VirtualEnvironment;
+                    if (string.IsNullOrWhiteSpace(venv) == false)
+                    {
+                        var pypath2 = $"{venv}\\Lib\\site-packages\\;{venv}\\LIB";
+                        Environment.SetEnvironmentVariable("PYTHONPATH", pypath2);
+                    }
                     PythonEngine.Initialize(false);
                     
+                    log.Debug("PYTHONPATH: " + Environment.GetEnvironmentVariable("PYTHONPATH"));
+                    log.Debug("PYTHONHOME: " + Environment.GetEnvironmentVariable("PYTHONHOME"));
+                    log.Debug($"PythonEngine.PythonPath: {PythonEngine.PythonPath}");
+                    log.Debug($"PythonEngine.PythonPath: {PythonEngine.PythonHome}");
                     PythonEngine.BeginAllowThreads();
                     log.Debug($"Loaded Python Version {PythonEngine.Version} from '{pyPath}'.");
                 }

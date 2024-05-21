@@ -57,7 +57,8 @@ class CsvPythonResultListener(PyResultListener):
             
             # Create directory if not exists
             directory = os.path.dirname(fileName)
-            if not os.path.exists(directory):
+            
+            if directory != "" and not os.path.exists(directory):
                 os.makedirs(directory)
 
             # Then write to the file.
