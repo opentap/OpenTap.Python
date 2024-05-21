@@ -25,7 +25,7 @@
       </Reference>
     </ItemGroup>
     <Target Name="AfterBuildPython" BeforeTargets="Build;PostBuildEvent">
-        <Exec Command=".\tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
-        <!--<Exec Command=".\tap python update-stubs - -cache cache-file - -output-folder Stubs " WorkingDirectory="$(OutputPath)../../" />-->
+        <Exec Command="./tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
+        <!--<Exec Command="./tap python update-stubs - -cache-file cache-file - -output-folder ../Stubs " WorkingDirectory="$(OutputPath)" />-->
     </Target>
 </Project>
