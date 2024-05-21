@@ -10,32 +10,12 @@ namespace OpenTap.Python.Stubs
     public static class StubBuilder
     {
         static readonly TraceSource log = Log.CreateSource("python");
-        public static void EnableJitStubBuilder()
-        {
-            Directory.CreateDirectory("Stubs");
-            foreach (var item in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                try
-                {
-                    BuildAssemblyStubs(item.Location, "Stubs");
-                }
-                catch
-                {
-                    log.Debug($"Cannot generate stubs for {item.Location}");
-                }
-            }
-            AppDomain.CurrentDomain.AssemblyLoad += CurrentDomainOnAssemblyLoad;
-        }
-        
-        static void CurrentDomainOnAssemblyLoad(object sender, AssemblyLoadEventArgs args)
-        {
-            BuildAssemblyStubs(args.LoadedAssembly.Location, "Stubs");
-
-        }
+       
         private static List<string> SearchPaths { get; set; } = new List<string>();
 
         public static string BuildAssemblyStubs(string targetAssemblyPath, string destPath = null, string[] searchPaths = null, BuildConfig cfgs = null)
         {
+            log.Debug($"Building stubs for {targetAssemblyPath}");
             // prepare configs
             if (cfgs is null)
                 cfgs = new BuildConfig();

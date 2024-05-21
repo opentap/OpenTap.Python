@@ -64,7 +64,6 @@ def add_dir(x):
                         log.Warning($"Unable to load Python: File does not exist " + pyLoc);
                         return false;
                     }
-                    Stubs.StubBuilder.EnableJitStubBuilder();
                     
                     Runtime.PythonDLL = pyLoc;
                     

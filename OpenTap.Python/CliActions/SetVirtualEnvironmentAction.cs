@@ -3,13 +3,13 @@ using System.Threading;
 using OpenTap.Cli;
 namespace OpenTap.Python.SDK;
 
-[Display("set-virtual-environment", Group:"python", Description: "Set the virtual environment setting.")]
+[Display("set-virtual-environment", Group: "python", Description: "Set the virtual environment setting.")]
 public class SetVirtualEnvironmentAction : ICliAction
 {
-        
+
     [UnnamedCommandLineArgument("VirtualEnvironment")]
     public string VirtualEnvironment { get; set; }
-        
+
     [CommandLineArgument("unset", Description = "Unset the virtual environment.")]
     public bool Unset { get; set; }
     static readonly TraceSource log = Log.CreateSource("python");
