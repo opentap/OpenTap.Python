@@ -1,0 +1,9 @@
+{
+  "python.analysis.stubPath": "./Stubs",
+  "python.analysis.extraPaths": [
+    "bin/Packages/Python"
+  ],
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingModuleSource": false
+  },
+}
