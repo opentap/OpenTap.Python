@@ -26,10 +26,10 @@
         <HintPath>..\bin\Dependencies\Microsoft.CSharp.4.0.4.0\Microsoft.CSharp.dll</HintPath>
       </Reference>
     </ItemGroup>
-    <Target Name="AfterBuildPython" BeforeTargets="Build;PostBuildEvent">
-        <Exec Command="./tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
+    <Target Name="PythonAddSearchPaths" BeforeTargets="Build;PostBuildEvent">
+        <Exec Command=".\tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
     </Target>
-    <Target Name="AfterBuildPython" BeforeTargets="Build;PostBuildEvent" Condition="'$(BuildStubs)' == 'true'">
-        <Exec Command="./tap python update-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
+    <Target Name="PythonBuildStubs" BeforeTargets="Build;PostBuildEvent" Condition="'$(BuildStubs)' == 'true'">
+        <Exec Command=".\tap python update-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
     </Target>
 </Project>
