@@ -6,12 +6,14 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <RootNamespace>Python.Test.CSharpApi</RootNamespace>
+        <PythonPluginVersion>PYTHON_PLUGIN_VERSION</PythonPluginVersion>
+        <BuildStubs>true</BuildStubs>
     </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="OpenTAP" Version="9.24.0" />
-        <OpenTapPackageReference Include="Python" Version="3.1.0" />
-        <AdditionalOpenTapPackage Include="PythonExamples" Version="3.1.0" />
+        <OpenTapPackageReference Include="Python" Version="$(PythonPluginVersion)" />
+        <AdditionalOpenTapPackage Include="PythonExamples" Version="$(PythonPluginVersion)" />
         
         <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
         <!-- <OpenTapPackageReference Include="Editor"/> -->
@@ -26,6 +28,8 @@
     </ItemGroup>
     <Target Name="AfterBuildPython" BeforeTargets="Build;PostBuildEvent">
         <Exec Command="./tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
-        <!--<Exec Command="./tap python update-stubs - -cache-file cache-file - -output-folder ../Stubs " WorkingDirectory="$(OutputPath)" />-->
+    </Target>
+    <Target Name="AfterBuildPython" BeforeTargets="Build;PostBuildEvent" Condition="'$(BuildStubs)' == 'true'">
+        <Exec Command="./tap python update-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
     </Target>
 </Project>

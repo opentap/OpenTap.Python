@@ -23,6 +23,7 @@ namespace OpenTap.Python.CliActions
 
         [CommandLineArgument("project-name",  Description = "The name of the newly create project.")] 
         public string ProjectName { get; set; }
+        
 
         public int Execute(CancellationToken cancellationToken)
         {
@@ -30,6 +31,8 @@ namespace OpenTap.Python.CliActions
                 throw new ArgumentException("The project name (--project-name) must be set.", nameof(ProjectName));
             if (string.IsNullOrEmpty(Directory))
                 throw new ArgumentException("The output directory (--directory) must be set.", nameof(Directory));
+            
+            var pythonPluginVersion = Installation.Current.FindPackage("Python")?.Version.ToString() ?? "3.1";
             
             using var fstr = File.OpenRead(TemplateFile);
             using var archive = new ZipArchive(fstr, ZipArchiveMode.Read);
@@ -52,6 +55,8 @@ namespace OpenTap.Python.CliActions
                     using (var reader = item.Open())
                         content = new StreamReader(reader).ReadToEnd();
                     content = content.Replace("OpenTap.Python.ProjectTemplate", ProjectName);
+                    content = content.Replace("PYTHON_PLUGIN_VERSION", pythonPluginVersion);
+                    
                     log.Debug("Writing: {0}", outName);
                     File.WriteAllText(outName, content);
 
