@@ -64,7 +64,7 @@ def add_dir(x):
                         log.Warning($"Unable to load Python: File does not exist " + pyLoc);
                         return false;
                     }
-
+                    
                     Runtime.PythonDLL = pyLoc;
                     
                     // In some cases the python home is not known.

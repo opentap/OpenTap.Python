@@ -44,6 +44,8 @@ jobs:
           ./bin/Release/tap run bin/Release/test.TapPlan --non-interactive
       - name: Test Project Creation
         run: |
+          # Copy packages to cache.
+          cp bin/Release/Python*.TapPackage ~/.local/share/OpenTap/PackageCache
           ./bin/Release/tap python new-project --directory /tmp/MyProject/Test2 --project-name Test2 --verbose
           pushd /tmp/MyProject/Test2
           dotnet build

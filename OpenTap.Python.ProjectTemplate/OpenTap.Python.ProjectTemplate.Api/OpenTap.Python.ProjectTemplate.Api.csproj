@@ -6,12 +6,14 @@
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
         <RootNamespace>Python.Test.CSharpApi</RootNamespace>
+        <PythonPluginVersion>PYTHON_PLUGIN_VERSION</PythonPluginVersion>
+        <BuildStubs>true</BuildStubs>
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="OpenTAP" Version="9.19.4" />
-        <OpenTapPackageReference Include="Python" Version="3.0" />
-        <AdditionalOpenTapPackage Include="PythonExamples" Version="3.0" />
+        <PackageReference Include="OpenTAP" Version="9.24.0" />
+        <OpenTapPackageReference Include="Python" Version="$(PythonPluginVersion)" />
+        <AdditionalOpenTapPackage Include="PythonExamples" Version="$(PythonPluginVersion)" />
         
         <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
         <!-- <OpenTapPackageReference Include="Editor"/> -->
@@ -24,7 +26,10 @@
         <HintPath>..\bin\Dependencies\Microsoft.CSharp.4.0.4.0\Microsoft.CSharp.dll</HintPath>
       </Reference>
     </ItemGroup>
-    <Target Name="AfterBuildLicensing" BeforeTargets="Build;PostBuildEvent">
+    <Target Name="PythonAddSearchPaths" BeforeTargets="Build;PostBuildEvent">
         <Exec Command=".\tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
+    </Target>
+    <Target Name="PythonBuildStubs" BeforeTargets="Build;PostBuildEvent" Condition="'$(BuildStubs)' == 'true'">
+        <Exec Command=".\tap python build-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
     </Target>
 </Project>
