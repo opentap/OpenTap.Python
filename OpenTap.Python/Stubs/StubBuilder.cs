@@ -1,5 +1,7 @@
-// Most of this code is leverated from
-// https://github.com/mcneel/pythonstubs/
+// Most of this code is borrowed from (MIT-licensed)
+// https://github.com/mcneel/pythonstubs/blob/b7fa142de4f320df969f41ac29934e81a1398ca3/builder/PyStubblerLib/StubBuilder.cs
+// This code takes care of building python stub files (.pyi) so that vs code and other applications can do code completion.
+
 using System;
 using System.Reflection;
 using System.Collections.Generic;
@@ -10,25 +12,15 @@ namespace OpenTap.Python.Stubs
     public static class StubBuilder
     {
         static readonly TraceSource log = Log.CreateSource("python");
-       
-        private static List<string> SearchPaths { get; set; } = new List<string>();
 
-        public static string BuildAssemblyStubs(string targetAssemblyPath, string destPath = null, string[] searchPaths = null, BuildConfig cfgs = null)
+        public static string BuildAssemblyStubs(string targetAssemblyPath, string destPath = null)
         {
             log.Debug($"Building stubs for {targetAssemblyPath}");
             // prepare configs
-            if (cfgs is null)
-                cfgs = new BuildConfig();
-
-            // prepare resolver
-            //AppDomain.CurrentDomain.AssemblyResolve -= AssemblyResolve;
-            //AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolve;
+            var  cfgs = new BuildConfig();
 
             // pick a dll and load
             Assembly assemblyToStub = Assembly.LoadFrom(targetAssemblyPath);
-            SearchPaths.Add(targetAssemblyPath);
-            if (searchPaths != null)
-                SearchPaths.AddRange(searchPaths);
 
             // extract types
             Type[] typesToStub = assemblyToStub.GetExportedTypes();
@@ -85,23 +77,7 @@ namespace OpenTap.Python.Stubs
             }
             return stubsDirectory.FullName;
         }
-
-        private static Assembly AssemblyResolve(object sender, ResolveEventArgs args)
-        {
-            string assemblyToResolve = args.Name.Substring(0, args.Name.IndexOf(',')) + ".dll";
-
-            // try to find the dll in given search paths
-            foreach (var searchPath in SearchPaths)
-            {
-                string assemblyPath = Path.Combine(searchPath, assemblyToResolve);
-                if (File.Exists(assemblyPath))
-                    return Assembly.LoadFrom(assemblyPath);
-            }
-
-            // say i don't know
-            return null;
-        }
-
+        
         private static string[] GetChildNamespaces(string parentNamespace, string[] allNamespaces)
         {
             List<string> childNamespaces = new List<string>();
@@ -400,11 +376,12 @@ namespace OpenTap.Python.Stubs
                 bSignature += $"_{parameter.GetType().Name}";
             return aSignature.CompareTo(bSignature);
         }
-    }
-    public class BuildConfig
+        class BuildConfig
         {
             public string Prefix { get; set; } = string.Empty;
             public string Postfix { get; set; } = string.Empty;
             public bool DestPathIsRoot { get; set; } = false;
         }
+    }
+    
 }
