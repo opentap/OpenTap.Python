@@ -13,6 +13,7 @@ import sys
 import clr
 import traceback    
 import os
+from typing import Callable
 
 clr.AddReference("OpenTap")
 clr.AddReference("OpenTap.Python")
@@ -67,11 +68,11 @@ def debug_this_thread():
 
 class Rule(OpenTap.Python.VirtualValidationRule):
     __namespace__ = "OpenTap.py"
-    def __init__(self, property, validFunc, errorFunc):
+    def __init__(self, property : str, validFunc : Callable[[], bool], errorFunc : Callable[[], str]):
         super(Rule, self).__init__(property)
         self.validFunc = validFunc
         self.errorFunc = errorFunc
-    def Error(self):
+    def Error(self) -> str:
         if self.validFunc():
             return None
         return self.errorFunc()
@@ -196,7 +197,7 @@ class PyTestStep(OpenTap.TestStep):
     def Run(self):
         debug_this_thread()
         
-    def PublishResult(self, tableName, columnNames, rows):
+    def PublishResult(self, tableName:str, columnNames, rows):
         if len(rows) == 0:
             return
         names = List[String]()
