@@ -15,9 +15,10 @@ This should give you the following folder structure:
   - MyPythonProject.Api/ExampleApi.cs  *This file contains an example of how to create and use C# interfaces with your Python code. .*
   - MyPythonProject.Api/MyPythonProject.Api.csproj  *This file contains the C# project definition, but also which packages gets installed when you build the project*
 - bin *(After build) This folder contains a full OpenTAP installation, with all the dependencies you defined in the csproj file above.*
-- MyPythonProject.sln * The C# solution file. Just ignore this.* 
-- package.xml * This file contains definitions for your OpenTAP package. It can be used to create a .TapPackage file which can be distributed.*
-- Readme.md * Contains some information on how to get started. It can be modified at your discretion. *
+- MyPythonProject.sln *The C# solution file. Just ignore this.* 
+- package.xml *This file contains definitions for your OpenTAP package. It can be used to create a .TapPackage file which can be distributed.*
+- Readme.md *Contains some information on how to get started. It can be modified at your discretion.*
+- typings/ *(After build) This directory contains type information about .NET types to improve developer experience in e.g VS Code.*
 
 
 Once you have the folder structure set up, you can build the project using 

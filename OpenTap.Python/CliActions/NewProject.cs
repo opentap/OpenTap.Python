@@ -23,13 +23,31 @@ namespace OpenTap.Python.CliActions
 
         [CommandLineArgument("project-name",  Description = "The name of the newly create project.")] 
         public string ProjectName { get; set; }
-
+        
         public int Execute(CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(ProjectName))
+            if (string.IsNullOrWhiteSpace(ProjectName))
                 throw new ArgumentException("The project name (--project-name) must be set.", nameof(ProjectName));
             if (string.IsNullOrEmpty(Directory))
                 throw new ArgumentException("The output directory (--directory) must be set.", nameof(Directory));
+            
+            ProjectName = ProjectName.Trim();
+            { // validate project name
+                if (!(char.IsLetter(ProjectName[0]) || ProjectName[0] == '_'))
+                {
+                    throw new ArgumentException("The project name (--project-name) must start with a letter or underscore.", nameof(ProjectName));
+                }
+                foreach (var letter in ProjectName)
+                {
+                    if (!(char.IsLetterOrDigit(letter) || letter == '_'))
+                    {
+                        throw new ArgumentException("The project name (--project-name) must only include digits, letters or underscores.", nameof(ProjectName));
+                    }
+                }
+            }
+            
+            
+            var pythonPluginVersion = Installation.Current.FindPackage("Python")?.Version.ToString() ?? "3.1";
             
             using var fstr = File.OpenRead(TemplateFile);
             using var archive = new ZipArchive(fstr, ZipArchiveMode.Read);
@@ -52,6 +70,8 @@ namespace OpenTap.Python.CliActions
                     using (var reader = item.Open())
                         content = new StreamReader(reader).ReadToEnd();
                     content = content.Replace("OpenTap.Python.ProjectTemplate", ProjectName);
+                    content = content.Replace("PYTHON_PLUGIN_VERSION", pythonPluginVersion);
+                    
                     log.Debug("Writing: {0}", outName);
                     File.WriteAllText(outName, content);
 

@@ -50,6 +50,7 @@ class NumpyStep(TestStep):
       super().__init__()
    def Run(self):
       super().Run()
+      print(np.__version__)
       
       # Use numpy to generate some data.
       X = np.arange(self.Points)
@@ -66,4 +67,3 @@ class NumpyStep(TestStep):
       # Finally publish the arrays as results
       self.Results.PublishTable("XY", columnNames, xx, yy)
       self.log.Info("Generated {0}x2 Points", self.Points)
-      
