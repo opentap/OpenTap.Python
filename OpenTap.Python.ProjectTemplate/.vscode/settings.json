@@ -1,5 +1,6 @@
 {
-   "python.analysis.extraPaths": [
+  "python.analysis.stubPath": "typings",
+  "python.analysis.extraPaths": [
     "bin/Packages/Python"
   ],
   "python.analysis.diagnosticSeverityOverrides": {

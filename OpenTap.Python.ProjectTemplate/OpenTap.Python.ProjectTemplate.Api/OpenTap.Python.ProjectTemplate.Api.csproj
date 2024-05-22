@@ -30,6 +30,6 @@
         <Exec Command=".\tap python search-path --add .. " WorkingDirectory="$(OutputPath)" />
     </Target>
     <Target Name="PythonBuildStubs" BeforeTargets="Build;PostBuildEvent" Condition="'$(BuildStubs)' == 'true'">
-        <Exec Command=".\tap python update-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
+        <Exec Command=".\tap python build-stubs --cache-file cache-file --output-folder ../typings" WorkingDirectory="$(OutputPath)" />
     </Target>
 </Project>

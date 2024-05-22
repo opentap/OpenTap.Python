@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -6,7 +7,8 @@ using OpenTap.Cli;
 using OpenTap.Package;
 namespace OpenTap.Python.SDK;
 
-[Display("update-stubs", "", "python")]
+[Display("build-stubs", "", "python")]
+[Browsable(false)]
 public class UpdateStubsAction : ICliAction
 {
     static readonly TraceSource log = Log.CreateSource("python");
