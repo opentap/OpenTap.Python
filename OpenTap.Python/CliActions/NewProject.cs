@@ -24,13 +24,28 @@ namespace OpenTap.Python.CliActions
         [CommandLineArgument("project-name",  Description = "The name of the newly create project.")] 
         public string ProjectName { get; set; }
         
-
         public int Execute(CancellationToken cancellationToken)
         {
-            if (string.IsNullOrEmpty(ProjectName))
+            if (string.IsNullOrWhiteSpace(ProjectName))
                 throw new ArgumentException("The project name (--project-name) must be set.", nameof(ProjectName));
             if (string.IsNullOrEmpty(Directory))
                 throw new ArgumentException("The output directory (--directory) must be set.", nameof(Directory));
+            
+            ProjectName = ProjectName.Trim();
+            { // validate project name
+                if (!(char.IsLetter(ProjectName[0]) || ProjectName[0] == '_'))
+                {
+                    throw new ArgumentException("The project name (--project-name) must start with a letter or underscore.", nameof(ProjectName));
+                }
+                foreach (var letter in ProjectName)
+                {
+                    if (!(char.IsLetterOrDigit(letter) || letter == '_'))
+                    {
+                        throw new ArgumentException("The project name (--project-name) must only include digits, letters or underscores.", nameof(ProjectName));
+                    }
+                }
+            }
+            
             
             var pythonPluginVersion = Installation.Current.FindPackage("Python")?.Version.ToString() ?? "3.1";
             
