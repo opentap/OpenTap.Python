@@ -48,6 +48,7 @@ namespace OpenTap.Python.CliActions
             
             
             var pythonPluginVersion = Installation.Current.FindPackage("Python")?.Version.ToString() ?? "3.1";
+            var opentapVersion = Installation.Current.GetOpenTapPackage().Version.ToString();
             
             using var fstr = File.OpenRead(TemplateFile);
             using var archive = new ZipArchive(fstr, ZipArchiveMode.Read);
@@ -71,6 +72,7 @@ namespace OpenTap.Python.CliActions
                         content = new StreamReader(reader).ReadToEnd();
                     content = content.Replace("OpenTap.Python.ProjectTemplate", ProjectName);
                     content = content.Replace("PYTHON_PLUGIN_VERSION", pythonPluginVersion);
+                    content = content.Replace("OPENTAP_VERSION", opentapVersion);
                     
                     log.Debug("Writing: {0}", outName);
                     File.WriteAllText(outName, content);

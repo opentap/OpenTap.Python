@@ -11,14 +11,14 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="OpenTAP" Version="9.24.0" />
+        <PackageReference Include="OpenTAP" Version="OPENTAP_VERSION" />
         <OpenTapPackageReference Include="Python" Version="$(PythonPluginVersion)" />
         <AdditionalOpenTapPackage Include="PythonExamples" Version="$(PythonPluginVersion)" />
         
         <!-- Uncomment one of these lines to get a test plan editor installed when you build. -->
-        <!-- <OpenTapPackageReference Include="Editor"/> -->
-        <!-- <OpenTapPackageReference Include="Editor X"/> -->
-        <!-- <OpenTapPackageReference Include="TUI"/> -->
+        <!-- <AdditionalOpenTapPackage Include="Editor"/> -->
+        <!-- <AdditionalOpenTapPackage Include="Editor X"/> -->
+        <!-- <AdditionalOpenTapPackage Include="TUI"/> -->
     </ItemGroup>
     
     <ItemGroup>
