@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using OpenTap.Cli;
 using OpenTap.Package;
+using OpenTap.Python.Stubs;
 namespace OpenTap.Python.SDK;
 
 [Display("build-stubs", "", "python")]
@@ -13,14 +15,14 @@ public class UpdateStubsAction : ICliAction
 {
     static readonly TraceSource log = Log.CreateSource("python");
     [CommandLineArgument("output-folder")]
-    public string StubsFolder { get; set; }
+    public string OutputFolder { get; set; }
 
     [CommandLineArgument("cache-file", Description = "If this file exists the update action will be skipped.")]
     public string CacheFile { get; set; }
 
     public int Execute(CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(StubsFolder))
+        if (string.IsNullOrEmpty(OutputFolder))
             throw new ExitCodeException(10, "output-folder must be set.");
         var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(asm => asm.IsDynamic == false)
             .OrderBy(x => x.FullName)
@@ -39,20 +41,19 @@ public class UpdateStubsAction : ICliAction
             File.Delete(CacheFile);
         }
 
-        Directory.CreateDirectory(StubsFolder);
-        foreach (var item in assemblies)
+        Directory.CreateDirectory(OutputFolder);
+
+
+        var stubBuilder = new StubBuilder();
+
+        stubBuilder.AddAssembly(typeof(Int32).Assembly);
+        foreach (var asm in assemblies)
         {
-            if (item.IsDynamic) continue;
-            try
-            {
-                Stubs.StubBuilder.BuildAssemblyStubs(item.Location, StubsFolder);
-            }
-            catch
-            {
-                log.Debug($"Cannot generate stubs for {item.Location}");
-            }
+            if (asm.IsDynamic) continue;
+            
+            stubBuilder.AddAssembly(asm);
         }
-        foreach (var package in Installation.Current.GetPackages())
+        foreach (var package in packages)
         {
             foreach (var file in package.Files)
             {
@@ -60,16 +61,17 @@ public class UpdateStubsAction : ICliAction
                 {
                     try
                     {
-                        Stubs.StubBuilder.BuildAssemblyStubs(file.FileName, StubsFolder);
+                        stubBuilder.AddAssembly(file.FileName);
                     }
-                    catch
+                    catch(Exception e)
                     {
-                        log.Debug($"Cannot generate stubs for {file.FileName}");
+                        log.Debug($"Cannot generate stubs for {file.FileName}. Error: {0}", e.Message);
+                        log.Debug(e);
                     }
-
                 }
             }
         }
+        stubBuilder.BuildAssemblyStubs(OutputFolder);
         if (!string.IsNullOrWhiteSpace(CacheFile) && File.Exists(CacheFile) == false)
         {
             File.WriteAllText(CacheFile, cacheKey);

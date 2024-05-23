@@ -6,18 +6,78 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace OpenTap.Python.Stubs
 {
-    public static class StubBuilder
+    internal class StubBuilder
     {
         static readonly TraceSource log = Log.CreateSource("python");
+        readonly HashSet<Type> typesToStub = new HashSet<Type>();
+
+        public void AddAssembly(Assembly asm)
+        {
+            foreach (var type in asm.GetExportedTypes())
+            {
+                typesToStub.Add(type);
+            }
+        }
+
+        public void AddAssembly(string location)
+        {
+            var asm = Assembly.LoadFrom(location);
+            AddAssembly(asm);
+        }
+
+        public void BuildAssemblyStubs(string destPath)
+        {
+            DirectoryInfo stubsDirectory;
+
+            stubsDirectory = new DirectoryInfo(destPath);
+            var stubDictionary = new Dictionary<string, List<Type>>();
+            var extensionMethods = new Dictionary<Type, HashSet<MethodInfo>>();
+            foreach (var stubType in typesToStub)
+            {
+                if (string.IsNullOrEmpty(stubType.Namespace))
+                    continue;
+                if (!stubDictionary.ContainsKey(stubType.Namespace))
+                    stubDictionary[stubType.Namespace] = new List<Type>();
+                stubDictionary[stubType.Namespace].Add(stubType);
+
+                // static class?
+                if (stubType.IsAbstract && stubType.IsSealed && stubType.GetCustomAttribute<ExtensionAttribute>() != null)
+                {
+                    var methods = stubType.GetMethods();
+                    foreach (var method in methods)
+                    {
+                        if (method.GetCustomAttribute<ExtensionAttribute>() == null)
+                            continue;
+                        var parameter = method.GetParameters().FirstOrDefault();
+                        if (parameter == null) continue;
+                        var type = parameter.ParameterType;
+                        if (!extensionMethods.TryGetValue(type, out var methodList))
+                        {
+                            extensionMethods[type] = methodList = new HashSet<MethodInfo>();
+                        }
+                        methodList.Add(method);
+                    }
+                }
+            }
+
+            List<string> namespaces = new List<string>(stubDictionary.Keys);
+
+            // generate stubs for each type
+            foreach (var stubList in stubDictionary.Values)
+                WriteStubList(stubsDirectory, namespaces.ToArray(), stubList);
+        }
 
         public static string BuildAssemblyStubs(string targetAssemblyPath, string destPath = null)
         {
             log.Debug($"Building stubs for {targetAssemblyPath}");
             // prepare configs
-            var  cfgs = new BuildConfig();
+            var cfgs = new BuildConfig();
 
             // pick a dll and load
             Assembly assemblyToStub = Assembly.LoadFrom(targetAssemblyPath);
@@ -59,13 +119,13 @@ namespace OpenTap.Python.Stubs
             // update the setup.py version with the matching version of the assembly
             var parentDirectory = stubsDirectory.Parent;
             string setup_py = Path.Combine(parentDirectory.FullName, "setup.py");
-            if( File.Exists(setup_py))
+            if (File.Exists(setup_py))
             {
                 string[] contents = File.ReadAllLines(setup_py);
-                for( int i=0; i<contents.Length; i++ )
+                for (int i = 0; i < contents.Length; i++)
                 {
                     string line = contents[i].Trim();
-                    if( line.StartsWith("version=") )
+                    if (line.StartsWith("version="))
                     {
                         line = contents[i].Substring(0, contents[i].IndexOf("="));
                         var version = assemblyToStub.GetName().Version;
@@ -77,13 +137,13 @@ namespace OpenTap.Python.Stubs
             }
             return stubsDirectory.FullName;
         }
-        
-        private static string[] GetChildNamespaces(string parentNamespace, string[] allNamespaces)
+
+        static string[] GetChildNamespaces(string parentNamespace, string[] allNamespaces)
         {
             List<string> childNamespaces = new List<string>();
-            foreach(var ns in allNamespaces)
+            foreach (var ns in allNamespaces)
             {
-                if( ns.StartsWith(parentNamespace + "."))
+                if (ns.StartsWith(parentNamespace + "."))
                 {
                     string childNamespace = ns.Substring(parentNamespace.Length + 1);
                     if (!childNamespace.Contains("."))
@@ -94,29 +154,27 @@ namespace OpenTap.Python.Stubs
             return childNamespaces.ToArray();
         }
 
-
-        private static void WriteStubList(DirectoryInfo rootDirectory, string[] allNamespaces, List<Type> stubTypes)
+        static void WriteStubList(DirectoryInfo rootDirectory, string[] allNamespaces, List<Type> stubTypes)
         {
             // sort the stub list so we get consistent output over time
             stubTypes.Sort((a, b) => { return a.Name.CompareTo(b.Name); });
 
             string[] ns = stubTypes[0].Namespace.Split('.');
             string path = rootDirectory.FullName;
-            for (int i = 1; i < ns.Length; i++)
+            for (int i = 0; i < ns.Length; i++)
                 path = Path.Combine(path, ns[i]);
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
             path = Path.Combine(path, "__init__.pyi");
-
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
 
             string[] allChildNamespaces = GetChildNamespaces(stubTypes[0].Namespace, allNamespaces);
-            if( allChildNamespaces.Length>0 )
+            if (allChildNamespaces.Length > 0)
             {
                 sb.Append("__all__ = [");
-                for(int i=0; i<allChildNamespaces.Length; i++)
+                for (int i = 0; i < allChildNamespaces.Length; i++)
                 {
                     if (i > 0)
                         sb.Append(",");
@@ -124,8 +182,8 @@ namespace OpenTap.Python.Stubs
                 }
                 sb.AppendLine("]");
             }
-            sb.AppendLine("from typing import Tuple, Set, Iterable, List");
-
+            sb.AppendLine("from typing import Tuple, Set, Iterable, List, overload");
+            
             foreach (var stubType in stubTypes)
             {
                 var obsolete = stubType.GetCustomAttribute(typeof(System.ObsoleteAttribute));
@@ -152,15 +210,23 @@ namespace OpenTap.Python.Stubs
                     }
                     continue;
                 }
+                string interfaces = string.Join(",", stubType.GetInterfaces().Where(x => x.IsPublic).Select(x => ToPythonType(x)));
 
                 if (stubType.BaseType != null &&
-                  stubType.BaseType.FullName.StartsWith(ns[0]) &&
-                  stubType.BaseType.FullName.IndexOf('+') < 0 &&
-                  stubType.BaseType.FullName.IndexOf('`') < 0
-                  )
-                    sb.AppendLine($"class {stubType.Name}({stubType.BaseType.Name}):");
+                    stubType.BaseType.FullName.StartsWith(ns[0]) &&
+                    stubType.BaseType.FullName.IndexOf('+') < 0 &&
+                    stubType.BaseType.FullName.IndexOf('`') < 0
+                    )
+                {
+                    interfaces = "," + interfaces;
+                    sb.AppendLine($"class {stubType.Name}({ToPythonType(stubType.BaseType)}{interfaces}):");
+                }
                 else
-                    sb.AppendLine($"class {stubType.Name}:");
+                {
+                    if(interfaces != "")
+                        interfaces = "(" + interfaces + ")";
+                    sb.AppendLine($"class {stubType.Name}{interfaces}:");
+                }
 
                 string classStartString = sb.ToString();
 
@@ -186,7 +252,10 @@ namespace OpenTap.Python.Stubs
                 }
 
                 // methods
-                MethodInfo[] methods = stubType.GetMethods();
+                MethodInfo[] methods = stubType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static)
+                    .Where(m => m.IsPrivate == false && m.Name.StartsWith("<") == false)
+                    .ToArray();
+                
                 // sort for consistent output
                 Array.Sort(methods, MethodCompare);
                 Dictionary<string, int> methodNames = new Dictionary<string, int>();
@@ -241,7 +310,7 @@ namespace OpenTap.Python.Stubs
                     }
 
                     bool addComma = false;
-                    if (!method.IsStatic)
+                    if (!method.IsStatic )
                     {
                         sb.Append("self");
                         addComma = true;
@@ -298,21 +367,25 @@ namespace OpenTap.Python.Stubs
                 {
                     sb.AppendLine($"    pass");
                 }
-
+                
             }
             File.WriteAllText(path, sb.ToString());
         }
 
-        private static string SafePythonName(string s)
+        static string SafePythonName(string s)
         {
             if (s == "from")
                 return "from_";
             return s;
         }
 
-        private static string ToPythonType(string s)
+        static string ToPythonType(string s)
         {
             string rc = s;
+            if (rc.Contains('`'))
+            {
+                rc = rc.Substring(0, rc.IndexOf('`'));
+            }
             if (rc.EndsWith("&"))
                 rc = rc.Substring(0, rc.Length - 1);
 
@@ -339,7 +412,7 @@ namespace OpenTap.Python.Stubs
             return rc;
         }
 
-        private static string ToPythonType(Type t)
+        static string ToPythonType(Type t)
         {
             if (t.IsGenericType && t.Name.StartsWith("IEnumerable"))
             {
@@ -376,6 +449,7 @@ namespace OpenTap.Python.Stubs
                 bSignature += $"_{parameter.GetType().Name}";
             return aSignature.CompareTo(bSignature);
         }
+
         class BuildConfig
         {
             public string Prefix { get; set; } = string.Empty;
@@ -383,5 +457,5 @@ namespace OpenTap.Python.Stubs
             public bool DestPathIsRoot { get; set; } = false;
         }
     }
-    
+
 }
