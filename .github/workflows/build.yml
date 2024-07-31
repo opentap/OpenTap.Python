@@ -72,7 +72,7 @@ jobs:
           ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
 
   test-macos:
-    runs-on: macos-11
+    runs-on: 	macos-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
