@@ -6,6 +6,9 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <TargetFramework>netstandard2.0</TargetFramework>
     <OpenTapVersion>9.24.1</OpenTapVersion>
+    <LangVersion>10</LangVersion>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CreateOpenTapPackage>false</CreateOpenTapPackage>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <IsDebug>true</IsDebug>
@@ -26,21 +29,5 @@
     <DefineConstants>TRACE</DefineConstants>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-  </PropertyGroup>
-  
-  <Target Name="RemoveSatelliteAssemblies" AfterTargets="ResolveAssemblyReferences">
-    <ItemGroup>
-        <ReferenceCopyLocalPaths Remove="@(ReferenceSatellitePaths)" />
-    </ItemGroup>
-  </Target>
-
-  <ItemDefinitionGroup>
-    <Reference>
-      <Private>False</Private>
-    </Reference>
-    <ProjectReference>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemDefinitionGroup>
-    
+  </PropertyGroup>  
 </Project>
