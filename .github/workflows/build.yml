@@ -13,7 +13,7 @@ jobs:
         os: [ ubuntu-22.04, ubuntu-20.04]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Fix tags
@@ -52,7 +52,7 @@ jobs:
           bin/tap package create ./package.xml
           popd
       - name: Upload binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: TapPackage
           retention-days: 14
@@ -62,7 +62,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -81,7 +81,7 @@ jobs:
   test-macos:
     runs-on: macos-11
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -110,7 +110,7 @@ jobs:
       - build-ubuntu
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: TapPackage
           path: ./
@@ -131,9 +131,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Pages Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -149,7 +149,7 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
         working-directory: Documentation/TAP_Python_Help
       - name: Upload Docs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Pages
           retention-days: 14
