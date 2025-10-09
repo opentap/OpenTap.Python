@@ -31,7 +31,9 @@ class BasicInstrument(Instrument):
     def Open(self):
         """Called by TAP when the test plan starts."""
         self.log.Info("Python Instrument Opened")
+        super().Open()
 
     def Close(self):
         """Called by TAP when the test plan ends."""
         self.log.Info("Python Instrument Closed")
+        super().Close()
