@@ -21,8 +21,10 @@ class BasicDut(Dut):
     def Open(self):
         """Called by TAP when the test plan starts."""
         self.log.Info(self.Name + " Opened")
+        super().Open()
 
     def Close(self):
         """Called by TAP when the test plan ends."""
         self.log.Info(self.Name + " Closed")
         self.HighPowerOn = False
+        super().Close()

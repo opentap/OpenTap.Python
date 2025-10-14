@@ -223,7 +223,7 @@ class PyDut(OpenTap.Dut):
     def Open(self):
         super().Open()
     def Close(self):
-        super().Open()
+        super().Close()
 
 
 class PyInstrument(OpenTap.Instrument):
@@ -236,7 +236,7 @@ class PyInstrument(OpenTap.Instrument):
     def Open(self):
         super().Open()
     def Close(self):
-        super().Open()
+        super().Close()
 
 class PyResultListener(OpenTap.ResultListener):
     __clr_abstract__ = True
