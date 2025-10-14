@@ -52,6 +52,7 @@ jobs:
           bin/tap package create ./package.xml
           popd
       - name: Upload binaries
+        if: matrix.os == 'ubuntu-24.04'
         uses: actions/upload-artifact@v4
         with:
           name: TapPackage
