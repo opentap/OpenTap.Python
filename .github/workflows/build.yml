@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-22.04, ubuntu-20.04]
+        os: [ ubuntu-22.04, ubuntu-24.04]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,7 +79,7 @@ jobs:
           ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
 
   test-macos:
-    runs-on: macos-11
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
