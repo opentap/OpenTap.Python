@@ -8,7 +8,13 @@ __More Information__
 - Documentation can be found at https://doc.opentap.io/OpenTap.Python
 - Example code is located in ```%TAP_PATH%\Packages\Python\MyExamplePlugin\```
 
-This work is based on a fork of [PythonNet](https://github.com/pythonnet/pythonnet/): https://github.com/rmadsen-ks/pythonnet
+__Pythonnet__
+
+Pythonnet is used for integrating Python and C#. The original source can be found here: https://github.com/pythonnet/pythonnet/
+
+This plugin depends on a fork of PythonNet: [PythonNet Fork](https://github.com/pythonnet/pythonnet/): https://github.com/rmadsen-ks/pythonnet
+
+- git commit: 338b01fac14e1f8a5882949970125fe817c2d8d3
 
 __Developers__
 - Lim Jing Huey
