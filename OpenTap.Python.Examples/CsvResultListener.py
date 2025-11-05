@@ -63,6 +63,11 @@ class CsvPythonResultListener(PyResultListener):
 
             # Then write to the file.
             System.IO.File.WriteAllText(fileName, self.sb.ToString())
+            
+            # Publish the csv file as an artifact. This feature is a available from OpenTAP 9.22.0
+            if hasattr(planRun, "PublishArtifact"):
+                planRun.PublishArtifact(fileName)
+            
         except Exception as e:
             self.log.Debug(e)
     
