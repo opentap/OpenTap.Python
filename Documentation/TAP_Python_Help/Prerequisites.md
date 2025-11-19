@@ -6,7 +6,7 @@ The Python Plugin is available at [the OpenTAP website](https://packages.opentap
   - Commercial development tools can be downloaded from [Keysight](http://www.keysight.com/find/tap).
 
 - **Python**
- Python 3.7 or later. Download from [python.org](http://www.python.org).
+ Python 3.7 to 3.13. Download from [python.org](http://www.python.org).
 
 - **Supported Operating Systems**: Windows 7 or newer, Ubuntu 20.04 or equivalent or newer, MacOS 10 
 
