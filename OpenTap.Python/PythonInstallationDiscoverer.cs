@@ -23,7 +23,7 @@ class PythonDiscoverer
     }
 
     const int minSupportedMinorVersion = 7;
-    const int maxSupportedMinorVersion = 12;
+    const int maxSupportedMinorVersion = 13;
     const int supportedMajorVersion = 3;
     
     public IEnumerable<(string library, string pyPath)> GetAvailablePythonInstallations()
