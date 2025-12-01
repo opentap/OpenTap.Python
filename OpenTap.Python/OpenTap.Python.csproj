@@ -41,7 +41,7 @@
       <Private>False</Private>
     </PackageReference>
     
-    <PackageReference Include="System.Reflection.Emit" Version="4.3.0">
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0">
       <Private>False</Private>
     </PackageReference>
   </ItemGroup>
