@@ -113,6 +113,12 @@ class PythonDiscoverer
             yield return (PythonSettings.Current.PythonLibraryPath, PythonSettings.Current.PythonPath, 1000);
         }
 
+        //pythonLibLocation alpine image.
+        if ((Environment.GetEnvironmentVariable("pythonLibLocation") ?? "") is string lib && File.Exists(lib))
+        {          
+            yield return (lib, "", 0);
+        }
+
         //pythonLocation  for github builds.
         if ((Environment.GetEnvironmentVariable("PYTHONHOME") ?? Environment.GetEnvironmentVariable("pythonLocation")) is string home && Directory.Exists(home))
         {
