@@ -49,6 +49,9 @@ class PythonDiscoverer
         
         var sh = SharedLib.Load(libPath);
 
+        if (sh is null)
+            return false;
+
         var versionSymbol = sh.GetSymbol("Py_GetVersion");
         if (versionSymbol == IntPtr.Zero) 
             return false;
