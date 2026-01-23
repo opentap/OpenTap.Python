@@ -75,7 +75,8 @@ class PythonDiscoverer
             List<string> pys = new List<string>();
             foreach (var dir in Directory.GetDirectories(folderPath))
             {
-                if (Path.GetFileName(dir).Contains("Python"))
+                string fileName = Path.GetFileName(dir);
+                if (fileName.ToLower().Contains("python"))
                 {
                     pys.Add(dir);
                 }
@@ -101,8 +102,10 @@ class PythonDiscoverer
         var programFiles5 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Programs", "Python");
         var programFiles6 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        var programFiles7 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Python"); //C:\Users\fredandr\AppData\Local\Python\bin
 
-        return drives.Concat(new[] { programFiles, programFiles6, programFiles2, programFiles3, programFiles4, programFiles5 })
+        return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5, programFiles6, programFiles7 })
             .SelectMany(GetPythonsInFolder).Distinct().ToArray();
     }
 
