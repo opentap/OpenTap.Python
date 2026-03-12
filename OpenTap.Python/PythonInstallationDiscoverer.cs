@@ -181,9 +181,14 @@ class PythonDiscoverer
             }
 
         }
-        else
+        else // Assume OS is Linux
         {
-            foreach(var basePath in new [] {"/usr/lib/x86_64-linux-gnu/", "/usr/lib/aarch64-linux-gnu/"}
+            foreach(var basePath in new [] {
+                            "/usr/lib/x86_64-linux-gnu/", 
+                            "/usr/lib/aarch64-linux-gnu/", 
+                            "/usr/lib/" // alpine linux
+                            
+                        }
                         .Where(Directory.Exists))
             foreach (var python in TryFindPythons(basePath))
             {
