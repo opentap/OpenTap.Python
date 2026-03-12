@@ -100,9 +100,28 @@ jobs:
         run: |
           pip install numpy
           ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
-  
-  
-  
+  test-alpine:
+    runs-on: ubuntu-latest
+    container:
+      image: alpine:3.21
+    steps:
+      - name: Install dependencies
+        run: |
+          apk add --no-cache \
+            bash git python3 py3-pip py3-numpy \
+            dotnet-sdk-8.0 \
+            icu-libs
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: ./bin/Debug/tap python test
+      - name: Test Plan
+        run: ./bin/Debug/tap run bin/Debug/test.TapPlan --non-interactive
+
   publish-package:
     if: github.ref == 'refs/heads/dev' || contains(github.ref, 'refs/heads/release') || contains(github.ref, 'refs/tags/v')
     environment: packages.opentap.io
