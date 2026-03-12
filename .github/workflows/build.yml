@@ -108,7 +108,7 @@ jobs:
       - name: Install dependencies
         run: |
           apk add --no-cache \
-            bash git python3 py3-pip py3-numpy \
+            bash git python3 python3-dev py3-pip py3-numpy \
             dotnet-sdk-8.0 \
             icu-libs
       - name: Checkout
