@@ -49,6 +49,9 @@ class PythonDiscoverer
         
         var sh = SharedLib.Load(libPath);
 
+        if (sh is null)
+            return false;
+
         var versionSymbol = sh.GetSymbol("Py_GetVersion");
         if (versionSymbol == IntPtr.Zero) 
             return false;
@@ -75,7 +78,8 @@ class PythonDiscoverer
             List<string> pys = new List<string>();
             foreach (var dir in Directory.GetDirectories(folderPath))
             {
-                if (Path.GetFileName(dir).Contains("Python"))
+                string fileName = Path.GetFileName(dir);
+                if (fileName.ToLower().Contains("python"))
                 {
                     pys.Add(dir);
                 }
@@ -101,8 +105,10 @@ class PythonDiscoverer
         var programFiles5 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Programs", "Python");
         var programFiles6 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+        var programFiles7 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Python");
 
-        return drives.Concat(new[] { programFiles, programFiles6, programFiles2, programFiles3, programFiles4, programFiles5 })
+        return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5, programFiles6, programFiles7 })
             .SelectMany(GetPythonsInFolder).Distinct().ToArray();
     }
 
@@ -175,9 +181,14 @@ class PythonDiscoverer
             }
 
         }
-        else
+        else // Assume OS is Linux
         {
-            foreach(var basePath in new [] {"/usr/lib/x86_64-linux-gnu/", "/usr/lib/aarch64-linux-gnu/"}
+            foreach(var basePath in new [] {
+                            "/usr/lib/x86_64-linux-gnu/", 
+                            "/usr/lib/aarch64-linux-gnu/", 
+                            "/usr/lib/" // alpine linux
+                            
+                        }
                         .Where(Directory.Exists))
             foreach (var python in TryFindPythons(basePath))
             {

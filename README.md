@@ -15,12 +15,3 @@ Pythonnet is used for integrating Python and C#. The original source can be foun
 This plugin depends on a fork of PythonNet: [PythonNet Fork](https://github.com/pythonnet/pythonnet/): https://github.com/rmadsen-ks/pythonnet
 
 - git commit: 338b01fac14e1f8a5882949970125fe817c2d8d3
-
-__Developers__
-- Lim Jing Huey
-- Kyler Lee
-- Gordon Ong
-- Jingwei Liang
-- Joseph Hoff 
-- Navjodh Dhillon
-- Rolf Madsen (*Maintainer* @rmadsen-ks, rolf_madsen@keysight.com)
