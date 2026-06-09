@@ -62,8 +62,12 @@ class SharedLib
     }
 
 
-    [DllImport("kernel32.dll")]
+    [DllImport("kernel32.dll", SetLastError = true)]
     static extern IntPtr LoadLibrary(string dllToLoad);
+    
+    const uint LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008;
+    [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+    static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
     
     [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
     static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
@@ -157,13 +161,37 @@ class SharedLib
         return libdl.dlsym(lib, symbolName);
     }
 
+    private static TraceSource log = Log.CreateSource("Python");
     public static SharedLib Load(string name)
     {
         clearError();
-        IntPtr p = load(name);
+        IntPtr p;
+        if (IsWin32)
+        {
+            p = LoadLibrary(name);
+            if (p == IntPtr.Zero)
+            {
+                // if vcredist is not installed, we can usually find it right next to python dll.
+                // If LoadLibraryEx is used this way, it will try to load the DLL with alternative search strategy.
+                //   this usually resolves in it finding vcredist dll right next ot the python dll and then successfully loading.
+                p = LoadLibraryEx(name, IntPtr.Zero, LOAD_WITH_ALTERED_SEARCH_PATH);
+                if (p == IntPtr.Zero)
+                {
+                    int err = Marshal.GetLastWin32Error();
+                    var ex = new Win32Exception(err); // gives readable message
+                    log.Error($"Unable to load {name}: {ex.Message}");
+                }
+            }
+        }
+        else
+        {
+            p = load(name);
+        }
+
         if (p == IntPtr.Zero)
         {
             checkError();
+            
             return null;
         }
         return new SharedLib(p);
