@@ -14,4 +14,5 @@ Pythonnet is used for integrating Python and C#. The original source can be foun
 
 This plugin depends on a fork of PythonNet: [PythonNet Fork](https://github.com/pythonnet/pythonnet/): https://github.com/rmadsen-ks/pythonnet
 
-- git commit: 338b01fac14e1f8a5882949970125fe817c2d8d3
+- branch: https://github.com/rmadsen-ks/pythonnet/tree/pynetupdate2
+- git commit: d682fea62cd72116f068019d9be1628ced6c0eb2
