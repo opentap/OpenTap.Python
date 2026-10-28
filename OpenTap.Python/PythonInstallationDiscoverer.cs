@@ -28,7 +28,27 @@ class PythonDiscoverer
     
     public IEnumerable<(string library, string pyPath)> GetAvailablePythonInstallations()
     {
-        return GetAvailablePythonInstallationCandidates()
+        var installations = ValidateInstallations(GetAvailablePythonInstallationCandidates());
+        return SharedLib.IsWin32
+            ? GetInstallationsWithFallback(installations,
+                () => GetInstallationsWithFallback(
+                    ValidateInstallations(GetWindowsCandidates(GetWindowsPathFolders())),
+                    () => ValidateInstallations(GetWindowsCandidates(GetFixedDrivePythonFolders()))))
+            : installations;
+    }
+
+    internal static IEnumerable<(string library, string pyPath)> GetInstallationsWithFallback(
+        IEnumerable<(string library, string pyPath)> preferred,
+        Func<IEnumerable<(string library, string pyPath)>> fallback)
+    {
+        var installations = preferred.ToArray();
+        return installations.Length > 0 ? installations : fallback().ToArray();
+    }
+
+    static IEnumerable<(string library, string pyPath)> ValidateInstallations(
+        IEnumerable<(string lib, string pyPath, int weight)> candidates)
+    {
+        return candidates
             .Where(x => x.lib != null && File.Exists(x.lib))
             .OrderByDescending(x => x.weight)
             .ToArray()
@@ -97,7 +117,6 @@ class PythonDiscoverer
     {
         if (!SharedLib.IsWin32)
             return Array.Empty<string>();
-        var drives = Directory.GetLogicalDrives();
         var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
         var programFiles2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
         var programFiles3 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
@@ -108,8 +127,51 @@ class PythonDiscoverer
         var programFiles7 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
             "Python");
 
-        return drives.Concat(new[] { programFiles, programFiles2, programFiles3, programFiles4, programFiles5, programFiles6, programFiles7 })
-            .SelectMany(GetPythonsInFolder).Distinct().ToArray();
+        // Check the usual installation folders before PATH or drive-root discovery.
+        return new[] { programFiles5, programFiles6, programFiles3, programFiles7, programFiles4, programFiles, programFiles2 }
+            .Where(path => !string.IsNullOrWhiteSpace(path))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .SelectMany(GetPythonsInFolder)
+            .Distinct(StringComparer.OrdinalIgnoreCase);
+    }
+
+    static IEnumerable<string> GetWindowsPathFolders()
+    {
+        return (Environment.GetEnvironmentVariable("PATH") ?? "")
+            .Split(Path.PathSeparator)
+            .Select(path => path.Trim().Trim('"'))
+            .Where(path => !string.IsNullOrWhiteSpace(path) && Path.IsPathRooted(path))
+            .Distinct(StringComparer.OrdinalIgnoreCase);
+    }
+
+    static IEnumerable<string> GetFixedDrivePythonFolders()
+    {
+        // Do not touch mapped network drives, even when the normal discovery methods fail.
+        foreach (var drive in DriveInfo.GetDrives())
+        {
+            if (drive.DriveType == DriveType.Fixed)
+            {
+                foreach (var folder in GetPythonsInFolder(drive.Name))
+                    yield return folder;
+            }
+        }
+    }
+
+    static IEnumerable<(string lib, string pyPath, int weight)> GetWindowsCandidates(IEnumerable<string> folders)
+    {
+        foreach (var targetFolder in folders)
+        {
+            var loc = TryFindPythons(targetFolder).FirstOrDefault();
+            if (loc != null && pythonVersionParser.IsMatch(loc))
+            {
+                // A Lib folder is required for the installation to serve as PythonHome.
+                var fld = Path.GetDirectoryName(loc);
+                if (fld != null && !Directory.Exists(Path.Combine(fld, "Lib")))
+                    fld = null;
+                Int32.TryParse(pythonVersionParser.Match(loc).Groups["v"].Value, out int weight);
+                yield return (loc, fld, weight);
+            }
+        }
     }
 
     IEnumerable<(string lib, string pyPath, int weight)> GetAvailablePythonInstallationCandidates()
@@ -144,20 +206,8 @@ class PythonDiscoverer
         }
         if (SharedLib.IsWin32)
         {
-            foreach (var targetFolder in LocatePythonsWin32())
-            {
-                var loc = TryFindPythons(targetFolder).FirstOrDefault();
-                if (loc != null && pythonVersionParser.IsMatch(loc))
-                {
-                    // if the target file folder contains a Lib folder,
-                    // then it can probably be used as a PythonHome.
-                    var fld = Path.GetDirectoryName(loc);
-                    if (fld != null && !Directory.Exists(Path.Combine(fld, "Lib")))
-                        fld = null;
-                    Int32.TryParse(pythonVersionParser.Match(loc).Groups["v"].Value, out int weight);
-                    yield return (loc, fld, weight);
-                }
-            }
+            foreach (var candidate in GetWindowsCandidates(LocatePythonsWin32()))
+                yield return candidate;
         }
         else if (SharedLib.IsMacOs)
         {
