@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ "*" ]
+    branches: [ "**" ]
     tags:
       - v*
 jobs:
