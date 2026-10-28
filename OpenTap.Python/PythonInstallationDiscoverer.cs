@@ -97,7 +97,9 @@ class PythonDiscoverer
     {
         if (!SharedLib.IsWin32)
             return Array.Empty<string>();
-        var drives = Directory.GetLogicalDrives();
+        var drives = DriveInfo.GetDrives()
+            .Where(drive => drive.DriveType == DriveType.Fixed)
+            .Select(drive => drive.Name);
         var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles);
         var programFiles2 = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFilesX86);
         var programFiles3 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
