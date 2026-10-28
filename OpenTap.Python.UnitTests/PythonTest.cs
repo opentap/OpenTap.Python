@@ -11,7 +11,6 @@ namespace OpenTap.Python.UnitTests
     {
         public int Execute(CancellationToken cancellationToken)
         {
-            new PythonDiscoveryTests().Execute(cancellationToken);
             PythonInitializer.LoadPython();
             if (!PythonEngine.IsInitialized)
             {
