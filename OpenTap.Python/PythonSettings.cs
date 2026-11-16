@@ -40,7 +40,7 @@ namespace OpenTap.Python
         public string PythonLibraryPath {get; set; }
 
         [DirectoryPath]
-        [Display("Virtual Environment", Description:"If a virtual environment is used, point this to the folder of that virtual environment. This will cause PYTHONPATH to be overwritten for the application.")]
+        [Display("Virtual Environment", Description:"Point to a virtual environment to add its site-packages to the embedded Python module search path. Restart OpenTAP after changing this setting. The Python runtime is selected separately.")]
         public string VirtualEnvironment { get; set; } = null;
         
         [Display("Plugin Module Search Path", "A list containing additional search paths for finding the Python based plugin modules.", Order: 1)]

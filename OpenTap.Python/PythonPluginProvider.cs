@@ -42,8 +42,7 @@ namespace OpenTap.Python
         public void Search()
         {
             // ensure that it's loaded.
-            PythonInitializer.LoadPython();
-            if (!PythonEngine.IsInitialized) return; //something went wrong and python is not initialized.
+            if (!PythonInitializer.LoadPython() || !PythonEngine.IsInitialized) return;
             using (Py.GIL())
             {
                 var types = new List<TypeData>();

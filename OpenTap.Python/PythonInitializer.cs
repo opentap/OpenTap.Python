@@ -18,6 +18,21 @@ namespace OpenTap.Python
         const string loadScript = @"import sys
 def add_dir(x):
     sys.path.insert(0, x)
+
+def add_venv_site(venv):
+    import os
+    import site
+    if os.name == 'nt':
+        packages = os.path.join(venv, 'Lib', 'site-packages')
+    else:
+        packages = os.path.join(venv, 'lib', 'python%d.%d' % sys.version_info[:2], 'site-packages')
+    if not os.path.isdir(packages):
+        raise RuntimeError('Virtual environment site-packages not found: ' + packages)
+    # addsitedir handles .pth files; prefer venv paths over base packages.
+    before = list(sys.path)
+    site.addsitedir(packages)
+    added = [packages] + [p for p in sys.path if p not in before and p != packages]
+    sys.path[:] = added + [p for p in sys.path if p not in added]
 ";
 
         static readonly TraceSource log = Log.CreateSource("Python");
@@ -32,6 +47,7 @@ def add_dir(x):
             {
                 if (initialized && !reinit) return initSuccess;
                 initialized = true;
+                initSuccess = false;
                 if (!InitInternal())
                     return false;
                 initSuccess = true;
@@ -74,12 +90,6 @@ def add_dir(x):
                     if(pyPath != null && SharedLib.IsWin32)
                         PythonEngine.PythonHome = pyPath;
                     PythonEngine.ProgramName = Assembly.GetEntryAssembly().Location;
-                    var venv = PythonSettings.Current.VirtualEnvironment;
-                    if (string.IsNullOrWhiteSpace(venv) == false)
-                    {
-                        var pypath2 = $"{venv}\\Lib\\site-packages\\;{venv}\\LIB";
-                        Environment.SetEnvironmentVariable("PYTHONPATH", pypath2);
-                    }
                     PythonEngine.Initialize(false);
                     
                     log.Debug("PYTHONPATH: " + Environment.GetEnvironmentVariable("PYTHONPATH"));
@@ -102,6 +112,19 @@ def add_dir(x):
                 using (Py.GIL())
                 {
                     PyObject mod = PyModule.FromString("init_mod", loadScript);
+                    var venv = PythonSettings.Current.VirtualEnvironment;
+                    if (!string.IsNullOrWhiteSpace(venv))
+                    {
+                        try
+                        {
+                            mod.InvokeMethod("add_venv_site", Path.GetFullPath(venv).ToPython());
+                        }
+                        catch (PythonException e)
+                        {
+                            log.Error("Unable to configure virtual environment: " + e.Message);
+                            return false;
+                        }
+                    }
                     foreach (var s in PythonSettings.Current.GetSearchList())
                         mod.InvokeMethod("add_dir", s.ToPython());
 
