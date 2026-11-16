@@ -10,8 +10,8 @@ import sys
 import tempfile
 
 
-def run(*args, env=None):
-    result = subprocess.run(args, env=env, text=True, stdout=subprocess.PIPE,
+def run(*args, env=None, cwd=None):
+    result = subprocess.run(args, env=env, cwd=cwd, text=True, stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
     print(result.stdout, end='')
     if result.returncode:
@@ -30,9 +30,19 @@ def main():
             venv = root / 'venv with spaces'
             run(str(python), '-m', 'venv', str(venv))
             executable = venv / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+            pip_env = dict(os.environ)
+            pip_env.pop('PYTHONPATH', None)
+            pip_env.pop('PYTHONHOME', None)
+            run(str(executable), '-m', 'pip', 'install', 'numpy', env=pip_env)
             site = Path(subprocess.check_output(
                 [str(executable), '-c', 'import sysconfig; print(sysconfig.get_path("purelib"))'],
                 text=True).strip())
+            # Install the venv before subsequent setup commands launch OpenTAP,
+            # including the first process that discovers the example plugins.
+            settings.parent.mkdir(parents=True, exist_ok=True)
+            settings.write_text('<?xml version="1.0" encoding="utf-8"?>\n'
+                                '<PythonSettings type="OpenTap.Python.PythonSettings" />\n',
+                                encoding='utf-8')
             (site / 'opentap_venv_marker.py').write_text('VALUE = 42\n')
             pth_dir = root / 'pth modules'
             pth_dir.mkdir()
@@ -46,7 +56,6 @@ def main():
             env = dict(os.environ, PYTHONPATH=str(external), OPENTAP_TEST_VENV=str(venv),
                        OPENTAP_TEST_EXTERNAL='1')
             env.pop('VIRTUAL_ENV', None)
-            run(str(tap), 'python', 'set-path', str(python.parent), env=env)
             # Prefer the shared library used by the Python executable that created
             # the venv, rather than another discovered installation.
             library = subprocess.check_output([str(python), '-c',
@@ -54,29 +63,54 @@ def main():
                 'print(os.path.join(os.path.dirname(sys.executable), "python%d%d.dll" % sys.version_info[:2]) '
                 'if os.name == "nt" else os.path.join(sysconfig.get_config_var("LIBDIR") or "", '
                 'sysconfig.get_config_var("LDLIBRARY") or ""))'], text=True).strip()
+            run(str(tap), 'python', 'set-virtual-environment', str(venv), env=env)
+            run(str(tap), 'python', 'set-path', str(python.parent), env=env)
             if library and Path(library).is_file():
                 run(str(tap), 'python', 'set-lib-path', library, env=env)
-            run(str(tap), 'python', 'set-virtual-environment', str(venv), env=env)
             clean_env = dict(env)
             clean_env.pop('PYTHONPATH', None)
             clean_env.pop('OPENTAP_TEST_EXTERNAL', None)
             run(str(tap), 'python', 'test-venv', env=clean_env)
             run(str(tap), 'python', 'test-venv', env=env)
+            # The existing test deletes its settings using a relative path.
+            # Run from the installation directory and restore that file afterward.
+            test_settings = tap.parent / 'Settings' / 'Settings Test.xml'
+            original_test_settings = test_settings.read_bytes() if test_settings.exists() else None
+            try:
+                run(str(tap), 'python', 'test', env=clean_env, cwd=str(tap.parent))
+            finally:
+                if original_test_settings is None:
+                    if test_settings.exists():
+                        test_settings.unlink()
+                else:
+                    test_settings.write_bytes(original_test_settings)
+            plan_output = run(str(tap), 'run', str(tap.parent / 'test.TapPlan'), '--non-interactive',
+                              env=clean_env, cwd=str(root))
+            if 'Generated 32x2 Points' not in plan_output:
+                raise AssertionError('NumPy example step did not generate results')
             run(str(tap), 'python', 'set-virtual-environment', '--unset', env=env)
             (external / 'opentap_venv_marker.py').unlink()
             missing = subprocess.run([str(tap), 'python', 'test-venv'], env=env,
                                      text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            print(missing.stdout, end='')
             if missing.returncode == 0 or 'opentap_venv_marker' not in missing.stdout:
+                print(missing.stdout, end='')
                 raise AssertionError('Marker unexpectedly importable without virtual environment')
+            print('Expected failure: marker is unavailable after unsetting the virtual environment.')
             invalid = root / 'not a venv'
             invalid.mkdir()
-            run(str(tap), 'python', 'set-virtual-environment', str(invalid), env=env)
+            # Plugin discovery may report NumPy missing when no venv is set;
+            # this command deliberately transitions to an invalid environment.
+            setup = subprocess.run([str(tap), 'python', 'set-virtual-environment', str(invalid)],
+                                   env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            if setup.returncode:
+                print(setup.stdout, end='')
+                raise AssertionError('Failed to set invalid environment for negative test')
             failed = subprocess.run([str(tap), 'python', 'test-venv'], env=env,
                                     text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            print(failed.stdout, end='')
             if failed.returncode == 0 or 'Virtual environment site-packages not found' not in failed.stdout:
+                print(failed.stdout, end='')
                 raise AssertionError('Invalid virtual environment was not reported')
+            print('Expected failure: invalid virtual environment was rejected.')
             print('Virtual environment regression checks passed.')
     finally:
         if original_settings is None:

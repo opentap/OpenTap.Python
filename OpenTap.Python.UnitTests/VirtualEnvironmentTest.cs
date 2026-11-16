@@ -23,6 +23,15 @@ namespace OpenTap.Python.UnitTests
                     throw new Exception("Marker was not loaded from the virtual environment: " + actual);
                 if (marker.GetAttr("VALUE").As<int>() != 42)
                     throw new Exception("Unexpected virtual environment marker value.");
+                var numpy = Py.Import("numpy");
+                var numpyPath = Path.GetFullPath(numpy.GetAttr("__file__").As<string>());
+                if (!numpyPath.StartsWith(expected + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                    throw new Exception("NumPy was not loaded from the virtual environment: " + numpyPath);
+                using (var probe = PyModule.FromString("venv_numpy_probe", "import numpy\nresult = int(numpy.arange(5).sum())"))
+                {
+                    if (probe.GetAttr("result").As<int>() != 10)
+                        throw new Exception("NumPy calculation returned an unexpected result.");
+                }
                 Py.Import("opentap_pth_marker");
                 if (Environment.GetEnvironmentVariable("OPENTAP_TEST_EXTERNAL") == "1")
                     Py.Import("opentap_external_marker");
