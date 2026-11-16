@@ -101,7 +101,7 @@ jobs:
           ./bin/Debug/tap python set-lib-path $Python3_ROOT_DIR/lib/libpython3.13.dylib
           ./bin/Debug/tap python test
       - name: Test virtual environment
-        run: python3 OpenTap.Python.UnitTests/test_venv.py bin/Debug/tap
+        run: python3 OpenTap.Python.UnitTests/test_venv.py bin/Debug/tap "$Python3_ROOT_DIR/bin/python3" "$Python3_ROOT_DIR/lib/libpython3.13.dylib"
       - name: Test Plan
         run: |
           pip install numpy

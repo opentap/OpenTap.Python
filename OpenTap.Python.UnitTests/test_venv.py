@@ -1,6 +1,6 @@
 """Exercise a configured virtual environment in fresh OpenTAP processes.
 
-Usage: python test_venv.py path/to/tap [path/to/base/python]
+Usage: python test_venv.py path/to/tap [path/to/base/python [path/to/python/library]]
 The OpenTAP installation's Python settings are restored when the test finishes.
 """
 import os
@@ -21,12 +21,19 @@ def run(*args, env=None, cwd=None):
 
 def main():
     tap = Path(sys.argv[1]).resolve()
-    python = Path(sys.argv[2] if len(sys.argv) > 2 else sys.executable).resolve()
+    # Keep the selected executable's path: resolving a symlink can select a
+    # different framework installation on macOS.
+    python = Path(os.path.abspath(sys.argv[2] if len(sys.argv) > 2 else sys.executable))
+    explicit_library = Path(os.path.abspath(sys.argv[3])) if len(sys.argv) > 3 else None
+    if explicit_library is not None and not explicit_library.is_file():
+        raise FileNotFoundError(f'Python library does not exist: {explicit_library}')
     settings = tap.parent / 'Settings' / 'Python.xml'
     original_settings = settings.read_bytes() if settings.exists() else None
     try:
         with tempfile.TemporaryDirectory(prefix='opentap venv ') as tmp:
-            root = Path(tmp)
+            # On macOS /var is a symlink to /private/var. Python resolves the
+            # site-packages path, so use the same canonical path for assertions.
+            root = Path(tmp).resolve()
             venv = root / 'venv with spaces'
             run(str(python), '-m', 'venv', str(venv))
             executable = venv / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
@@ -65,6 +72,8 @@ def main():
                 'sysconfig.get_config_var("LDLIBRARY") or ""))'], text=True).strip()
             run(str(tap), 'python', 'set-virtual-environment', str(venv), env=env)
             run(str(tap), 'python', 'set-path', str(python.parent), env=env)
+            if explicit_library is not None:
+                library = str(explicit_library)
             if library and Path(library).is_file():
                 run(str(tap), 'python', 'set-lib-path', library, env=env)
             clean_env = dict(env)
